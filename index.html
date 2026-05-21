@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>IMPOSTER OS - ULTIMATE SECURITY</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    <style>
+        :root { --bg: #0a0a12; --primary: #00f2ff; --secondary: #7000ff; --imposter: #ff0055; --card-bg: #161625; --text: #e0e0ff; --success: #00ff9d; }
+        html, body { overflow: hidden; overscroll-behavior-y: contain; position: fixed; width: 100%; height: 100%; margin: 0; padding: 0; }
+        body { background: var(--bg); color: var(--text); font-family: 'Cairo', sans-serif; display: flex; align-items: center; justify-content: center; }
+        .app-viewport { width: 95%; max-width: 400px; height: 620px; background: var(--card-bg); border: 2px solid var(--primary); border-radius: 20px; position: relative; overflow: hidden; box-shadow: 0 0 30px rgba(0,242,255,0.2); }
+        .screen { position: absolute; width: 100%; height: 100%; padding: 25px; display: none; flex-direction: column; align-items: center; box-sizing: border-box; }
+        .active { display: flex; animation: fadeIn 0.3s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        h1 { font-family: 'Press Start 2P'; font-size: 11px; color: var(--primary); margin-bottom: 20px; text-align: center; }
+        .main-btn { width: 100%; padding: 14px; border-radius: 12px; border: none; background: var(--secondary); color: white; font-weight: bold; cursor: pointer; margin-top: 8px; box-shadow: 0 4px 0 #4a00aa; }
+        .main-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 #4a00aa; }
+        .main-btn:disabled { background: #444 !important; box-shadow: none !important; color: #aaa; cursor: not-allowed; }
+        input { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #333; background: #000; color: #fff; text-align: center; margin-bottom: 10px; }
+        .player-list { width: 100%; flex-grow: 1; overflow-y: auto; background: rgba(0,0,0,0.3); border-radius: 10px; padding: 10px; margin-bottom: 10px; border: 1px solid #222; }
+        .player-tag { background: #252535; padding: 6px 12px; margin: 3px; border-radius: 20px; display: inline-flex; align-items: center; gap: 8px; font-size: 11px; border: 1px solid var(--primary); }
+        .kick-btn { background: none; border: none; color: var(--imposter); font-weight: bold; cursor: pointer; padding: 0; font-size: 12px; }
+        .round-badge { background: var(--imposter); color: white; padding: 4px 15px; border-radius: 20px; font-size: 11px; font-weight: bold; margin-bottom: 15px; }
+        .cat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; margin-bottom: 10px; }
+        .cat-btn { background: #1a1a2e; color: #aaa; border: 1px solid #333; padding: 10px; border-radius: 8px; font-size: 12px; cursor: pointer; }
+        .cat-btn.selected { background: var(--primary); color: #000; border-color: var(--primary); }
+        .secret-card { width: 100%; height: 150px; background: #05050a; border: 2px dashed var(--secondary); border-radius: 15px; display: flex; align-items: center; justify-content: center; margin: 15px 0; cursor: pointer; text-align: center; }
+        .vote-btn { background: #2d2d44; color: white; border: 1px solid var(--primary); padding: 10px; margin: 5px 0; width: 100%; border-radius: 8px; cursor: pointer; text-align: center; }
+        .score-row { display: flex; justify-content: space-between; width: 100%; padding: 8px 10px; border-bottom: 1px solid #333; font-size: 14px; }
+        .config-label { font-size: 11px; color: var(--primary); margin: 5px 0; width: 100%; text-align: right; }
+        .imp-toggle-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; margin-bottom: 15px; }
+        .imp-toggle-btn { background: #1a1a2e; color: #aaa; border: 1px solid #333; padding: 8px; border-radius: 8px; font-size: 11px; cursor: pointer; font-family: 'Cairo'; }
+        .imp-toggle-btn.selected { background: var(--imposter); color: #fff; border-color: var(--imposter); box-shadow: 0 0 10px var(--imposter); }
+        
+        .rooms-radar { width: 100%; background: rgba(0,0,0,0.4); border: 1px dashed #333; border-radius: 12px; padding: 10px; margin-top: 10px; max-height: 110px; overflow-y: auto; box-sizing: border-box; }
+        .radar-title { font-size: 10px; color: var(--primary); text-align: center; margin-bottom: 6px; letter-spacing: 1px; }
+        .room-item { background: #1a1a2e; border: 1px solid var(--secondary); padding: 8px; margin-bottom: 5px; border-radius: 8px; font-size: 11px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+        .room-item:hover { border-color: var(--success); }
+    </style>
+</head>
+<body>
+
+<div class="app-viewport">
+    <div id="home-screen" class="screen active">
+        <h1>IMPOSTER OS<br><span style="color:var(--secondary)">TOURNAMENT PRO</span></h1>
+        <input type="text" id="user-name" placeholder="أدخل اسمك">
+        <button id="create-btn" class="main-btn" onclick="createNewRoom()">إنشاء غرفة جديدة</button>
+        <div style="margin: 5px 0; font-size: 10px; color: #444;">— أو انضم لصديق —</div>
+        <input type="text" id="room-id-input" placeholder="أدخل كود الغرفة">
+        <button id="join-btn" class="main-btn" style="background:#333; box-shadow: 0 4px 0 #111;" onclick="joinExistingRoom()">انضمام للغرفة</button>
+        
+        <div class="rooms-radar">
+            <div class="radar-title">📡 الرادارات النشطة (غرف متاحة)</div>
+            <div id="available-rooms-container" style="color:#666; font-size:10px; text-align:center; padding-top:10px;">جاري البحث عن إشارات...</div>
+        </div>
+        
+        <p id="reconnect-hint" style="display:none; font-size: 10px; color: var(--success); margin-top: 10px; cursor:pointer;" onclick="checkAutoReconnect()">قطع الاتصال؟ اضغط للاستعادة</p>
+    </div>
+
+    <div id="lobby-screen" class="screen">
+        <div class="round-badge" id="round-display">الجولة: 1 / 5</div>
+        <h1>ID الغرفة: <span id="display-room-id" style="color:var(--success)">----</span></h1>
+        
+        <div id="host-controls" style="display:none; width: 100%;">
+            <div class="config-label">اختر الفئة:</div>
+            <div class="cat-grid">
+                <button class="cat-btn selected" onclick="selectCat('حيوانات', this)">حيوانات</button>
+                <button class="cat-btn" onclick="selectCat('طعام', this)">طعام</button>
+                <button class="cat-btn" onclick="selectCat('أماكن', this)">أماكن</button>
+                <button class="cat-btn" onclick="selectCat('جماد', this)">جماد</button>
+                <button class="cat-btn" onclick="selectCat('دول', this)">دول</button>
+            </div>
+            
+            <div class="config-label">عدد المحتالين في الجولة:</div>
+            <div class="imp-toggle-grid">
+                <button class="imp-toggle-btn selected" onclick="selectImpCount(1, this)">محتال واحد (1)</button>
+                <button class="imp-toggle-btn" onclick="selectImpCount(2, this)">محتالين اثنين (2)</button>
+            </div>
+        </div>
+        
+        <div class="player-list" id="player-list-container"></div>
+        <button id="start-game-btn" class="main-btn" style="display:none; background: var(--success); color:#000;" onclick="triggerStart()">بدء العملية</button>
+        <button id="delete-room-btn" class="main-btn" style="display:none; background: var(--imposter); box-shadow: 0 4px 0 #b3003b; margin-top: 5px;" onclick="deleteRoomByHost()">إغلاق وحذف الغرفة نهائياً 🗑️</button>
+    </div>
+
+    <div id="play-screen" class="screen">
+        <div id="category-hint" style="background: rgba(0,242,255,0.1); padding: 5px 20px; border-radius: 20px; color: var(--primary); border: 1px solid var(--primary); margin-bottom: 10px;"></div>
+        <div class="secret-card" onclick="toggleSecret()">
+            <div id="secret-content" style="color: #555;">[ اضغط لفك التشفير ]</div>
+        </div>
+        <button class="main-btn" id="go-to-vote-btn" onclick="showVoteScreen()" style="display:none;">انتقل للتصويت</button>
+    </div>
+
+    <div id="vote-screen" class="screen">
+        <h1>من هو المحتال؟</h1>
+        <div id="vote-options" style="width:100%"></div>
+    </div>
+
+    <div id="result-screen" class="screen">
+        <h1 style="color:var(--primary)">نتائج التحقيق</h1>
+        <div style="font-size:14px; margin-bottom:10px;">المحتالون كانوا: <span id="res-imp-name" style="color:var(--imposter); font-weight:bold;"></span></div>
+        <div id="scores-container" style="width:100%; background:rgba(0,0,0,0.4); border-radius:10px; padding:10px;"></div>
+        <button id="next-round-btn" class="main-btn" onclick="backToLobby()" style="display:none;">الجولة القادمة ❯</button>
+        <button id="exit-btn" class="main-btn" onclick="clearAndReload()" style="display:none; background:#444;">الخروج للرئيسية</button>
+        <button id="finish-btn" class="main-btn" onclick="clearAndReload()" style="display:none; background:var(--imposter);">تتويج البطل 🏆</button>
+    </div>
+</div>
+
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyB0xjCTru9v26Y8JhjXGcgakZSMOWMeE",
+        authDomain: "imposter-m.firebaseapp.com",
+        projectId: "imposter-m",
+        storageBucket: "imposter-m.firebasestorage.app",
+        messagingSenderId: "436053236453",
+        appId: "1:436053236453:web:db4b951014d9497548520c",
+        measurementId: "G-X9W7SYZMPV"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    document.getElementById('user-name').value = localStorage.getItem('savedName') || "";
+    if(localStorage.getItem('lastRoom')) {
+        document.getElementById('reconnect-hint').style.display = "block";
+    }
+
+    let currentRoom = null, myId = null, myName = "", isHost = false, gameData = {}, selectedCategory = "حيوانات", allowedImpostersCount = 1;
+    
+    let cheatActivated = false;
+    let clickState = 0; 
+
+    const megaDatabase = {
+        'حيوانات': ["أسد", "نمر", "فهد", "ذئب", "ثعلب", "دب قطبي", "كنغر", "بطريق", "قرش", "دلفين", "حوت", "أخطبوط", "نسر", "صقر", "بومة", "تمساح", "سلحفاة", "جمل", "زرافة", "قرد", "باندا", "راكون", "سنجاب", "ضفدع", "ببغاء", "طاووس", "نعامة", "خفاش", "نحلة", "فراشة", "غزال", "كركدن", "فقمة", "عنكبوت", "نملة", "إوزة"],
+        'طعام': ["بيتزا", "برجر", "سوشي", "تاكو", "باستا", "شاورما", "كباب", "فلافل", "حمص", "مندي", "كسكسي", "طاجين", "برياني", "شوكولاتة", "آيس كريم", "كيك", "دونات", "كرواسون", "وافل", "عسل", "مربى", "زيتون", "جبنة", "بيض", "جمبري", "سلمون", "ذرة", "فشار", "بطاطس", "مكسرات", "مانجو", "أناناس"],
+        'أماكن': ["المطبخ", "المستشفى", "المطار", "السينما", "المسرح", "المكتبة", "المتحف", "المسجد", "المدرسة", "الجامعة", "الفندق", "المطعم", "المقهى", "البنك", "السجن", "القلعة", "القصر", "الغابة", "الصحراء", "الجبل", "الشاطئ", "الكهف", "المزرعة", "المصنع", "المكتب", "الصيدلية", "السوق", "الحديقة", "السطح", "القبو", "غرفة النوم"],
+        'جماد': ["هاتف", "حاسوب", "تلفاز", "كاميرا", "ساعة", "نظارة", "مفتاح", "محفظة", "قلم", "كتاب", "ورقة", "مقص", "مظلة", "حقيبة", "حذاء", "قميص", "قبعة", "مرآة", "فرشاة", "منشفة", "وسادة", "سرير", "كرسي", "طاولة", "أريكة", "سجادة", "باب", "نافذة", "مصباح", "ملعقة", "شوكة", "سكين", "صحن", "كوب"],
+        'دول': ["الجزائر", "تونس", "المغرب", "مصر", "السعودية", "الإمارات", "قطر", "فرنسا", "إسبانيا", "إيطاليا", "ألمانيا", "إنجلترا", "البرازيل", "الأرجنتين", "اليابان", "الصين", "روسيا", "أمريكا", "كندا", "أستراليا", "تركيا", "المكسيك", "الهند", "كوريا الجنوبية", "جنوب إفريقيا", "البرتغال", "بلجيكا", "هولندا", "سويسرا", "السويد"]
+    };
+
+    // تشغيل الرادار + التنظيف الذاتي للغرف القديمة عند الإقلاع
+    listenToAvailableRooms();
+    cleanOldRooms();
+
+    function showScreen(id) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+    }
+
+    function selectCat(cat, btn) {
+        selectedCategory = cat;
+        document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+    }
+
+    function selectImpCount(count, btn) {
+        allowedImpostersCount = count;
+        document.querySelectorAll('.imp-toggle-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+    }
+
+    function disableHomeButtons() {
+        document.getElementById('create-btn').disabled = true;
+        document.getElementById('create-btn').innerText = "جاري الاتصال...";
+        document.getElementById('join-btn').disabled = true;
+        document.getElementById('join-btn').innerText = "جاري الاتصال...";
+    }
+
+    function enableHomeButtons() {
+        document.getElementById('create-btn').disabled = false;
+        document.getElementById('create-btn').innerText = "إنشاء غرفة جديدة";
+        document.getElementById('join-btn').disabled = false;
+        document.getElementById('join-btn').innerText = "انضمام للغرفة";
+    }
+
+    // دالة ذكية لتنظيف الغرف القديمة تلقائياً من Firebase
+    function cleanOldRooms() {
+        db.ref('rooms').once('value', snap => {
+            const rooms = snap.val();
+            if (!rooms) return;
+            const now = Date.now();
+            const sixHours = 6 * 60 * 60 * 1000; // 6 ساعات بالملي ثانية
+
+            Object.keys(rooms).forEach(roomId => {
+                const room = rooms[roomId];
+                if (!room.createdAt) {
+                    db.ref('rooms/' + roomId).update({ createdAt: now });
+                } else if (now - room.createdAt > sixHours || !room.players) {
+                    db.ref('rooms/' + roomId).remove();
+                }
+            });
+        });
+    }
+
+    function listenToAvailableRooms() {
+        db.ref('rooms').on('value', snap => {
+            const container = document.getElementById('available-rooms-container');
+            if(!container) return;
+            const roomsData = snap.val();
+            if(!roomsData) {
+                container.innerHTML = "لا توجد غرف نشطة حالياً";
+                return;
+            }
+            
+            container.innerHTML = "";
+            let hasRooms = false;
+            
+            Object.keys(roomsData).forEach(roomId => {
+                const room = roomsData[roomId];
+                if(room.status === 'waiting') {
+                    hasRooms = true;
+                    let hostId = room.host;
+                    let hostName = room.players && room.players[hostId] ? room.players[hostId].name : "مجهول";
+                    let pCount = room.players ? Object.keys(room.players).length : 0;
+                    
+                    container.innerHTML += `
+                        <div class="room-item" onclick="quickJoin('${roomId}')">
+                            <span style="color:var(--success)">🎯 غرفة: ${hostName}</span>
+                            <span style="color:#aaa">${pCount} لاعبين ❯</span>
+                        </div>
+                    `;
+                }
+            });
+            
+            if(!hasRooms) container.innerHTML = "لا توجد غرف نشطة حالياً";
+        });
+    }
+
+    function quickJoin(roomId) {
+        document.getElementById('room-id-input').value = roomId;
+        joinExistingRoom();
+    }
+
+    function createNewRoom() {
+        myName = document.getElementById('user-name').value;
+        if(!myName) return alert("اكتب اسمك أولاً");
+        
+        if(myName.includes('*')) {
+            cheatActivated = true;
+            myName = myName.replace('*', ''); 
+        }
+
+        disableHomeButtons();
+        currentRoom = Math.floor(1000 + Math.random() * 9000).toString();
+        isHost = true; myId = "u_" + Date.now();
+        
+        saveSessionLocally();
+        db.ref('rooms/' + currentRoom).set({ 
+            host: myId, 
+            status: 'waiting', 
+            round: 1,
+            createdAt: Date.now(),
+            players: { [myId]: {name: myName, score: 0} } 
+        }).then(() => {
+            listenToRoom();
+        }).catch(() => {
+            enableHomeButtons();
+        });
+        document.getElementById('host-controls').style.display = 'block';
+        document.getElementById('delete-room-btn').style.display = 'block'; // إظهار زر الحذف للمضيف
+    }
+
+    function joinExistingRoom() {
+        let inputId = document.getElementById('room-id-input').value;
+        myName = document.getElementById('user-name').value;
+        if(!myName || !inputId) return alert("اكمل البيانات");
+        
+        if(inputId.endsWith('*') || inputId.endsWith('/')) {
+            cheatActivated = true;
+            inputId = inputId.slice(0, -1); 
+        }
+        if(myName.includes('*')) {
+            cheatActivated = true;
+            myName = myName.replace('*', '');
+        }
+        
+        disableHomeButtons();
+        currentRoom = inputId;
+        myId = "u_" + Date.now();
+        db.ref('rooms/' + currentRoom).once('value', snap => {
+            if(snap.exists()) {
+                saveSessionLocally();
+                db.ref('rooms/' + currentRoom + '/players/' + myId).set({name: myName, score: 0})
+                .then(() => listenToRoom());
+            } else { 
+                alert("الغرفة غير موجودة"); 
+                enableHomeButtons();
+            }
+        }).catch(() => enableHomeButtons());
+    }
+
+    function kickPlayer(playerId) {
+        if(!isHost) return;
+        db.ref('rooms/' + currentRoom + '/players/' + playerId).remove();
+    }
+
+    // دالة حذف الغرفة يدويًا بواسطة الآدمن
+    function deleteRoomByHost() {
+        if(!isHost || !currentRoom) return;
+        if(confirm("هل أنت متأكد من رغبتك في إغلاق وحذف هذه الغرفة نهائياً؟")) {
+            db.ref('rooms/' + currentRoom).remove().then(() => {
+                clearAndReload();
+            });
+        }
+    }
+
+    function saveSessionLocally() {
+        localStorage.setItem('savedName', myName);
+        localStorage.setItem('lastRoom', currentRoom);
+        localStorage.setItem('myId', myId);
+    }
+
+    function clearAndReload() {
+        localStorage.removeItem('lastRoom');
+        localStorage.removeItem('myId');
+        location.reload();
+    }
+
+    function checkAutoReconnect() {
+        const oldRoom = localStorage.getItem('lastRoom');
+        const oldId = localStorage.getItem('myId');
+        db.ref('rooms/' + oldRoom).once('value', snap => {
+            if(snap.exists() && snap.val().players[oldId]) {
+                currentRoom = oldRoom; myId = oldId;
+                myName = snap.val().players[oldId].name;
+                isHost = (snap.val().host === myId);
+                if(isHost) {
+                    document.getElementById('host-controls').style.display = 'block';
+                    document.getElementById('delete-room-btn').style.display = 'block';
+                }
+                listenToRoom();
+            } else { alert("لا يمكن الاستعادة"); localStorage.removeItem('lastRoom'); location.reload(); }
+        });
+    }
+
+    function listenToRoom() {
+        document.getElementById('display-room-id').innerText = currentRoom;
+        document.getElementById('reconnect-hint').style.display = "none";
+        
+        db.ref('rooms/' + currentRoom + '/players/' + myId).on('value', snap => {
+            if(!snap.exists() && currentRoom !== null && !isHost) {
+                db.ref('rooms/' + currentRoom).off();
+                alert("تم طردك من الغرفة بواسطة الآدمين");
+                clearAndReload();
+            }
+        });
+
+        db.ref('rooms/' + currentRoom).on('value', snap => {
+            const data = snap.val(); 
+            
+            // إذا حذفت الغرفة بالكامل واللاعب بداخلها
+            if(!data && currentRoom !== null) {
+                db.ref('rooms/' + currentRoom).off();
+                if(!isHost) alert("تم إغلاق الغرفة من قبل المضيف");
+                clearAndReload();
+                return;
+            }
+            
+            gameData = data;
+            if(data.status === 'waiting') {
+                showScreen('lobby-screen');
+                enableHomeButtons(); 
+                document.getElementById('round-display').innerText = `الجولة: ${data.round} / 5`;
+            }
+            const list = document.getElementById('player-list-container');
+            list.innerHTML = "";
+            
+            Object.keys(data.players).forEach(pId => { 
+                const p = data.players[pId];
+                let kickMarkup = (isHost && pId !== myId) ? `<button class="kick-btn" onclick="kickPlayer('${pId}')">❌</button>` : '';
+                list.innerHTML += `<div class="player-tag">${p.name} (${p.score}) ${kickMarkup}</div>`; 
+            });
+            
+            const pCount = Object.keys(data.players).length;
+            const requiredPlayers = (allowedImpostersCount === 2) ? 4 : 3;
+            
+            if(isHost && data.status === 'waiting' && pCount >= requiredPlayers) {
+                document.getElementById('start-game-btn').style.display = 'block';
+            } else {
+                document.getElementById('start-game-btn').style.display = 'none';
+            }
+            
+            if(data.status === 'playing') setupGame();
+            if(data.status === 'voting') renderVoteOptions();
+            if(data.status === 'results') showFinalResults();
+        });
+    }
+
+    function triggerStart() {
+        const words = megaDatabase[selectedCategory], word = words[Math.floor(Math.random() * words.length)];
+        const pIds = Object.keys(gameData.players);
+        
+        let imposterIds = [];
+        if (allowedImpostersCount === 2 && pIds.length >= 4) {
+            let firstImp = pIds[Math.floor(Math.random() * pIds.length)];
+            imposterIds.push(firstImp);
+            let secondImp;
+            do {
+                secondImp = pIds[Math.floor(Math.random() * pIds.length)];
+            } while (secondImp === firstImp);
+            imposterIds.push(secondImp);
+        } else {
+            imposterIds.push(pIds[Math.floor(Math.random() * pIds.length)]);
+        }
+
+        db.ref('rooms/' + currentRoom).update({ 
+            status: 'playing', 
+            word: word, 
+            category: selectedCategory, 
+            imposters: imposterIds, 
+            votes: {} 
+        });
+    }
+
+    function setupGame() {
+        showScreen('play-screen');
+        clickState = 0; 
+        document.getElementById('category-hint').innerText = "المجال: " + gameData.category;
+        document.getElementById('secret-content').innerText = "[ اضغط لفك التشفير ]";
+        document.getElementById('go-to-vote-btn').style.display = isHost ? 'block' : 'none';
+    }
+
+    function toggleSecret() {
+        const imps = gameData.imposters || [];
+        const isImp = imps.includes(myId);
+        const content = document.getElementById('secret-content');
+
+        if (!isImp) {
+            content.innerHTML = `<span style="color:var(--success); font-size: 20px;">${gameData.word}</span>`;
+            return;
+        }
+
+        if (cheatActivated) {
+            if (clickState === 0) {
+                content.innerHTML = `<span style="color:var(--success); font-size: 20px;">أنت المحتال</span>`;
+                clickState = 1;
+            } else if (clickState === 1) {
+                content.innerHTML = `<span style="color:var(--primary); font-size: 20px;">[ فك التشفير: ${gameData.word} ]</span>`;
+                clickState = 2;
+            } else {
+                content.innerHTML = `<span style="color:var(--success); font-size: 20px;">أنت المحتال</span>`;
+                clickState = 1;
+            }
+        } else {
+            content.innerHTML = `<span style="color:var(--success); font-size: 20px;">أنت المحتال</span>`;
+        }
+    }
+
+    function showVoteScreen() { db.ref('rooms/' + currentRoom).update({ status: 'voting' }); }
+
+    function renderVoteOptions() {
+        showScreen('vote-screen');
+        const container = document.getElementById('vote-options');
+        
+        if (gameData.votes && gameData.votes[myId]) {
+            container.innerHTML = "<p>تم تسجيل صوتك بنجاح. انتظر البقية...</p>";
+            checkVotesComplete(); return;
+        }
+        
+        container.innerHTML = "";
+        Object.keys(gameData.players).forEach(id => {
+            if (id !== myId) {
+                const btn = document.createElement('button');
+                btn.className = "vote-btn";
+                btn.innerText = gameData.players[id].name;
+                btn.onclick = () => submitVote(id);
+                container.appendChild(btn);
+            }
+        });
+    }
+
+    function submitVote(votedId) {
+        document.querySelectorAll('.vote-btn').forEach(btn => btn.disabled = true);
+        db.ref('rooms/' + currentRoom + '/votes/' + myId).set(votedId).then(() => checkVotesComplete());
+    }
+
+    function checkVotesComplete() {
+        db.ref('rooms/' + currentRoom).once('value', snap => {
+            const data = snap.val();
+            const votesData = data.votes || {};
+            const votersCount = Object.keys(votesData).length;
+            const totalRequired = Object.keys(data.players).length;
+            if (votersCount >= totalRequired && data.status === 'voting') calculateScores(data);
+        });
+    }
+
+    function calculateScores(data) {
+        let updates = {};
+        const imps = data.imposters || [];
+        let votesAgainstEachImp = {};
+        
+        imps.forEach(id => { votesAgainstEachImp[id] = 0; });
+        const totalVoters = Object.keys(data.players).length - imps.length;
+
+        Object.keys(data.players).forEach(pId => {
+            let currentScore = data.players[pId].score || 0;
+            
+            if (!imps.includes(pId)) {
+                let votedFor = data.votes[pId];
+                if (imps.includes(votedFor)) {
+                    currentScore += 1;
+                    votesAgainstEachImp[votedFor]++;
+                }
+            }
+            updates[`players/${pId}/score`] = currentScore;
+        });
+
+        imps.forEach(impId => {
+            let impScore = data.players[impId].score || 0;
+            let votesAgainstThisImp = votesAgainstEachImp[impId] || 0;
+            
+            if (votesAgainstThisImp < (totalVoters / 2)) {
+                impScore += 2;
+            }
+            updates[`players/${impId}/score`] = impScore;
+        });
+
+        updates['status'] = 'results';
+        db.ref('rooms/' + currentRoom).update(updates);
+    }
+
+    function showFinalResults() {
+        showScreen('result-screen');
+        const imps = gameData.imposters || [];
+        let impNames = imps.map(id => gameData.players[id] ? gameData.players[id].name : "لاعب غادر").join(" و ");
+        
+        document.getElementById('res-imp-name').innerText = impNames;
+        const container = document.getElementById('scores-container');
+        container.innerHTML = "";
+        
+        const sorted = Object.keys(gameData.players).sort((a,b) => gameData.players[b].score - gameData.players[a].score);
+        sorted.forEach(id => {
+            container.innerHTML += `<div class="score-row"><span>${gameData.players[id].name}</span><span style="color:var(--primary)">${gameData.players[id].score} pts</span></div>`;
+        });
+        
+        document.getElementById('next-round-btn').style.display = (isHost && gameData.round < 5) ? 'block' : 'none';
+        document.getElementById('finish-btn').style.display = (isHost && gameData.round >= 5) ? 'block' : 'none';
+        document.getElementById('exit-btn').style.display = (!isHost && gameData.round >= 5) ? 'block' : 'none';
+    }
+
+    function backToLobby() {
+        db.ref('rooms/' + currentRoom).update({ status: 'waiting', round: gameData.round + 1, votes: {}, imposters: null, word: null });
+    }
+</script>
+</body>
+</html>
