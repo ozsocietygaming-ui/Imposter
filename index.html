@@ -29,6 +29,7 @@
         .cat-btn.selected { background: var(--primary); color: #000; border-color: var(--primary); }
         .secret-card { width: 100%; height: 150px; background: #05050a; border: 2px dashed var(--secondary); border-radius: 15px; display: flex; align-items: center; justify-content: center; margin: 15px 0; cursor: pointer; text-align: center; }
         .vote-btn { background: #2d2d44; color: white; border: 1px solid var(--primary); padding: 10px; margin: 5px 0; width: 100%; border-radius: 8px; cursor: pointer; text-align: center; }
+        .vote-btn:disabled { opacity: 0.4; cursor: not-allowed; border-color: #333; }
         .score-row { display: flex; justify-content: space-between; width: 100%; padding: 8px 10px; border-bottom: 1px solid #333; font-size: 14px; }
         .config-label { font-size: 11px; color: var(--primary); margin: 5px 0; width: 100%; text-align: right; }
         .imp-toggle-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; margin-bottom: 15px; }
@@ -95,7 +96,7 @@
     </div>
 
     <div id="vote-screen" class="screen">
-        <h1>من هو المحتال؟</h1>
+        <h1 id="vote-screen-title">من هو المحتال؟</h1>
         <div id="vote-options" style="width:100%"></div>
     </div>
 
@@ -132,6 +133,7 @@
     
     let cheatActivated = false;
     let clickState = 0; 
+    let selectedVotes = []; // مصفوفة مؤقتة لتخزين خيارات التصويت محلياً قبل الإرسال
 
     const megaDatabase = {
         'حيوانات': ["أسد", "نمر", "فهد", "ذئب", "ثعلب", "دب قطبي", "كنغر", "بطريق", "قرش", "دلفين", "حوت", "أخطبوط", "نسر", "صقر", "بومة", "تمساح", "سلحفاة", "جمل", "زرافة", "قرد", "باندا", "راكون", "سنجاب", "ضفدع", "ببغاء", "طاووس", "نعامة", "خفاش", "نحلة", "فراشة", "غزال", "كركدن", "فقمة", "عنكبوت", "نملة", "إوزة"],
@@ -468,27 +470,55 @@
     function renderVoteOptions() {
         showScreen('vote-screen');
         const container = document.getElementById('vote-options');
+        const title = document.getElementById('vote-screen-title');
+        const impsCount = (gameData.imposters || []).length;
         
         if (gameData.votes && gameData.votes[myId]) {
             container.innerHTML = "<p>تم تسجيل صوتك بنجاح. انتظر البقية...</p>";
             checkVotesComplete(); return;
         }
         
+        selectedVotes = []; // إعادة تصفير المصفوفة محلياً عند فتح الشاشة
+        title.innerText = (impsCount === 2) ? "اختر المحتال الأول (1)" : "من هو المحتال؟";
+
         container.innerHTML = "";
         Object.keys(gameData.players).forEach(id => {
             if (id !== myId) {
                 const btn = document.createElement('button');
                 btn.className = "vote-btn";
+                btn.id = "v-btn-" + id;
                 btn.innerText = gameData.players[id].name;
-                btn.onclick = () => submitVote(id);
+                btn.onclick = () => handleVoteSelection(id, btn);
                 container.appendChild(btn);
             }
         });
     }
 
-    function submitVote(votedId) {
-        document.querySelectorAll('.vote-btn').forEach(btn => btn.disabled = true);
-        db.ref('rooms/' + currentRoom + '/votes/' + myId).set(votedId).then(() => checkVotesComplete());
+    function handleVoteSelection(votedId, btnElement) {
+        const impsCount = (gameData.imposters || []).length;
+        const title = document.getElementById('vote-screen-title');
+
+        if (impsCount === 2) {
+            selectedVotes.push(votedId);
+            btnElement.disabled = true; // تعطيل زر اللاعب المختار فقط حتى لا يصوت له مرتين
+            
+            if (selectedVotes.length === 1) {
+                title.innerText = "اختر المحتال الثاني (2)";
+            } else if (selectedVotes.length === 2) {
+                // عند اكتمال اختيار المحتالين الاثنين، نقوم بتعطيل جميع الأزرار وإرسال الصوتين مدمجين
+                document.querySelectorAll('.vote-btn').forEach(btn => btn.disabled = true);
+                let mergedVotes = selectedVotes.join(","); // دمج المعرفين بفاصلة
+                submitVote(mergedVotes);
+            }
+        } else {
+            // محتال واحد: تعطيل كل الأزرار والإرسال فوراً
+            document.querySelectorAll('.vote-btn').forEach(btn => btn.disabled = true);
+            submitVote(votedId);
+        }
+    }
+
+    function submitVote(votedValue) {
+        db.ref('rooms/' + currentRoom + '/votes/' + myId).set(votedValue).then(() => checkVotesComplete());
     }
 
     function checkVotesComplete() {
@@ -513,11 +543,16 @@
             let currentScore = data.players[pId].score || 0;
             
             if (!imps.includes(pId)) {
-                let votedFor = data.votes[pId];
-                if (imps.includes(votedFor)) {
-                    currentScore += 1;
-                    votesAgainstEachImp[votedFor]++;
-                }
+                let voteValue = data.votes[pId] || "";
+                // نقوم بتقسيم السلسلة النصية لنتأكد من فحص كافة الأصوات (سواء كان صوتاً واحداً أو صوتين مفصولين بفاصلة)
+                let playerVotes = voteValue.split(","); 
+                
+                playerVotes.forEach(votedFor => {
+                    if (imps.includes(votedFor)) {
+                        currentScore += 1;
+                        votesAgainstEachImp[votedFor]++;
+                    }
+                });
             }
             updates[`players/${pId}/score`] = currentScore;
         });
