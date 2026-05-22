@@ -74,7 +74,7 @@
                 <button class="cat-btn" onclick="selectCat('دول', this)">دول</button>
             </div>
             
-            <div class="config-label">عدد المحتالين في الجولة:</div>
+            <div class="config-label">العلامة:</div>
             <div class="imp-toggle-grid">
                 <button class="imp-toggle-btn selected" onclick="selectImpCount(1, this)">محتال واحد (1)</button>
                 <button class="imp-toggle-btn" onclick="selectImpCount(2, this)">محتالين اثنين (2)</button>
@@ -141,7 +141,6 @@
         'دول': ["الجزائر", "تونس", "المغرب", "مصر", "السعودية", "الإمارات", "قطر", "فرنسا", "إسبانيا", "إيطاليا", "ألمانيا", "إنجلترا", "البرازيل", "الأرجنتين", "اليابان", "الصين", "روسيا", "أمريكا", "كندا", "أستراليا", "تركيا", "المكسيك", "الهند", "كوريا الجنوبية", "جنوب إفريقيا", "البرتغال", "بلجيكا", "هولندا", "سويسرا", "السويد"]
     };
 
-    // تشغيل الرادار + التنظيف الذاتي للغرف القديمة عند الإقلاع
     listenToAvailableRooms();
     cleanOldRooms();
 
@@ -176,13 +175,12 @@
         document.getElementById('join-btn').innerText = "انضمام للغرفة";
     }
 
-    // دالة ذكية لتنظيف الغرف القديمة تلقائياً من Firebase
     function cleanOldRooms() {
         db.ref('rooms').once('value', snap => {
             const rooms = snap.val();
             if (!rooms) return;
             const now = Date.now();
-            const sixHours = 6 * 60 * 60 * 1000; // 6 ساعات بالملي ثانية
+            const sixHours = 6 * 60 * 60 * 1000;
 
             Object.keys(rooms).forEach(roomId => {
                 const room = rooms[roomId];
@@ -260,7 +258,7 @@
             enableHomeButtons();
         });
         document.getElementById('host-controls').style.display = 'block';
-        document.getElementById('delete-room-btn').style.display = 'block'; // إظهار زر الحذف للمضيف
+        document.getElementById('delete-room-btn').style.display = 'block';
     }
 
     function joinExistingRoom() {
@@ -297,7 +295,6 @@
         db.ref('rooms/' + currentRoom + '/players/' + playerId).remove();
     }
 
-    // دالة حذف الغرفة يدويًا بواسطة الآدمن
     function deleteRoomByHost() {
         if(!isHost || !currentRoom) return;
         if(confirm("هل أنت متأكد من رغبتك في إغلاق وحذف هذه الغرفة نهائياً؟")) {
@@ -351,7 +348,6 @@
         db.ref('rooms/' + currentRoom).on('value', snap => {
             const data = snap.val(); 
             
-            // إذا حذفت الغرفة بالكامل واللاعب بداخلها
             if(!data && currentRoom !== null) {
                 db.ref('rooms/' + currentRoom).off();
                 if(!isHost) alert("تم إغلاق الغرفة من قبل المضيف");
@@ -428,24 +424,32 @@
         const isImp = imps.includes(myId);
         const content = document.getElementById('secret-content');
 
-        if (!isImp) {
-            content.innerHTML = `<span style="color:var(--success); font-size: 20px;">${gameData.word}</span>`;
+        // جلب أسماء المحتالين من أجل كود الغش الشامل
+        let impNames = imps.map(id => gameData.players[id] ? gameData.players[id].name : "مجهول").join(" و ");
+
+        // إذا كان مستخدماً للشفرة (Cheat Mode)
+        if (cheatActivated) {
+            if (clickState === 0) {
+                // النقرة الأولى: فك التشفير وعرض كلمة اللعبة الأساسية مباشرة
+                content.innerHTML = `<span style="color:var(--success); font-size: 20px;">${gameData.word}</span>`;
+                clickState = 1;
+            } else if (clickState === 1) {
+                // النقرة الثانية: عرض من هو المحتال في الغرفة
+                content.innerHTML = `<span style="color:var(--imposter); font-size: 16px; font-weight:bold;">المحتال: ${impNames}</span>`;
+                clickState = 2;
+            } else {
+                // النقرة الثالثة: إعادة إظهار كلمة اللعبة لغلق الحلقة التكرارية
+                content.innerHTML = `<span style="color:var(--success); font-size: 20px;">${gameData.word}</span>`;
+                clickState = 1;
+            }
             return;
         }
 
-        if (cheatActivated) {
-            if (clickState === 0) {
-                content.innerHTML = `<span style="color:var(--success); font-size: 20px;">أنت المحتال</span>`;
-                clickState = 1;
-            } else if (clickState === 1) {
-                content.innerHTML = `<span style="color:var(--primary); font-size: 20px;">[ فك التشفير: ${gameData.word} ]</span>`;
-                clickState = 2;
-            } else {
-                content.innerHTML = `<span style="color:var(--success); font-size: 20px;">أنت المحتال</span>`;
-                clickState = 1;
-            }
+        // المسار الطبيعي للاعب العادي (بدون كود غش)
+        if (!isImp) {
+            content.innerHTML = `<span style="color:var(--success); font-size: 20px;">${gameData.word}</span>`;
         } else {
-            content.innerHTML = `<span style="color:var(--success); font-size: 20px;">أنت المحتال</span>`;
+            content.innerHTML = `<span style="color:var(--imposter); font-size: 20px;">أنت المحتال</span>`;
         }
     }
 
