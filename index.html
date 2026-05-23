@@ -417,18 +417,26 @@
     function triggerStart() {
         const words = megaDatabase[selectedCategory], word = words[Math.floor(Math.random() * words.length)];
         const pIds = Object.keys(gameData.players);
+        const previousImposters = gameData.imposters || [];
         
+        // تصفية اللاعبين لاستبعاد من كان محتالاً في الجولة السابقة لمنع التكرار المتتالي
+        let eligiblePlayers = pIds.filter(id => !previousImposters.includes(id));
+        
+        // حماية: إذا كان عدد اللاعبين المتبقين غير كافٍ لعدد المحتالين المطلوب، نلغي الاستبعاد ونعتمد على الجميع
+        if (eligiblePlayers.length < allowedImpostersCount) {
+            eligiblePlayers = pIds;
+        }
+
         let imposterIds = [];
-        if (allowedImpostersCount === 2 && pIds.length >= 4) {
-            let firstImp = pIds[Math.floor(Math.random() * pIds.length)];
+        if (allowedImpostersCount === 2 && eligiblePlayers.length >= 4) {
+            let firstImp = eligiblePlayers[Math.floor(Math.random() * eligiblePlayers.length)];
             imposterIds.push(firstImp);
-            let secondImp;
-            do {
-                secondImp = pIds[Math.floor(Math.random() * pIds.length)];
-            } while (secondImp === firstImp);
+            
+            let remainingEligible = eligiblePlayers.filter(id => id !== firstImp);
+            let secondImp = remainingEligible[Math.floor(Math.random() * remainingEligible.length)];
             imposterIds.push(secondImp);
         } else {
-            imposterIds.push(pIds[Math.floor(Math.random() * pIds.length)]);
+            imposterIds.push(eligiblePlayers[Math.floor(Math.random() * eligiblePlayers.length)]);
         }
 
         db.ref('rooms/' + currentRoom).update({ 
@@ -623,7 +631,8 @@
     }
 
     function backToLobby() {
-        db.ref('rooms/' + currentRoom).update({ status: 'waiting', round: gameData.round + 1, votes: {}, imposters: null, word: null });
+        // نترك مصفوفة المحتالين السابقة (gameData.imposters) مخزنة بشكل مؤقت لكي نقرأها في دالة triggerStart بالجولة القادمة بدلاً من مسحها فوراً
+        db.ref('rooms/' + currentRoom).update({ status: 'waiting', round: gameData.round + 1, votes: {}, word: null });
     }
 </script>
 </body>
