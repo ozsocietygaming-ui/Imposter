@@ -8,89 +8,38 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     <style>
-        :root { --bg: #0a0a12;
---primary: #00f2ff; --secondary: #7000ff; --imposter: #ff0055; --card-bg: #161625; --text: #e0e0ff; --success: #00ff9d;
-}
-        html, body { overflow: hidden; overscroll-behavior-y: contain; position: fixed; width: 100%;
-height: 100%; margin: 0; padding: 0; }
-        body { background: var(--bg); color: var(--text);
-font-family: 'Cairo', sans-serif; display: flex; align-items: center; justify-content: center; }
-        .app-viewport { width: 95%;
-max-width: 400px; height: 620px; background: var(--card-bg); border: 2px solid var(--primary); border-radius: 20px; position: relative; overflow: hidden;
-box-shadow: 0 0 30px rgba(0,242,255,0.2); }
-        .screen { position: absolute; width: 100%;
-height: 100%; padding: 25px; display: none; flex-direction: column; align-items: center; box-sizing: border-box;
-}
-        .active { display: flex; animation: fadeIn 0.3s;
-}
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1;
-} }
-        h1 { font-family: 'Press Start 2P'; font-size: 11px; color: var(--primary);
-margin-bottom: 20px; text-align: center; }
-        .main-btn { width: 100%; padding: 14px; border-radius: 12px;
-border: none; background: var(--secondary); color: white; font-weight: bold; cursor: pointer; margin-top: 8px; box-shadow: 0 4px 0 #4a00aa; flex-shrink: 0;
-}
-        .main-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 #4a00aa;
-}
-        .main-btn:disabled { background: #444 !important; box-shadow: none !important; color: #aaa; cursor: not-allowed;
-}
-        input { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #333;
-background: #000; color: #fff; text-align: center; margin-bottom: 10px; }
-        .player-list { width: 100%;
-flex-grow: 1; overflow-y: auto; background: rgba(0,0,0,0.3); border-radius: 10px; padding: 10px; margin-bottom: 10px; border: 1px solid #222;
-}
-        .player-tag { background: #252535; padding: 6px 12px; margin: 3px; border-radius: 20px;
-display: inline-flex; align-items: center; gap: 8px; font-size: 11px; border: 1px solid var(--primary);
-}
-        .kick-btn { background: none; border: none; color: var(--imposter); font-weight: bold; cursor: pointer;
-padding: 0; font-size: 12px; }
-        .round-badge { background: var(--imposter); color: white;
-padding: 4px 15px; border-radius: 20px; font-size: 11px; font-weight: bold; margin-bottom: 15px;
-}
-        .cat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%;
-margin-bottom: 10px; }
-        .cat-btn { background: #1a1a2e; color: #aaa; border: 1px solid #333;
-padding: 10px; border-radius: 8px; font-size: 12px; cursor: pointer; }
-        .cat-btn.selected { background: var(--primary);
-color: #000; border-color: var(--primary); }
-        .secret-card { width: 100%; height: 150px; background: #05050a;
-border: 2px dashed var(--secondary); border-radius: 15px; display: flex; align-items: center; justify-content: center; margin: 15px 0; cursor: pointer; text-align: center;
-}
-        .vote-btn { background: #2d2d44; color: white; border: 1px solid var(--primary); padding: 10px;
-margin: 5px 0; width: 100%; border-radius: 8px; cursor: pointer; text-align: center;
-}
-        .vote-btn:disabled { opacity: 0.4; cursor: not-allowed; border-color: #333;
-}
-        .score-row { display: flex; justify-content: space-between; width: 100%; padding: 8px 10px;
-border-bottom: 1px solid #333; font-size: 14px; }
-        .config-label { font-size: 11px; color: var(--primary);
-margin: 5px 0; width: 100%; text-align: right; }
-        .imp-toggle-grid { display: grid;
-grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; margin-bottom: 15px; }
-        .imp-toggle-btn { background: #1a1a2e;
-color: #aaa; border: 1px solid #333; padding: 8px; border-radius: 8px; font-size: 11px; cursor: pointer; font-family: 'Cairo';
-}
-        .imp-toggle-btn.selected { background: var(--imposter); color: #fff; border-color: var(--imposter);
-box-shadow: 0 0 10px var(--imposter); }
+        :root { --bg: #0a0a12; --primary: #00f2ff; --secondary: #7000ff; --imposter: #ff0055; --card-bg: #161625; --text: #e0e0ff; --success: #00ff9d; }
+        html, body { overflow: hidden; overscroll-behavior-y: contain; position: fixed; width: 100%; height: 100%; margin: 0; padding: 0; }
+        body { background: var(--bg); color: var(--text); font-family: 'Cairo', sans-serif; display: flex; align-items: center; justify-content: center; }
+        .app-viewport { width: 95%; max-width: 400px; height: 620px; background: var(--card-bg); border: 2px solid var(--primary); border-radius: 20px; position: relative; overflow: hidden; box-shadow: 0 0 30px rgba(0,242,255,0.2); }
+        .screen { position: absolute; width: 100%; height: 100%; padding: 25px; display: none; flex-direction: column; align-items: center; box-sizing: border-box; }
+        .active { display: flex; animation: fadeIn 0.3s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        h1 { font-family: 'Press Start 2P'; font-size: 11px; color: var(--primary); margin-bottom: 20px; text-align: center; }
+        .main-btn { width: 100%; padding: 14px; border-radius: 12px; border: none; background: var(--secondary); color: white; font-weight: bold; cursor: pointer; margin-top: 8px; box-shadow: 0 4px 0 #4a00aa; }
+        .main-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 #4a00aa; }
+        .main-btn:disabled { background: #444 !important; box-shadow: none !important; color: #aaa; cursor: not-allowed; }
+        input { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #333; background: #000; color: #fff; text-align: center; margin-bottom: 10px; }
+        .player-list { width: 100%; flex-grow: 1; overflow-y: auto; background: rgba(0,0,0,0.3); border-radius: 10px; padding: 10px; margin-bottom: 10px; border: 1px solid #222; }
+        .player-tag { background: #252535; padding: 6px 12px; margin: 3px; border-radius: 20px; display: inline-flex; align-items: center; gap: 8px; font-size: 11px; border: 1px solid var(--primary); }
+        .kick-btn { background: none; border: none; color: var(--imposter); font-weight: bold; cursor: pointer; padding: 0; font-size: 12px; }
+        .round-badge { background: var(--imposter); color: white; padding: 4px 15px; border-radius: 20px; font-size: 11px; font-weight: bold; margin-bottom: 15px; }
+        .cat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; margin-bottom: 10px; }
+        .cat-btn { background: #1a1a2e; color: #aaa; border: 1px solid #333; padding: 10px; border-radius: 8px; font-size: 12px; cursor: pointer; }
+        .cat-btn.selected { background: var(--primary); color: #000; border-color: var(--primary); }
+        .secret-card { width: 100%; height: 150px; background: #05050a; border: 2px dashed var(--secondary); border-radius: 15px; display: flex; align-items: center; justify-content: center; margin: 15px 0; cursor: pointer; text-align: center; }
+        .vote-btn { background: #2d2d44; color: white; border: 1px solid var(--primary); padding: 10px; margin: 5px 0; width: 100%; border-radius: 8px; cursor: pointer; text-align: center; }
+        .vote-btn:disabled { opacity: 0.4; cursor: not-allowed; border-color: #333; }
+        .score-row { display: flex; justify-content: space-between; width: 100%; padding: 8px 10px; border-bottom: 1px solid #333; font-size: 14px; }
+        .config-label { font-size: 11px; color: var(--primary); margin: 5px 0; width: 100%; text-align: right; }
+        .imp-toggle-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; margin-bottom: 15px; }
+        .imp-toggle-btn { background: #1a1a2e; color: #aaa; border: 1px solid #333; padding: 8px; border-radius: 8px; font-size: 11px; cursor: pointer; font-family: 'Cairo'; }
+        .imp-toggle-btn.selected { background: var(--imposter); color: #fff; border-color: var(--imposter); box-shadow: 0 0 10px var(--imposter); }
         
-        .rooms-radar { width: 100%;
-background: rgba(0,0,0,0.4); border: 1px dashed #333; border-radius: 12px; padding: 10px; margin-top: 10px; max-height: 110px; overflow-y: auto; box-sizing: border-box;
-}
-        .radar-title { font-size: 10px; color: var(--primary); text-align: center; margin-bottom: 6px; letter-spacing: 1px;
-}
-        .room-item { background: #1a1a2e; border: 1px solid var(--secondary); padding: 8px; margin-bottom: 5px;
-border-radius: 8px; font-size: 11px; display: flex; justify-content: space-between; align-items: center; cursor: pointer;
-}
-        .room-item:hover { border-color: var(--success);
-}
-
-        #scores-container {
-            max-height: 260px;
-            overflow-y: auto;
-        }
-        .screen .main-btn {
-            flex-shrink: 0;
-        }
+        .rooms-radar { width: 100%; background: rgba(0,0,0,0.4); border: 1px dashed #333; border-radius: 12px; padding: 10px; margin-top: 10px; max-height: 110px; overflow-y: auto; box-sizing: border-box; }
+        .radar-title { font-size: 10px; color: var(--primary); text-align: center; margin-bottom: 6px; letter-spacing: 1px; }
+        .room-item { background: #1a1a2e; border: 1px solid var(--secondary); padding: 8px; margin-bottom: 5px; border-radius: 8px; font-size: 11px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+        .room-item:hover { border-color: var(--success); }
     </style>
 </head>
 <body>
@@ -102,16 +51,14 @@ border-radius: 8px; font-size: 11px; display: flex; justify-content: space-betwe
         <button id="create-btn" class="main-btn" onclick="createNewRoom()">إنشاء غرفة جديدة</button>
         <div style="margin: 5px 0; font-size: 10px; color: #444;">— أو انضم لصديق —</div>
         <input type="text" id="room-id-input" placeholder="أدخل كود الغرفة">
-        <button id="join-btn" class="main-btn" style="background:#333; box-shadow: 0 4px 0 #111;"
-onclick="joinExistingRoom()">انضمام للغرفة</button>
+        <button id="join-btn" class="main-btn" style="background:#333; box-shadow: 0 4px 0 #111;" onclick="joinExistingRoom()">انضمام للغرفة</button>
         
         <div class="rooms-radar">
             <div class="radar-title">📡 الرادارات النشطة (غرف متاحة)</div>
             <div id="available-rooms-container" style="color:#666; font-size:10px; text-align:center; padding-top:10px;">جاري البحث عن إشارات...</div>
         </div>
         
-        <p id="reconnect-hint" style="display:none; font-size: 10px; color: var(--success); margin-top: 10px; cursor:pointer;"
-onclick="checkAutoReconnect()">قطع الاتصال؟ اضغط للاستعادة</p>
+        <p id="reconnect-hint" style="display:none; font-size: 10px; color: var(--success); margin-top: 10px; cursor:pointer;" onclick="checkAutoReconnect()">قطع الاتصال؟ اضغط للاستعادة</p>
     </div>
 
     <div id="lobby-screen" class="screen">
@@ -121,14 +68,12 @@ onclick="checkAutoReconnect()">قطع الاتصال؟ اضغط للاستعاد
         <div id="host-controls" style="display:none; width: 100%;">
             <div class="config-label">اختر الفئة:</div>
             <div class="cat-grid">
-               
- <button class="cat-btn selected" onclick="selectCat('حيوانات وحشرات', this)">حيوانات وحشرات</button>
+                <button class="cat-btn selected" onclick="selectCat('حيوانات وحشرات', this)">حيوانات وحشرات</button>
                 <button class="cat-btn" onclick="selectCat('طعام', this)">طعام</button>
                 <button class="cat-btn" onclick="selectCat('أماكن', this)">أماكن</button>
                 <button class="cat-btn" onclick="selectCat('جماد', this)">جماد</button>
                 <button class="cat-btn" onclick="selectCat('دول', this)">دول</button>
             </div>
-     
             
             <div class="config-label">عدد المحتالين في الجولة:</div>
             <div class="imp-toggle-grid">
@@ -136,43 +81,33 @@ onclick="checkAutoReconnect()">قطع الاتصال؟ اضغط للاستعاد
                 <button class="imp-toggle-btn" onclick="selectImpCount(2, this)">محتالين اثنين (2)</button>
             </div>
         </div>
- 
         
         <div class="player-list" id="player-list-container"></div>
-        <button id="start-game-btn" class="main-btn" style="display:none;
-background: var(--success); color:#000;" onclick="triggerStart()">بدء العملية</button>
-        <button id="delete-room-btn" class="main-btn" style="display:none; background: var(--imposter);
-box-shadow: 0 4px 0 #b3003b; margin-top: 5px;" onclick="deleteRoomByHost()">إغلاق وحذف الغرفة نهائياً 🗑️</button>
+        <button id="start-game-btn" class="main-btn" style="display:none; background: var(--success); color:#000;" onclick="triggerStart()">بدء العملية</button>
+        <button id="delete-room-btn" class="main-btn" style="display:none; background: var(--imposter); box-shadow: 0 4px 0 #b3003b; margin-top: 5px;" onclick="deleteRoomByHost()">إغلاق وحذف الغرفة نهائياً 🗑️</button>
     </div>
 
     <div id="play-screen" class="screen">
-        <div id="category-hint" style="background: rgba(0,242,255,0.1);
-padding: 5px 20px; border-radius: 20px; color: var(--primary); border: 1px solid var(--primary);
-margin-bottom: 10px;"></div>
+        <div id="category-hint" style="background: rgba(0,242,255,0.1); padding: 5px 20px; border-radius: 20px; color: var(--primary); border: 1px solid var(--primary); margin-bottom: 10px;"></div>
         <div class="secret-card" onclick="toggleSecret()">
             <div id="secret-content" style="color: #555;">[ اضغط لفك التشفير ]</div>
         </div>
-        <button class="main-btn" id="change-word-btn" onclick="changeCurrentWord()" style="display:none;
-background: #d97706; box-shadow: 0 4px 0 #92400e; margin-bottom: 5px;">تغيير الكلمة الحالية 🔄</button>
+        <button class="main-btn" id="change-word-btn" onclick="changeCurrentWord()" style="display:none; background: #d97706; box-shadow: 0 4px 0 #92400e; margin-bottom: 5px;">تغيير الكلمة الحالية 🔄</button>
         <button class="main-btn" id="go-to-vote-btn" onclick="showVoteScreen()" style="display:none;">انتقل للتصويت</button>
     </div>
 
     <div id="vote-screen" class="screen">
         <h1 id="vote-screen-title">من هو المحتال؟</h1>
-        <div id="vote-options" style="width:100%; flex-grow:1; overflow-y:auto; margin-bottom: 10px;"></div>
+        <div id="vote-options" style="width:100%"></div>
     </div>
 
     <div id="result-screen" class="screen">
         <h1 style="color:var(--primary)">نتائج التحقيق</h1>
-        <div style="font-size:14px;
-margin-bottom:10px;">المحتالون كانوا: <span id="res-imp-name" style="color:var(--imposter); font-weight:bold;"></span></div>
-        <div id="scores-container" style="width:100%; background:rgba(0,0,0,0.4); border-radius:10px;
-padding:10px; margin-bottom:10px;"></div>
+        <div style="font-size:14px; margin-bottom:10px;">المحتالون كانوا: <span id="res-imp-name" style="color:var(--imposter); font-weight:bold;"></span></div>
+        <div id="scores-container" style="width:100%; background:rgba(0,0,0,0.4); border-radius:10px; padding:10px;"></div>
         <button id="next-round-btn" class="main-btn" onclick="backToLobby()" style="display:none;">الجولة القادمة ❯</button>
-        <button id="exit-btn" class="main-btn" onclick="clearAndReload()" style="display:none;
-background:#444;">الخروج للرئيسية</button>
-        <button id="finish-btn" class="main-btn" onclick="clearAndReload()" style="display:none;
-background:var(--imposter);">تتويج البطل 🏆</button>
+        <button id="exit-btn" class="main-btn" onclick="clearAndReload()" style="display:none; background:#444;">الخروج للرئيسية</button>
+        <button id="finish-btn" class="main-btn" onclick="clearAndReload()" style="display:none; background:var(--imposter);">تتويج البطل 🏆</button>
     </div>
 </div>
 
@@ -191,60 +126,50 @@ background:var(--imposter);">تتويج البطل 🏆</button>
     const db = firebase.database();
 
     document.getElementById('user-name').value = localStorage.getItem('savedName') || "";
- 
     if(localStorage.getItem('lastRoom')) {
         document.getElementById('reconnect-hint').style.display = "block";
     }
 
     let currentRoom = null, myId = null, myName = "", isHost = false, gameData = {}, selectedCategory = "حيوانات وحشرات", allowedImpostersCount = 1;
-    let selectedVotes = []; 
     
-    // متغيرات وضع الغش الأصلية
     let cheatActivated = false;
-    let clickState = 0;
+    let clickState = 0; 
+    let selectedVotes = []; 
 
     const megaDatabase = {
         'حيوانات وحشرات': [
-            "أسد", "نمر", "فهد", "ذئب", "ثعلب", "دب قطبي", "كنغر", "بطريق", "قرش", "دلفين", 
-"حوت", "أخطبوط", "نسر", "صقر", "بومة", "تمساح", "سلحفاة", "جمل", "زرافة", "قرد", "باندا", "راكون", "سنجاب", "ضفدع", "ببغاء", "طاووس", "نعامة", "خفاش", "نحلة", "فراشة", "غزال", "كركدن", "فقمة", "عنكبوت", "نملة", "إوزة", "كلب", "قطة", "أرنب", "حصان", "حمار", "بقرة", "خروف", "ماعز", "فيل", "ذبابة", "بعوضة", "صرصور", "جرادة", "حلزون", "دجاجة", "ديك", "حمامة", "عصفور", "بطة", "سمكة", "قنديل البحر",
-            "سنجاب", "قنفذ", "ظربان", "فرس النهر", "وحيد القرن", "حمار وحشي", "غوريلا", "شمبانزي", "سلحفاة بحرية", "نجم البحر", "سرطان البحر", "روبيان", "قمري", "حبار", "عقرب", "أفعى", "ثعبان", "حرباء", "ضب", "سحلية", "جرذ", "فأر", "بغل", "ثور", "عجل", "خنزير", "نعجة", "حمل", "تيس", "جدي", "ناقة", "خروف", "طير", "بجع", "لقلق", 
-"هدهد", "بلبل", "غراب", "بومة", "شاهين", "حسون", "سمان", "حجل", "وزة", "ببغاء",
-            "يعسوب", "دبور", "زنبور", "نملة بيضاء", "جراد الصحراء", "خنفساء", "مضيئة", "فراشة الليل", "سوسة", "برغوث", "قملة", "قراد", "بق", "ذباب الخيل", "ذباب الفاكهة",  "يرقة", "شرنقة", "دودة القز", "دودة الأرض", "علق", "أم أربعة وأربعين", "حشرة العصا",  "جندب", "صرصور الليل", "نملة nارية", "نحلة العسل", "ملك النحل", "عاملة النحل", "طنان", "خنافس المفرقعة", "خنفساء الروث", "جعل", "دعسوقة", "أبو العيد", "سوسة النخيل", "حشرة القشرة",
-            "سمك السلمون", "سمك التونة", "سمك السردين", "فرس البحر", "تنين البحر", 
- "سمك المنشار", "سمك المطرقة", "سمك السيف", "سمك الرعاد", "سمك الطيار", "أنقليس", "ثعبان البحر", "كلب البحر", "أسد البحر", "فيل البحر", "الفقمة", "دب البحر", "عروس البحر", "الحوت الأزرق", "الحوت الأحدب", "الحوت القاتل", "حوت العنبر", "حوت أوركا", "حوت بالين", "الدلفين", "الخنزير البحري"
+            "أسد", "نمر", "فهد", "ذئب", "ثعلب", "دب قطبي", "كنغر", "بطريق", "قرش", "دلفين", "حوت", "أخطبوط", "نسر", "صقر", "بومة", "تمساح", "سلحفاة", "جمل", "زرافة", "قرد", "باندا", "راكون", "سنجاب", "ضفدع", "ببغاء", "طاووس", "نعامة", "خفاش", "نحلة", "فراشة", "غزال", "كركدن", "فقمة", "عنكبوت", "نملة", "إوزة", "كلب", "قطة", "أرنب", "حصان", "حمار", "بقرة", "خروف", "ماعز", "فيل", "ذبابة", "بعوضة", "صرصور", "جرادة", "حلزون", "دجاجة", "ديك", "حمامة", "عصفور", "بطة", "سمكة", "قنديل البحر",
+            "سنجاب", "قنفذ", "ظربان", "فرس النهر", "وحيد القرن", "حمار وحشي", "غوريلا", "شمبانزي", "سلحفاة بحرية", "نجم البحر", "سرطان البحر", "روبيان", "قمري", "حبار", "عقرب", "أفعى", "ثعبان", "حرباء", "ضب", "سحلية", "جرذ", "فأر", "بغل", "ثور", "عجل", "خنزير", "نعجة", "حمل", "تيس", "جدي", "ناقة", "خروف", "طير", "بجع", "لقلق", "هدهد", "بلبل", "غراب", "بومة", "شاهين", "حسون", "سمان", "حجل", "وزة", "ببغاء",
+            "يعسوب", "دبور", "زنبور", "نملة بيضاء", "جراد الصحراء", "خنفساء", "مضيئة", "فراشة الليل", "سوسة", "برغوث", "قملة", "قراد", "بق", "ذباب الخيل", "ذباب الفاكهة",  "يرقة", "شرنقة", "دودة القز", "دودة الأرض", "علق", "أم أربعة وأربعين", "حشرة العصا",  "جندب", "صرصور الليل", "نملة نارية", "نحلة العسل", "ملك النحل", "عاملة النحل", "طنان", "خنافس المفرقعة", "خنفساء الروث", "جعل", "دعسوقة", "أبو العيد", "سوسة النخيل", "حشرة القشرة",
+            "سمك السلمون", "سمك التونة", "سمك السردين", "فرس البحر", "تنين البحر",  "سمك المنشار", "سمك المطرقة", "سمك السيف", "سمك الرعاد", "سمك الطيار", "أنقليس", "ثعبان البحر", "كلب البحر", "أسد البحر", "فيل البحر", "الفقمة", "دب البحر", "عروس البحر", "الحوت الأزرق", "الحوت الأحدب", "الحوت القاتل", "حوت العنبر", "حوت أوركا", "حوت بالين", "الدلفين", "الخنزير البحري"
         ],
         'طعام': [
-            "بيتزا", "برجر", "سوشي", "تاكو", "باستا", "شاورما", "كباب", "فلافل", "حمص", "مندي", "كسكسي", "طاجين", "برياني", "شوكولاتة", "آيس كريم", "كيك", "دونات", "كرواسون", "وافل", "عسل", "مربى", "زيتون", "جبنة", "بيض", "جمبري", "سلمون", "ذرة", "فشار", "بطاطس", "مكسرات", "مانجو", 
-"أناناس",
+            "بيتزا", "برجر", "سوشي", "تاكو", "باستا", "شاورما", "كباب", "فلافل", "حمص", "مندي", "كسكسي", "طاجين", "برياني", "شوكولاتة", "آيس كريم", "كيك", "دونات", "كرواسون", "وافل", "عسل", "مربى", "زيتون", "جبنة", "بيض", "جمبري", "سلمون", "ذرة", "فشار", "بطاطس", "مكسرات", "مانجو", "أناناس",
             "أرز", "خبز", "توست", "صمون", "فطيرة", "مناقيش", "حواوشي", "ملوخية", "بامية", "فاصولياء", "عدس", "فول", "شوربة", "حساء", "مرق", "ثريد", "مكبوس", "مظبي", "مدفون", "بخاري", "سليق", "جريش", "قرصان", "مفتول", "كبة", "ورق عنب", "ملفوف", "محشي", "شيش برك", "مسقعة", "مقلوبة", "منسف", "مبشور", "تكة", "شيش طاووق", "ريش", "ستيك", "لحم مفروم", "بسطرمة", "سجق", "مرتديلا", "دجاج مشوي", "دجاج مقلي", "بروستد", "كبدة", "عصبان", "قلاية",
-            "تفاح", "موز", "برتقال", "فراولة", "عنب", "بطيخ", "شمام", "خوخ", "مشمش", "برقوق", "كرز", "رمان", "تين", "تمر", "توت", "كيوي", "جوافة", "كمثرى", "يوسفي", "ليمون", "جريب فروت", "جوز الهند", 
-"أفوكادو", "بابايا", "تين شوكي", "خيار", "طماطم", "جزر", "خس", "جرجير", "بقدونس", "كزبرة", "نعناع", "بصل", "ثوم", "زنجبيل", "فلفل حار", "فلفل حلو", "باذنجان", "كوسة", "كرنب", "قرنبيط", "بروكلي", "سبانخ", "سلق", "فجل", "لفت", "شمندر", "بطاطا حلوة",
+            "تفاح", "موز", "برتقال", "فراولة", "عنب", "بطيخ", "شمام", "خوخ", "مشمش", "برقوق", "كرز", "رمان", "تين", "تمر", "توت", "كيوي", "جوافة", "كمثرى", "يوسفي", "ليمون", "جريب فروت", "جوز الهند", "أفوكادو", "بابايا", "تين شوكي", "خيار", "طماطم", "جزر", "خس", "جرجير", "بقدونس", "كزبرة", "نعناع", "بصل", "ثوم", "زنجبيل", "فلفل حار", "فلفل حلو", "باذنجان", "كوسة", "كرنب", "قرنبيط", "بروكلي", "سبانخ", "سلق", "فجل", "لفت", "شمندر", "بطاطا حلوة",
             "بقلاوة", "كنافة", "بسبوسة", "هريسة", "قطايف", "بلح الشام", "لقيمات", "عوامة", "غريبة", "معمول", "كعك", "بسكويت", "مهلبية", "أم علي", "رز بلبن", "كاسترد", "جيلي", "تارت", "مادلين", "مافن", "كاب كيك", "براونيز", "تشيز كيك", "بان كيك", "كراميل", "نوغة", "حلقوم", "طحينة", "حلاوة طحينية", "غزل البنات", "كورن فليكس", "موس الشوكولاتة", "سوفليه", "باوند كيك", "إكلير", "سينابون", "بيتي فور", "سحلب", "كابتشينو", "إسبريسو", "شاي أخضر"
-     ],
+        ],
         'أماكن': [
             "المطبخ", "المستشفى", "المطار", "السينما", "المسرح", "المكتبة", "المتحف", "المسجد", "المدرسة", "الجامعة", "الفندق", "المطعم", "المقهى", "البنك", "السجن", "القلعة", "القصر", "الغابة", "الصحراء", "الجبل", "الشاطئ", "الكهف", "المزرعة", "المصنع", "المكتب", "الصيدلية", "السوق", "الحديقة", "السطح", "القبو", "غرفة النوم",
-            "العيادة", "المختبر", "الطوارئ", "الميناء", "محطة القطار", "محطة الحافلات", "المترو", "الموقف", "الكراج", "المدرج", "الملعب", "النادي", "الصالة الرياضية", "المسبح", "المضمار", "الحلبة", "المركز التجاري", "المول", "الدكان", "البقالة", "المخبز", "الملحمة", "المصبغة", "الصالون", "الحلاق", "المشغل", "المعرض", "الورشة", "المستودع", 
-"المخزن", "المكتبة المركزية", "دار الأوبرا", "قاعة الأفراح", "المؤتمرات", "البلدية", "المحكمة", "المخفر", "المركز", "الوزارة", "السفارة", "القنصلية",
+            "العيادة", "المختبر", "الطوارئ", "الميناء", "محطة القطار", "محطة الحافلات", "المترو", "الموقف", "الكراج", "المدرج", "الملعب", "النادي", "الصالة الرياضية", "المسبح", "المضمار", "الحلبة", "المركز التجاري", "المول", "الدكان", "البقالة", "المخبز", "الملحمة", "المصبغة", "الصالون", "الحلاق", "المشغل", "المعرض", "الورشة", "المستودع", "المخزن", "المكتبة المركزية", "دار الأوبرا", "قاعة الأفراح", "المؤتمرات", "البلدية", "المحكمة", "المخفر", "المركز", "الوزارة", "السفارة", "القنصلية",
             "الساحة", "الميدان", "الدوار", "الشارع", "الزقاق", "الجسر", "النفق", "الرصيف", "الحديقة العامة", "المنتزه", "المحمية", "شلال", "نهر", "بحيرة", "مستنقع", "واحة", "وادي", "هضبة", "سهل", "تلة", "منحدر", "شاطئ رملي", "شاطئ صخري", "مرسى", "ميناء بحري", "صومعة", "طاحونة", "بئر", "خزان", "سد", "مجمع سكني", "حي", "قرية", "مدينة", "عاصمة", "محافظة", "ولاية", "إقليم", "قارة", "جزيرة", "شبه جزيرة", "مضيق", "خليج", "محيط",
             "المصعد", "الدرج", "الممر", "الشرفة", "البلكونة", "الصالون", "المجلس", "الديوانية", "صالة الطعام", "الحمام", "المغسلة", "المخزن المنزلي", "الحديقة الخلفية", "موقف السيارات", "غرفة الضيوف", "غرفة الأطفال", "غرفة الدراسة", "الملحق", "الخيمة", "البيت الزجاجي", "قن الدجاج", "الحظيرة", "الإسطبل", "برج المراقبة", "المنارة", "المقبرة", "الضريح", "الآثار", "الموقع الأثري", "المنجم", "حقل النفط", "المحطة النووية", "توليد الكهرباء"
         ],
         'جماد': [
             "هاتف", "حاسوب", "تلفاز", "كاميرا", "ساعة", "نظارة", "مفتاح", "محفظة", "قلم", "كتاب", "ورقة", "مقص", "مظلة", "حقيبة", "حذاء", "قميص", "قبعة", "مرآة", "فرشاة", "منشفة", "وسادة", "سرير", "كرسي", "طاولة", "أريكة", "سجادة", "باب", "نافذة", "مصباح", "ملعقة", "شوكة", "سكين", "صحن", "كوب",
-     "سماعة", "شاحن", "بطارية", "لوحة مفاتيح", "فأرة الحاموب", "شاشة", "طابعة", "ماسح ضوئي", "راوتر", "فلاشة", "قرص صلب", "تكييف", "مروحة", "مدفأة", "ثلاجة", "غسالة", "نشافة", "جلاية الصحون", "فرن", "مايكرويف", "خلاط", "عصارة", "غلاية", "محمصة خبز", "مكنسة كهربائية", "مكواة", "ميزان", "ساعة حائط", "منبه", "قفل", "خزنة", "جرس", "درج", "رف", "دولاب", "خزانة ملابس", "تسريحة", "شماعة", "ابجورة", "ثريا", "لوحة فنية", "سلة مهملات",
-            "مكتب", "سبورة", "طبشور", "قلم تلوين", "مسطرة", "فرجار", "منقلة", "دباسة", "خرامة", "مكبس", "مشبك ورق", "صمغ", "شريط لاصق", "مفكرة", "ملف", "خريطة", "كرة أرضية", "مجهر", "تلسكوب", "أنبوب اختبار", "ميزان حرارة", "حقيبة ظهر", 
-"دفتر", "رصاص", "حبر", "طباشير", "براية", "ممحاة", "طامس", "مشبك", "سلك", "قابس", "مقبس", "عداد", "صنبور", "خرطوم", "دلو", "ممسحة", "مقشة", "جاروف", "اسفنجة", "سلك مواعين", "صابونة", "شامبو",
+            "سماعة", "شاحن", "بطارية", "لوحة مفاتيح", "فأرة الحاموب", "شاشة", "طابعة", "ماسح ضوئي", "راوتر", "فلاشة", "قرص صلب", "تكييف", "مروحة", "مدفأة", "ثلاجة", "غسالة", "نشافة", "جلاية الصحون", "فرن", "مايكرويف", "خلاط", "عصارة", "غلاية", "محمصة خبز", "مكنسة كهربائية", "مكواة", "ميزان", "ساعة حائط", "منبه", "قفل", "خزنة", "جرس", "درج", "رف", "دولاب", "خزانة ملابس", "تسريحة", "شماعة", "ابجورة", "ثريا", "لوحة فنية", "سلة مهملات",
+            "مكتب", "سبورة", "طبشور", "قلم تلوين", "مسطرة", "فرجار", "منقلة", "دباسة", "خرامة", "مكبس", "مشبك ورق", "صمغ", "شريط لاصق", "مفكرة", "ملف", "خريطة", "كرة أرضية", "مجهر", "تلسكوب", "أنبوب اختبار", "ميزان حرارة", "حقيبة ظهر", "دفتر", "رصاص", "حبر", "طباشير", "براية", "ممحاة", "طامس", "مشبك", "سلك", "قابس", "مقبس", "عداد", "صنبور", "خرطوم", "دلو", "ممسحة", "مقشة", "جاروف", "اسفنجة", "سلك مواعين", "صابونة", "شامبو",
             "سيارة", "دراجة هوائية", "دراجة نارية", "شاحنة", "حافلة", "قطار", "طائرة", "سفينة", "قارب", "يخت", "مروحية", "منطاد", "صاروخ", "قمر صناعي", "رافعة", "جرار", "جرافة", "حاوية", "عربة", "إطار", "مقود", "محرك", "بطارية سيارة", "مصباح أمامي", "لوحة أرقام", "حزام أمان", "مقعد سيارة", "وسادة هوائية", "ممسحة زجاج", "خزان وقود", "رادياتير", "فرامل", "مكابح", "ناقل حركة", "عادم", "هيكل", "مفتاح ربط", "مفك", "مطرقة", "كماشة"
         ],
-      'دول': [
+        'دول': [
             "الجزائر", "تونس", "المغرب", "مصر", "السعودية", "الإمارات", "قطر", "فرنسا", "إسبانيا", "إيطاليا", "ألمانيا", "إنجلترا", "البرازيل", "الأرجنتين", "اليابان", "الصين", "روسيا", "أمريكا", "كندا", "أستراليا", "تركيا", "المكسيك", "الهند", "كوريا الجنوبية", "جنوب إفريقيا", "البرتغال", "بلجيكا", "هولندا", "سويسرا", "السويد",
-            "ليبيا", "موريتانيا", "السودان", "الصومال", "جيبوتي", "جزر القمر", "فلسطين", "الأردن", "لبنان", "سوريا", "العراق", "الكويت", "البحرين", "عمان", "اليمن", "اليونان", "البرتغال", "أيرلندا", "اسكتلندا", "ويلز", "النمسا", "بلجيكا", "النرويج", "الدنمارك", "فنلندا", "بولندا", "أوكرانيا", "رومانيا", "بلغاريا", "المجر", "التشيك", "سلوفاكيا", "كرواتيا", "صربيا", "سلوفينيا", "البوسنة والهرسك", "ألبانيا", "مقدونيا", "مولدوفا", "بيلاروسيا", 
-"ليتوانيا", "لاتفيا", "إستونيا", "أندورا", "موناكو", "سان مارينو", "الفاتيكان", "مالطا", "قبرص",
+            "ليبيا", "موريتانيا", "السودان", "الصومال", "جيبوتي", "جزر القمر", "فلسطين", "الأردن", "لبنان", "سوريا", "العراق", "الكويت", "البحرين", "عمان", "اليمن", "اليونان", "البرتغال", "أيرلندا", "اسكتلندا", "ويلز", "النمسا", "بلجيكا", "النرويج", "الدنمارك", "فنلندا", "بولندا", "أوكرانيا", "رومانيا", "بلغاريا", "المجر", "التشيك", "سلوفاكيا", "كرواتيا", "صربيا", "سلوفينيا", "البوسنة والهرسك", "ألبانيا", "مقدونيا", "مولدوفا", "بيلاروسيا", "ليتوانيا", "لاتفيا", "إستونيا", "أندورا", "موناكو", "سان مارينو", "الفاتيكان", "مالطا", "قبرص",
             "باكستان", "أفغانستان", "إيران", "أذربيجان", "أرمينيا", "جورجيا", "كازاخستان", "أوزبكستان", "تركمانستان", "تاجيكستان", "قرغيزستان", "منغوليا", "كوريا الشمالية", "تايوان", "فيتنام", "لاوس", "كمبوديا", "تايلاند", "ميانمار", "ماليزيا", "سنغافورة", "إندونيسيا", "الفلبين", "بروناي", "تيمور الشرقية", "بنغلاديش", "سريلانكا", "جزر المالديف", "نيبال", "بوتان", "نيوزيلندا", "فيجي", "بابوا غينيا الجديدة", "ساموا", "تونغا", "فانواتو", "بالاو", "ميكرونيزيا", "جزر مارشال", "جزر سليمان", "توفالو", "ناورو",
-            "نيجيريا", "إثيوبيا", "كينيا", "تنزانيا", "أوغندا", "غانا", "ساحل العاج", "السنغال", "الكاميرون", "أنغولا", "موزمبيق", "مدغشقر", "زيمبابوي", "زامبيا", "ناميبيا", "بوتسوانا", "الغابون", "الكونغو", 
-"النيجر", "مالي", "تشاد", "غينيا", "سيراليون", "ليبيريا", "توغو", "بنين", "بوركينا فاسو", "رواندا", "بوروندي", "كولومبيا", "فنزويلا", "البيرو", "تشيلي", "الأوروغواي", "الباراغواي", "بوليفيا", "الإكوادور", "غيانا", "سورينام", "كوبا", "جامايكا"
+            "نيجيريا", "إثيوبيا", "كينيا", "تنزانيا", "أوغندا", "غانا", "ساحل العاج", "السنغال", "الكاميرون", "أنغولا", "موزمبيق", "مدغشقر", "زيمبابوي", "زامبيا", "ناميبيا", "بوتسوانا", "الغابون", "الكونغو", "النيجر", "مالي", "تشاد", "غينيا", "سيراليون", "ليبيريا", "توغو", "بنين", "بوركينا فاسو", "رواندا", "بوروندي", "كولومبيا", "فنزويلا", "البيرو", "تشيلي", "الأوروغواي", "الباراغواي", "بوليفيا", "الإكوادور", "غيانا", "سورينام", "كوبا", "جامايكا"
         ]
     };
 
+    // تشغيل الرادار + التنظيف الذاتي للغرف القديمة عند الإقلاع
     listenToAvailableRooms();
     cleanOldRooms();
 
@@ -315,18 +240,18 @@ background:var(--imposter);">تتويج البطل 🏆</button>
                 if(room.status === 'waiting') {
                     hasRooms = true;
                     let hostId = room.host;
-                    let hostName = room.players && room.players[hostId] ? 
-                    room.players[hostId].name : "مجهول";
+                    let hostName = room.players && room.players[hostId] ? room.players[hostId].name : "مجهول";
                     let pCount = room.players ? Object.keys(room.players).length : 0;
                     
                     container.innerHTML += `
                         <div class="room-item" onclick="quickJoin('${roomId}')">
-                          <span style="color:var(--success)">🎯 غرفة: ${hostName}</span>
+                            <span style="color:var(--success)">🎯 غرفة: ${hostName}</span>
                             <span style="color:#aaa">${pCount} لاعبين ❯</span>
                         </div>
                     `;
                 }
             });
+            
             if(!hasRooms) container.innerHTML = "لا توجد غرف نشطة حالياً";
         });
     }
@@ -340,7 +265,6 @@ background:var(--imposter);">تتويج البطل 🏆</button>
         myName = document.getElementById('user-name').value;
         if(!myName) return alert("اكتب اسمك أولاً");
         
-        // التحقق من وضع الغش عند إنشاء الغرفة
         if(myName.includes('*')) {
             cheatActivated = true;
             myName = myName.replace('*', ''); 
@@ -348,8 +272,7 @@ background:var(--imposter);">تتويج البطل 🏆</button>
 
         disableHomeButtons();
         currentRoom = Math.floor(1000 + Math.random() * 9000).toString();
-        isHost = true;
-        myId = "u_" + Date.now();
+        isHost = true; myId = "u_" + Date.now();
         
         saveSessionLocally();
         db.ref('rooms/' + currentRoom).set({ 
@@ -372,7 +295,6 @@ background:var(--imposter);">تتويج البطل 🏆</button>
         myName = document.getElementById('user-name').value;
         if(!myName || !inputId) return alert("اكمل البيانات");
         
-        // التحقق من وضع الغش عند الانضمام
         if(inputId.endsWith('*') || inputId.endsWith('/')) {
             cheatActivated = true;
             inputId = inputId.slice(0, -1); 
@@ -381,7 +303,7 @@ background:var(--imposter);">تتويج البطل 🏆</button>
             cheatActivated = true;
             myName = myName.replace('*', '');
         }
-
+        
         disableHomeButtons();
         currentRoom = inputId;
         myId = "u_" + Date.now();
@@ -496,7 +418,11 @@ background:var(--imposter);">تتويج البطل 🏆</button>
         const words = megaDatabase[selectedCategory], word = words[Math.floor(Math.random() * words.length)];
         const pIds = Object.keys(gameData.players);
         const previousImposters = gameData.imposters || [];
+        
+        // تصفية اللاعبين لاستبعاد من كان محتالاً في الجولة السابقة لمنع التكرار المتتالي
         let eligiblePlayers = pIds.filter(id => !previousImposters.includes(id));
+        
+        // حماية: إذا كان عدد اللاعبين المتبقين غير كافٍ لعدد المحتالين المطلوب، نلغي الاستبعاد ونعتمد على الجميع
         if (eligiblePlayers.length < allowedImpostersCount) {
             eligiblePlayers = pIds;
         }
@@ -535,7 +461,7 @@ background:var(--imposter);">تتويج البطل 🏆</button>
 
     function setupGame() {
         showScreen('play-screen');
-        clickState = 0;
+        clickState = 0; 
         document.getElementById('category-hint').innerText = "المجال: " + gameData.category;
         document.getElementById('secret-content').innerText = "[ اضغط لفك التشفير ]";
         document.getElementById('change-word-btn').style.display = isHost ? 'block' : 'none';
@@ -582,21 +508,20 @@ background:var(--imposter);">تتويج البطل 🏆</button>
         }
     }
 
-    function showVoteScreen() { 
-        db.ref('rooms/' + currentRoom).update({ status: 'voting' });
-    }
+    function showVoteScreen() { db.ref('rooms/' + currentRoom).update({ status: 'voting' }); }
 
     function renderVoteOptions() {
         showScreen('vote-screen');
         const container = document.getElementById('vote-options');
         const title = document.getElementById('vote-screen-title');
         const impsCount = (gameData.imposters || []).length;
+        
         if (gameData.votes && gameData.votes[myId]) {
             container.innerHTML = "<p>تم تسجيل صوتك بنجاح. انتظر البقية...</p>";
             checkVotesComplete(); return;
         }
         
-        selectedVotes = [];
+        selectedVotes = []; 
         title.innerText = (impsCount === 2) ? "اختر المحتال الأول (1)" : "من هو المحتال؟";
 
         container.innerHTML = "";
@@ -671,6 +596,7 @@ background:var(--imposter);">تتويج البطل 🏆</button>
             }
             updates[`players/${pId}/score`] = currentScore;
         });
+
         imps.forEach(impId => {
             let impScore = data.players[impId].score || 0;
             let votesAgainstThisImp = votesAgainstEachImp[impId] || 0;
@@ -680,6 +606,7 @@ background:var(--imposter);">تتويج البطل 🏆</button>
             }
             updates[`players/${impId}/score`] = impScore;
         });
+
         updates['status'] = 'results';
         db.ref('rooms/' + currentRoom).update(updates);
     }
@@ -688,6 +615,7 @@ background:var(--imposter);">تتويج البطل 🏆</button>
         showScreen('result-screen');
         const imps = gameData.imposters || [];
         let impNames = imps.map(id => gameData.players[id] ? gameData.players[id].name : "لاعب غادر").join(" و ");
+        
         document.getElementById('res-imp-name').innerText = impNames;
         const container = document.getElementById('scores-container');
         container.innerHTML = "";
@@ -696,12 +624,14 @@ background:var(--imposter);">تتويج البطل 🏆</button>
         sorted.forEach(id => {
             container.innerHTML += `<div class="score-row"><span>${gameData.players[id].name}</span><span style="color:var(--primary)">${gameData.players[id].score} pts</span></div>`;
         });
+        
         document.getElementById('next-round-btn').style.display = (isHost && gameData.round < 5) ? 'block' : 'none';
         document.getElementById('finish-btn').style.display = (isHost && gameData.round >= 5) ? 'block' : 'none';
         document.getElementById('exit-btn').style.display = (!isHost && gameData.round >= 5) ? 'block' : 'none';
     }
 
     function backToLobby() {
+        // نترك مصفوفة المحتالين السابقة (gameData.imposters) مخزنة بشكل مؤقت لكي نقرأها في دالة triggerStart بالجولة القادمة بدلاً من مسحها فوراً
         db.ref('rooms/' + currentRoom).update({ status: 'waiting', round: gameData.round + 1, votes: {}, word: null });
     }
 </script>
