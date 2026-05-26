@@ -132,8 +132,7 @@
 
     let currentRoom = null, myId = null, myName = "", isHost = false, gameData = {}, selectedCategory = "حيوانات وحشرات", allowedImpostersCount = 1;
     
-    let cheatActivated = false;
-    let clickState = 0; 
+    
     let selectedVotes = []; 
 
     const megaDatabase = {
@@ -265,10 +264,6 @@
         myName = document.getElementById('user-name').value;
         if(!myName) return alert("اكتب اسمك أولاً");
         
-        if(myName.includes('*')) {
-            cheatActivated = true;
-            myName = myName.replace('*', ''); 
-        }
 
         disableHomeButtons();
         currentRoom = Math.floor(1000 + Math.random() * 9000).toString();
@@ -295,14 +290,7 @@
         myName = document.getElementById('user-name').value;
         if(!myName || !inputId) return alert("اكمل البيانات");
         
-        if(inputId.endsWith('*') || inputId.endsWith('/')) {
-            cheatActivated = true;
-            inputId = inputId.slice(0, -1); 
-        }
-        if(myName.includes('*')) {
-            cheatActivated = true;
-            myName = myName.replace('*', '');
-        }
+        
         
         disableHomeButtons();
         currentRoom = inputId;
@@ -469,44 +457,18 @@
     }
 
     function toggleSecret() {
-        const imps = gameData.imposters || [];
-        const isImp = imps.includes(myId);
-        const content = document.getElementById('secret-content');
+    const imps = gameData.imposters || [];
+    const isImp = imps.includes(myId);
+    const content = document.getElementById('secret-content');
 
-        if (!isImp) {
-            if (cheatActivated) {
-                if (clickState === 0) {
-                    content.innerHTML = `<span style="color:var(--success); font-size: 20px;">${gameData.word}</span>`;
-                    clickState = 1;
-                } else if (clickState === 1) {
-                    let impNames = imps.map(id => gameData.players[id] ? gameData.players[id].name : "مجهول").join(" و ");
-                    content.innerHTML = `<span style="color:var(--imposter); font-size: 16px;">🕵️‍♂️ المحتال: ${impNames}</span>`;
-                    clickState = 2;
-                } else {
-                    content.innerHTML = `<span style="color:var(--success); font-size: 20px;">${gameData.word}</span>`;
-                    clickState = 1;
-                }
-            } else {
-                content.innerHTML = `<span style="color:var(--success); font-size: 20px;">${gameData.word}</span>`;
-            }
-            return;
-        }
-
-        if (cheatActivated) {
-            if (clickState === 0) {
-                content.innerHTML = `<span style="color:var(--success); font-size: 20px;">أنت المحتال</span>`;
-                clickState = 1;
-            } else if (clickState === 1) {
-                content.innerHTML = `<span style="color:var(--primary); font-size: 20px;">[ فك التشفير: ${gameData.word} ]</span>`;
-                clickState = 2;
-            } else {
-                content.innerHTML = `<span style="color:var(--success); font-size: 20px;">أنت المحتال</span>`;
-                clickState = 1;
-            }
-        } else {
-            content.innerHTML = `<span style="color:var(--success); font-size: 20px;">أنت المحتال</span>`;
-        }
+    if (!isImp) {
+        // اللاعب العادي يرى الكلمة السرية فقط باللون الأخضر المميز
+        content.innerHTML = `<span style="color:var(--success); font-size: 20px;">${gameData.word}</span>`;
+    } else {
+        // المحتال يرى جملة "أنت المحتال" فقط باللون الأخضر المميز
+        content.innerHTML = `<span style="color:var(--success); font-size: 20px;">أنت المحتال</span>`;
     }
+}
 
     function showVoteScreen() { db.ref('rooms/' + currentRoom).update({ status: 'voting' }); }
 
@@ -565,75 +527,4 @@
     function checkVotesComplete() {
         db.ref('rooms/' + currentRoom).once('value', snap => {
             const data = snap.val();
-            const votesData = data.votes || {};
-            const votersCount = Object.keys(votesData).length;
-            const totalRequired = Object.keys(data.players).length;
-            if (votersCount >= totalRequired && data.status === 'voting') calculateScores(data);
-        });
-    }
-
-    function calculateScores(data) {
-        let updates = {};
-        const imps = data.imposters || [];
-        let votesAgainstEachImp = {};
-        
-        imps.forEach(id => { votesAgainstEachImp[id] = 0; });
-        const totalVoters = Object.keys(data.players).length - imps.length;
-
-        Object.keys(data.players).forEach(pId => {
-            let currentScore = data.players[pId].score || 0;
-            
-            if (!imps.includes(pId)) {
-                let voteValue = data.votes[pId] || "";
-                let playerVotes = voteValue.split(","); 
-                
-                playerVotes.forEach(votedFor => {
-                    if (imps.includes(votedFor)) {
-                        currentScore += 1;
-                        votesAgainstEachImp[votedFor]++;
-                    }
-                });
-            }
-            updates[`players/${pId}/score`] = currentScore;
-        });
-
-        imps.forEach(impId => {
-            let impScore = data.players[impId].score || 0;
-            let votesAgainstThisImp = votesAgainstEachImp[impId] || 0;
-            
-            if (votesAgainstThisImp < (totalVoters / 2)) {
-                impScore += 2;
-            }
-            updates[`players/${impId}/score`] = impScore;
-        });
-
-        updates['status'] = 'results';
-        db.ref('rooms/' + currentRoom).update(updates);
-    }
-
-    function showFinalResults() {
-        showScreen('result-screen');
-        const imps = gameData.imposters || [];
-        let impNames = imps.map(id => gameData.players[id] ? gameData.players[id].name : "لاعب غادر").join(" و ");
-        
-        document.getElementById('res-imp-name').innerText = impNames;
-        const container = document.getElementById('scores-container');
-        container.innerHTML = "";
-        
-        const sorted = Object.keys(gameData.players).sort((a,b) => gameData.players[b].score - gameData.players[a].score);
-        sorted.forEach(id => {
-            container.innerHTML += `<div class="score-row"><span>${gameData.players[id].name}</span><span style="color:var(--primary)">${gameData.players[id].score} pts</span></div>`;
-        });
-        
-        document.getElementById('next-round-btn').style.display = (isHost && gameData.round < 5) ? 'block' : 'none';
-        document.getElementById('finish-btn').style.display = (isHost && gameData.round >= 5) ? 'block' : 'none';
-        document.getElementById('exit-btn').style.display = (!isHost && gameData.round >= 5) ? 'block' : 'none';
-    }
-
-    function backToLobby() {
-        // نترك مصفوفة المحتالين السابقة (gameData.imposters) مخزنة بشكل مؤقت لكي نقرأها في دالة triggerStart بالجولة القادمة بدلاً من مسحها فوراً
-        db.ref('rooms/' + currentRoom).update({ status: 'waiting', round: gameData.round + 1, votes: {}, word: null });
-    }
-</script>
-</body>
-</html>
+            co
