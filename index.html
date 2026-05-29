@@ -108,6 +108,11 @@ border-radius: 8px; font-size: 11px; display: flex; justify-content: space-betwe
         /* تنسيق زر المغادرة العلوي الثابت */
         .leave-game-btn { background: #33101a; border: 1px dashed var(--imposter); color: var(--imposter); font-size: 11px; padding: 4px 12px; border-radius: 6px; cursor: pointer; font-family: 'Cairo'; position: absolute; top: 10px; left: 10px; z-index: 100; display: none; font-weight: bold; }
         .leave-game-btn:hover { background: var(--imposter); color: #fff; }
+
+        /* التنسيقات الجديدة لنوع الغرفة */
+        .room-type-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; margin-bottom: 8px; }
+        .type-btn { background: #1a1a2e; color: #aaa; border: 1px solid #333; padding: 10px; border-radius: 8px; font-size: 12px; cursor: pointer; font-family: 'Cairo'; font-weight: bold; }
+        .type-btn.selected { background: var(--secondary); color: #fff; border-color: var(--secondary); }
     </style>
 </head>
 <body>
@@ -118,6 +123,13 @@ border-radius: 8px; font-size: 11px; display: flex; justify-content: space-betwe
     <div id="home-screen" class="screen active">
         <h1>IMPOSTER OS<br><span style="color:var(--secondary)">TOURNAMENT PRO</span></h1>
         <input type="text" id="user-name" placeholder="أدخل اسمك">
+        
+        <div class="room-type-grid">
+            <button id="type-public-btn" class="type-btn selected" onclick="setRoomPrivacy('public')">🔓 غرفة عامة</button>
+            <button id="type-private-btn" class="type-btn" onclick="setRoomPrivacy('private')">🔒 غرفة برمز سري</button>
+        </div>
+        <input type="number" id="custom-password-input" placeholder="أدخل رمز سري (4 أرقام)" style="display:none;" oninput="if(this.value.length > 4) this.value = this.value.slice(0,4)">
+
         <button id="create-btn" class="main-btn" onclick="createNewRoom()">إنشاء غرفة جديدة</button>
         <div style="margin: 5px 0; font-size: 10px; color: #444;">— أو انضم لصديق —</div>
         <input type="text" id="room-id-input" placeholder="أدخل كود الغرفة">
@@ -135,7 +147,7 @@ onclick="checkAutoReconnect()">قطع الاتصال؟ اضغط للاستعاد
 
     <div id="lobby-screen" class="screen">
         <div class="round-badge" id="round-display">الجولة: 1 / 5</div>
-        <h1>ID الغرفة: <span id="display-room-id" style="color:var(--success)">----</span></h1>
+        <h1>ID الغرفة: <span id="display-room-id" style="color:var(--success)">----</span> <span id="display-room-privacy" style="font-size:10px; color:#aaa;"></span></h1>
         
         <div id="host-controls" style="display:none; width: 100%;">
             <div class="config-row">اختر الفئة:</div>
@@ -238,6 +250,7 @@ background:#444;">الخروج للرئيسية</button>
     }
 
     let currentRoom = null, myId = null, myName = "", isHost = false, gameData = {}, selectedCategory = "حيوانات وحشرات", allowedImpostersCount = 1;
+    let roomPrivacySetting = "public"; // متغير لتخزين خيار الخصوصية الافتراضي
     
     let selectedVotes = []; 
 
@@ -285,7 +298,7 @@ background:#444;">الخروج للرئيسية</button>
         ],
         'شخصيات مشهورة': [
             "أبو بكر الصديق", "عمر بن خطاب", "عثمان بن عفان", "علي بن أبي طالب", "خالد بن الوليد", "صلاح الدين الأيوبي", "طارق بن زياد", "عقبة بن نافع", "محمد الفاتح", "عمر المختار", "الأمير عبد القادر", "حمزة بن عبد المطلب", "سعد بن أبي وقاص", "عمرو بن العاص", "الظاهر بيبرس", "سيف الدين قطز", "يوسف بن تاشفين", "موسى بن نصير", "قتيبة بن مسلم", "نور الدين زنكي", "الباب العالي", "سليمان القانوني", "هارون الرشيد", "عمر بن عبد العزيز", "المعتصم بالله", "أرطغرل", "الملك فيصل", "المهدي المنتظر", "الإمام الشافعي", "الإمام مالك", "الإمام أحمد بن حنبل", "الإمام أبو حنيفة", "البخاري", "مسلم", "ابن تيمية", "الغزالي", "ابن قيم الجوزية", "العز بن عبد السلام", "أحمد ديدات", "ذاكر نايك",
-            "ابن سينا", "ابن الهيثم", "الخوارزمي", "جابر بن حيان", "الرازي", "ابن خلدون", "الإدريسي", "ابن بطوطة", "البيروني", "ألبيرت أينشتاين", "إسحاق نيوتن", "نيكولا تيسلا", "توماس أديسون", "غاليليو غاليلي", "ماري كوري", "تشارلز داروين", "ستيفن هوكينغ", "ألكسندر غراهام بيل", "لويس باستور", "ألكسندر فليمنغ", "مايكل فارادي", "جيمس وات", "ماكس بلانك", "ريتشارد فاينمان", "أرخميدس", "فيثاغورس", "أرسطو", "أفلاطون", "سقراط", "ابن رشد", "ابن النفيس", "أحمد زويل", "فاروق الباز", "مجدي يعقوب", "عباس بن فرناس", "الجزري", "الكندي", "الفارابي", "ثابت بن قره", "عمر الخيام",
+            "ابن سينا", "ابن الهيثم", "الخوارزمي", "جابر بن حيان", "الرازي", "ابن خلدون", "الإدريسي", "ابن بطوطة", "البيروني", "ألبيرت أينشتاين", "إسحاق نيوتن", "نيكولا تيسلا", "توماس أديسون", "غاليليو غاليلي", "ماري كوري", "تشارلز داروين", "ستيفن هوكينغ", "ألكسندر غراهام بيل", "لويس باستور", "ألكسندر فليمنغ", "مايكل فارادي", "جيمس وات", "ماكس بلانك", "ريتشارد فاراينمان", "أرخميدس", "فيثاغورس", "أرسطو", "أفلاطون", "سقراط", "ابن رشد", "ابن النفيس", "أحمد زويل", "فاروق الباز", "مجدي يعقوب", "عباس بن فرناس", "الجزري", "الكندي", "الفارابي", "ثابت بن قره", "عمر الخيام",
             "ليونيل ميسي", "كريستيانو رونالدو", "دييغو مارادونا", "بيليه", "زين الدين زيدان", "رونالدو البرازيلي", "رونالدينيو", "تيري هنري", "ديفيد بيكهام", "كيليان مبابي", "نيمار دا سيلفا", "محمد صلاح", "رياض محرز", "أشرف حكيمي", "ياسين بونو", "ساديو ماني", "إيميريك أوباميانغ", "كريم بنزيما", "لوكا مودريتش", "إيرلينغ هالاند", "مايكل جوردان", "كوبي براينت", "ليبرون جيمس", "شاكيل أونيل", "محمد علي كلاي", "مايك تايسون", "فليد ميرفي", "يوسين بولت", "مايكل فيلبس", "رافائيل نادال", "روجر فيدرر", "نوفاك دجوكوفيتش", "سيرينا ويليامز", "تايجر وودز", "لويس هاميلتون", "مايكل شوماخر", "كليان جورنيت", "حبيب نورماغوميدوف", "إislam ماخاشيف", "كونور ماكغريغور",
             "الإسكندر الأكبر", "يوليوس قيصر", "حنبعل", "سبارتاكوس", "نابودان", "بونابرت", "ونستون تشرشل", "شارل ديغول", "جورج واشنطن", "أبراهام لينكون", "جون كينيدي", "باراك أوباما", "نيلسون مانيلا", "مهاتما غاندي", "مارتن لوثر كينغ", "تشي جيفارا", "فيدل كاسترو", "الملكة إليزابيث", "فيكتوريا", "كليوباترا", "نفرتيتي", "جنكيز خان", "تيمورلنك", "أتيلا الهوني", "وليم والاس", "ريتشارد قلب الأسد", "صلاح الدين", "اليساندرو فولت", "أندريا بيرلو", "جوزيه مورينيو", "بيب غوارديولا", "سير أليكس فيرغسون", "كارلو أنشيلوتي", "يورغن كلوب", "زين الدين", "رابح ماجر", "مصطفى بن بولعيد", "العربي بن مهيدي", "ديدوش مراد", "زيغود يوسف",
             "أحمد بن بلة", "هواري بومدين", "ياسر عرفات", "صدام حسين", "معمر القذافي", "الملك عبد العزيز", "الشيخ زايد", "ستيف جوبز", "بيل غيتس", "إيلون ماسك", "مارك زوكربرغ", "جيف بيزوس", "نيل آرمسترونغ", "يوري غاغارين", "كريستانتوس كولومبوس", "فاسكو دا غاما", "ماجلان", "ماركو بولو", "ويليام شكسبير", "المتنبي", "أحمد شوقي", "طه حسين", "نجيب محفوظ", "ابن عربي", "جلال الدين الرومي", "تشارلي تشابلن", "والت ديزني", "ألفرد نوبل", "لوتشيانو بافاروتي", "أم كلثوم", "فيروز", "عبد الحليم حافظ", "فريد الأطرش", "ميكل أنجلو", "ليوناردو دا فينشي", "بابلو بيكاسو", "فان غوخ", "إدغار آلان بو", "أجاثا كريستي المبدعة", "سلفادور دالي"
@@ -303,6 +316,21 @@ background:#444;">الخروج للرئيسية</button>
             document.getElementById('global-leave-btn').style.display = 'none';
         } else {
             document.getElementById('global-leave-btn').style.display = 'block';
+        }
+    }
+
+    // دالة جديدة لتعديل خصوصية الغرفة في الشاشة الرئيسية
+    function setRoomPrivacy(privacy) {
+        roomPrivacySetting = privacy;
+        document.getElementById('type-public-btn').className = "type-btn";
+        document.getElementById('type-private-btn').className = "type-btn";
+        
+        if (privacy === 'public') {
+            document.getElementById('type-public-btn').className = "type-btn selected";
+            document.getElementById('custom-password-input').style.display = "none";
+        } else {
+            document.getElementById('type-private-btn').className = "type-btn selected";
+            document.getElementById('custom-password-input').style.display = "block";
         }
     }
 
@@ -402,9 +430,11 @@ background:#444;">الخروج للرئيسية</button>
                     if(room.status === 'voting') statusLabel = " (جارِ التصويت ⚖️)";
                     if(room.status === 'results') statusLabel = " (النتائج 🏆)";
 
+                    let lockIcon = (room.privacy === 'private') ? " 🔒 (خاصة)" : " 🔓 (عامة)";
+
                     container.innerHTML += `
                         <div class="room-item" onclick="quickJoin('${roomId}')">
-                            <span style="color:var(--success)">🎯 غرفة: ${hostName}${statusLabel}</span>
+                            <span style="color:var(--success)">🎯 غرفة: ${hostName}${lockIcon}${statusLabel}</span>
                             <span style="color:#aaa">${pCount} لاعبين ❯</span>
                         </div>
                     `;
@@ -423,6 +453,14 @@ background:#444;">الخروج للرئيسية</button>
         myName = document.getElementById('user-name').value.trim();
         if(!myName) return alert("اكتب اسمك أولاً");
         
+        let roomPass = "";
+        if (roomPrivacySetting === "private") {
+            roomPass = document.getElementById('custom-password-input').value.trim();
+            if (roomPass.length !== 4 || isNaN(roomPass)) {
+                return alert("الرجاء إدخال رمز سري مكون من 4 أرقام بالضبط للغرفة الخاصة!");
+            }
+        }
+        
         disableHomeButtons();
         currentRoom = Math.floor(1000 + Math.random() * 9000).toString();
         isHost = true;
@@ -432,6 +470,8 @@ background:#444;">الخروج للرئيسية</button>
         db.ref('rooms/' + currentRoom).set({ 
             host: myId, 
             status: 'waiting', 
+            privacy: roomPrivacySetting,
+            password: roomPass,
             round: 1,
             createdAt: Date.now(),
             players: { [myId]: {name: myName, score: 0} } 
@@ -478,6 +518,16 @@ background:#444;">الخروج للرئيسية</button>
                         alert("عذراً، بدأت الجولة بالفعل داخل هذه الغرفة! انتظر حتى يعود اللاعبون للمكتب الرئيسي (Lobby).");
                         enableHomeButtons();
                         return;
+                    }
+                    
+                    // التحقق من الرمز السري إذا كانت الغرفة خاصة
+                    if (data.privacy === "private") {
+                        let enteredPass = prompt("هذه الغرفة محمية برمز سري🔒. أدخل الرمز المكون من 4 أرقام للدخول:");
+                        if (enteredPass !== data.password) {
+                            alert("الرمز السري خاطئ! لم يتم السماح بالاتصال.");
+                            enableHomeButtons();
+                            return;
+                        }
                     }
                     
                     myId = "u_" + Date.now();
@@ -605,6 +655,8 @@ background:#444;">الخروج للرئيسية</button>
                 showScreen('lobby-screen');
                 enableHomeButtons(); 
                 document.getElementById('round-display').innerText = `الجولة: ${data.round} / 5`;
+                // عرض حالة خصوصية الغرفة في اللوبي
+                document.getElementById('display-room-privacy').innerText = (data.privacy === 'private') ? "🔒 (خاصة)" : "🔓 (عامة)";
             }
             const list = document.getElementById('player-list-container');
             list.innerHTML = "";
@@ -746,7 +798,6 @@ background:#444;">الخروج للرئيسية</button>
         const isImp = imps.includes(myId);
         const content = document.getElementById('secret-content');
 
-        // التحقق مما إذا كانت الكلمة ظاهرة بالفعل لإخفائها عند الضغط مرة أخرى
         if (content.innerText !== "[ اضغط لفك التشفير ]") {
             content.innerText = "[ اضغط لفك التشفير ]";
         } else {
