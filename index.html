@@ -164,7 +164,7 @@ onclick="checkAutoReconnect()">قطع الاتصال؟ اضغط للاستعاد
             <div class="chat-messages" id="chat-messages-container"></div>
             <div class="chat-input-area">
                 <input type="text" id="chat-msg-input" placeholder="اكتب رسالة للاعبين..." onkeypress="if(event.key === 'Enter') sendLobbyMessage()">
-                <button onclick="sendLobbyMessage()">إرسال</button>
+                <button onclick="sendLobbyMessage()">إإرسال</button>
             </div>
         </div>
 
@@ -299,7 +299,6 @@ background:#444;">الخروج للرئيسية</button>
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById(id).classList.add('active');
         
-        // إظهار زر المغادرة في كل الشاشات عدا الشاشة الرئيسية (Home) لجميع اللاعبين دون تمييز
         if(id === 'home-screen') {
             document.getElementById('global-leave-btn').style.display = 'none';
         } else {
@@ -314,12 +313,10 @@ background:#444;">الخروج للرئيسية</button>
         
         if(confirm(confirmMsg)) {
             if(isHost) {
-                // إذا كان المغادر هو الهوست، نحذف الغرفة كاملة لتدميرها فوراً وطرد الجميع
                 db.ref('rooms/' + currentRoom).remove().then(() => {
                     clearAndReload();
                 });
             } else {
-                // إذا كان لاعباً عادياً، نمسح سجلاته ومصوتاته فقط لتستمر اللعبة للبقية
                 db.ref('rooms/' + currentRoom + '/players/' + myId).remove();
                 db.ref('rooms/' + currentRoom + '/understandVotes/' + myId).remove();
                 db.ref('rooms/' + currentRoom + '/votes/' + myId).remove();
@@ -581,7 +578,6 @@ background:#444;">الخروج للرئيسية</button>
         document.getElementById('display-room-id').innerText = currentRoom;
         document.getElementById('reconnect-hint').style.display = "none";
         
-        // التحقق مما إذا كان اللاعب الحالي تم حذفه/طرده أو إذا حذف الهوست الغرفة كاملة
         db.ref('rooms/' + currentRoom + '/players/' + myId).on('value', snap => {
             if(!snap.exists() && currentRoom !== null && !isHost) {
                 db.ref('rooms/' + currentRoom).off();
@@ -750,10 +746,15 @@ background:#444;">الخروج للرئيسية</button>
         const isImp = imps.includes(myId);
         const content = document.getElementById('secret-content');
 
-        if (!isImp) {
-            content.innerHTML = `<span style="color:var(--success); font-size: 20px;">${gameData.word}</span>`;
+        // التحقق مما إذا كانت الكلمة ظاهرة بالفعل لإخفائها عند الضغط مرة أخرى
+        if (content.innerText !== "[ اضغط لفك التشفير ]") {
+            content.innerText = "[ اضغط لفك التشفير ]";
         } else {
-            content.innerHTML = `<span style="color:var(--success); font-size: 20px;">أنت المحتال</span>`;
+            if (!isImp) {
+                content.innerHTML = `<span style="color:var(--success); font-size: 20px;">${gameData.word}</span>`;
+            } else {
+                content.innerHTML = `<span style="color:var(--success); font-size: 20px;">أنت المحتال</span>`;
+            }
         }
     }
 
