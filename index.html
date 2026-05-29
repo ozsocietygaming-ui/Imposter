@@ -63,7 +63,7 @@ margin: 5px 0; width: 100%; border-radius: 8px; cursor: pointer; text-align: cen
 }
         .score-row { display: flex; justify-content: space-between; width: 100%; padding: 8px 10px;
 border-bottom: 1px solid #333; font-size: 14px; }
-        .config-label { font-size: 11px; color: var(--primary);
+        .config-row { font-size: 11px; color: var(--primary);
 margin: 5px 0; width: 100%; text-align: right; }
         .config-scroll-area { width: 100%; max-height: 120px; overflow-y: auto; background: rgba(0,0,0,0.2); padding: 5px; border-radius: 10px; box-sizing: border-box; margin-bottom: 10px; border: 1px solid #222; }
         .imp-toggle-grid { display: grid;
@@ -132,7 +132,7 @@ onclick="checkAutoReconnect()">قطع الاتصال؟ اضغط للاستعاد
         <h1>ID الغرفة: <span id="display-room-id" style="color:var(--success)">----</span></h1>
         
         <div id="host-controls" style="display:none; width: 100%;">
-            <div class="config-label">اختر الفئة:</div>
+            <div class="config-row">اختر الفئة:</div>
             <div class="config-scroll-area">
                 <div class="cat-grid">
                     <button class="cat-btn selected" onclick="selectCat('حيوانات وحشرات', this)">حيوانات وحشرات</button>
@@ -144,7 +144,7 @@ onclick="checkAutoReconnect()">قطع الاتصال؟ اضغط للاستعاد
                 </div>
             </div>
         
-            <div class="config-label">عدد المحتالين في الجولة:</div>
+            <div class="config-row">عدد المحتالين في الجولة:</div>
             <div class="imp-toggle-grid">
                 <button class="imp-toggle-btn selected" onclick="selectImpCount(1, this)">محتال واحد (1)</button>
                 <button class="imp-toggle-btn" onclick="selectImpCount(2, this)">محتالين اثنين (2)</button>
@@ -204,10 +204,10 @@ margin-bottom:10px;">المحتالون كانوا: <span id="res-imp-name" styl
         <div id="scores-container" style="width:100%; background:rgba(0,0,0,0.4); border-radius:10px;
 padding:10px;"></div>
         <button id="next-round-btn" class="main-btn" onclick="backToLobby()" style="display:none;">الجولة القادمة ❯</button>
-        <button id="exit-btn" class="main-btn" onclick="clearAndReload()" style="display:none;
-background:#444;">الخروج للرئيسية</button>
         <button id="finish-btn" class="main-btn" onclick="clearAndReload()" style="display:none;
 background:var(--imposter);">تتويج البطل 🏆</button>
+        <button id="exit-btn" class="main-btn" onclick="clearAndReload()" style="display:none;
+background:#444;">الخروج للرئيسية</button>
     </div>
 </div>
 
@@ -229,7 +229,6 @@ background:var(--imposter);">تتويج البطل 🏆</button>
  
     if(localStorage.getItem('lastRoom')) {
         document.getElementById('reconnect-hint').style.display = "block";
-        // تفعيل الربط والعودة التلقائية بمجرد تحديث الصفحة لضمان عدم ضياع اللاعب
         setTimeout(checkAutoReconnect, 500);
     }
 
@@ -276,7 +275,7 @@ background:var(--imposter);">تتويج البطل 🏆</button>
             "ليبيا", "موريتانيا", "السودان", "الصومال", "جيبوتي", "جزر القمر", "فلسطين", "الأردن", "لبنان", "سوريا", "العراق", "الكويت", "البحرين", "عمان", "اليمن", "اليونان", "البرتغال", "أيرلندا", "اسكتلندا", "ويلز", "النمسا", "بلجيكا", "النرويج", "الدنمارك", "فنلندا", "بولندا", "أوكرانيا", "رومانيا", "بلغاريا", "المجر", "التشيك", "سلوفاكيا", "كرواتيا", "صربيا", "سلوفينيا", "البوسنة والهرسك", "ألبانيا", "مقدونيا", "مولدوفا", "بيلاروسيا", 
 "ليتانيا", "لاتفيا", "إستونيا", "أندورا", "موناكو", "سان مارينو", "الفاتيكان", "مالطا", "قبرص",
             "باكستان", "أفغانستان", "إيران", "أذربيجان", "أرمينيا", "جورجيا", "كازاخستان", "أوزبكستان", "تركمانستان", "تاجيكستان", "قرغيزستان", "منغوليا", "كوريا الشمالية", "تايوان", "فيتنام", "لاوس", "كمبوديا", "تايلاند", "ميانمار", "ماليزيا", "سنغافورة", "إندونيسيا", "الفلبين", "بروناي", "تيمور الشرقية", "بنغلاديش", "سريلانكا", "جزر المالديف", "نيpal", "بوتان", "نيوزيلندا", "فيجي", "بابوا غينيا الجديدة", "ساموا", "تونغا", "فانواتو", "بالاو", "ميكرونيزيا", "جزر مارشال", "جزر سليمان", "توفالو", "ناورو",
-            "نيجيريا", "إثيوبيا", "كينيا", "تنزانيا", "أوغندا", "غانا", "ساحل العاج", "السنغال", "الكاميرون", "أنغولا", "موزمبيق", "مدغشقر", "زيمبابوي", "زامبيا", "ناميبيا", "بوتسوانا", "الغابون", "الكونغو", 
+            "نيجر", "إثيوبيا", "كينيا", "تنزانيا", "أوغندا", "غانا", "ساحل العاج", "السنغال", "الكاميرون", "أنغولا", "موزمبيق", "مدغشقر", "زيمبابوي", "زامبيا", "ناميبيا", "بوتسوانا", "الغابون", "الكونغو", 
 "النيجر", "مالي", "تشاد", "غينيا", "سيراليون", "ليبيريا", "توغو", "بنين", "بوركينا فاسو", "رواندا", "بوروندي", "كولومبيا", "فنزويلا", "البيرو", "تشيلي", "الأوروغواي", "الباراغواي", "بوليفيا", "الإكوادور", "غيانا", "سورينام", "كوبا", "جامايكا"
         ],
         'شخصيات مشهورة': [
@@ -355,7 +354,6 @@ background:var(--imposter);">تتويج البطل 🏆</button>
             
             Object.keys(roomsData).forEach(roomId => {
                 const room = roomsData[roomId];
-                // تم تعديل الشرط هنا ليتم عرض الغرفة دائماً في الرادار حتى أثناء اللعب والتصويت لكي يجدها من خرج بالخطأ
                 if(room.status === 'waiting' || room.status === 'playing' || room.status === 'voting' || room.status === 'results') {
                     hasRooms = true;
                     let hostId = room.host;
@@ -423,6 +421,7 @@ background:var(--imposter);">تتويج البطل 🏆</button>
                 const data = snap.val();
                 const players = data.players || {};
                 
+                // البحث عما إذا كان هذا المستخدم يمتلك جلسة مسجلة مسبقاً داخل الغرفة (اعتماداً على الاسم)
                 let foundExistingId = null;
                 Object.keys(players).forEach(pId => {
                     if (players[pId].name === myName) {
@@ -431,6 +430,7 @@ background:var(--imposter);">تتويج البطل 🏆</button>
                 });
 
                 if (foundExistingId) {
+                    // إذا وجدناه، نسمح له بالدخول فوراً لإتمام اللعبة أو التصويت (Auto Reconnect الحقيقي)
                     myId = foundExistingId;
                     isHost = (data.host === myId);
                     if(isHost) {
@@ -440,6 +440,13 @@ background:var(--imposter);">تتويج البطل 🏆</button>
                     saveSessionLocally();
                     listenToRoom();
                 } else {
+                    // إذا كان لاعباً جديداً تماماً، نتحقق من حالة الغرفة أولاً
+                    if(data.status !== 'waiting') {
+                        alert("عذراً، بدأت الجولة بالفعل داخل هذه الغرفة! انتظر حتى يعود اللاعبون للمكتب الرئيسي (Lobby).");
+                        enableHomeButtons();
+                        return;
+                    }
+                    
                     myId = "u_" + Date.now();
                     saveSessionLocally();
                     db.ref('rooms/' + currentRoom + '/players/' + myId).set({name: myName, score: 0})
