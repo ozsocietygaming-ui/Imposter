@@ -84,7 +84,7 @@ border-radius: 8px; font-size: 11px; display: flex; justify-content: space-betwe
         .room-item:hover { border-color: var(--success);
 }
 
-        /* تنسيقات قسم فهم الكلمة الجديد */
+        /* تنسيقات قسم فهم الكلمة */
         .understand-section { width: 100%; display: flex; flex-direction: column; align-items: center; margin-bottom: 10px; background: rgba(255,255,255,0.03); padding: 8px; border-radius: 10px; border: 1px solid #222; box-sizing: border-box; }
         .understand-title { font-size: 12px; color: var(--text); margin-bottom: 6px; font-weight: bold; }
         .understand-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; }
@@ -94,6 +94,15 @@ border-radius: 8px; font-size: 11px; display: flex; justify-content: space-betwe
         .und-btn.selected-yes { background: var(--success); color: #000; border-color: var(--success); box-shadow: 0 0 8px var(--success); }
         .und-btn.selected-no { background: var(--imposter); color: #fff; border-color: var(--imposter); box-shadow: 0 0 8px var(--imposter); }
         .understand-status { font-size: 11px; color: #aaa; margin-top: 4px; text-align: center; }
+
+        /* تنسيقات قسم دردشة الـ Lobby المضافة */
+        .lobby-chat-box { width: 100%; display: flex; flex-direction: column; background: rgba(0,0,0,0.4); border: 1px solid #222; border-radius: 12px; margin-bottom: 10px; height: 110px; overflow: hidden; box-sizing: border-box; }
+        .chat-messages { flex-grow: 1; overflow-y: auto; padding: 6px 10px; font-size: 11px; display: flex; flex-direction: column; gap: 4px; text-align: right; }
+        .chat-msg { background: rgba(255,255,255,0.03); padding: 4px 8px; border-radius: 6px; border-right: 2px solid var(--secondary); word-break: break-all; }
+        .chat-msg .sender { color: var(--primary); font-weight: bold; margin-left: 5px; }
+        .chat-input-area { display: flex; border-top: 1px solid #222; background: #000; }
+        .chat-input-area input { flex-grow: 1; border: none; padding: 6px 10px; font-size: 11px; background: transparent; color: #fff; margin: 0; text-align: right; }
+        .chat-input-area button { background: var(--secondary); color: white; border: none; padding: 0 15px; font-size: 11px; font-weight: bold; cursor: pointer; font-family: 'Cairo'; }
     </style>
 </head>
 <body>
@@ -142,6 +151,16 @@ onclick="checkAutoReconnect()">قطع الاتصال؟ اضغط للاستعاد
  
         
         <div class="player-list" id="player-list-container"></div>
+
+        <!-- قسم دردشة الـ Lobby المضاف -->
+        <div class="lobby-chat-box">
+            <div class="chat-messages" id="chat-messages-container"></div>
+            <div class="chat-input-area">
+                <input type="text" id="chat-msg-input" placeholder="اكتب رسالة للاعبين..." onkeypress="if(event.key === 'Enter') sendLobbyMessage()">
+                <button onclick="sendLobbyMessage()">إرسال</button>
+            </div>
+        </div>
+
         <button id="start-game-btn" class="main-btn" style="display:none;
 background: var(--success); color:#000;" onclick="triggerStart()">بدء العملية</button>
         <button id="delete-room-btn" class="main-btn" style="display:none; background: var(--imposter);
@@ -225,7 +244,7 @@ background:var(--imposter);">تتويج البطل 🏆</button>
   "سمك المنشار", "سمك المطرقة", "سمك السيف", "سمك الرعاد", "سمك الطيار", "أنقليس", "ثعبان البحر", "كلب البحر", "أسد البحر", "فيل البحر", "الفقمة", "دب البحر", "عروس البحر", "الحوت الأزرق", "الحوت الأحدب", "الحوت القاتل", "حوت العنبر", "حوت أوركا", "حوت بالين", "الدلفين", "الخنزير البحري"
         ],
         'طعام': [
-            "بيتزا", "برجر", "سوشي", "تاكو", "باستا", "شاورما", "كباب", "فلافل", "حمص", "مندي", "كسكسي", "طاجين", "برياني", "شوكولاتة", "آيس كريم", "كيك", "دونات", "كرواسون", "وافل", "عسل", "مربى", "زيتون", "جبنة", "بيض", "جمبري", "سلمون", "ذرة", "فشار", "بطاطس", "مكسرات", "مانجو", 
+            "بيتزا", "برجر", "سوشي", "تاکو", "باستا", "شاورما", "كباب", "فلافل", "حمص", "مندي", "كسكسي", "طاجين", "برياني", "شوكولاتة", "آيس كريم", "كيك", "دونات", "كرواسون", "وافل", "عسل", "مربى", "زيتون", "جبنة", "بيض", "جمبري", "سلمون", "ذرة", "فشار", "بطاطس", "مكسرات", "مانجو", 
 "أناناس",
             "أرز", "خبز", "توست", "صمون", "فطيرة", "مناقيش", "حواوشي", "ملوخية", "بامية", "فاصولياء", "عدس", "فول", "شوربة", "حساء", "مرق", "ثريد", "مكبوس", "مظبي", "مدفون", "بخاري", "سليق", "جريش", "قرصان", "مفتول", "كبة", "ورق عنب", "ملفوف", "محشي", "شيش برك", "مسقعة", "مقلوبة", "منسف", "مبشور", "تكة", "شيش طاووق", "ريش", "ستيك", "لحم مفروم", "بسطرمة", "سجق", "مرتديلا", "دجاج مشوي", "دجاج مقلي", "بروستد", "كبدة", "عصبان", "قلاية",
             "تفاح", "موز", "برتقال", "فراولة", "عنب", "بطيخ", "شمام", "خوخ", "مشمش", "برقوق", "كرز", "رمان", "تين", "تمر", "توت", "كيوي", "جوافة", "كمثرى", "يوسفي", "ليمون", "جريب فروت", "جوز الهند", 
@@ -243,7 +262,7 @@ background:var(--imposter);">تتويج البطل 🏆</button>
         'جماد': [
             "هاتف", "حاسوب", "تلفاز", "كاميرا", "ساعة", "نظارة", "مفتاح", "محفظة", "قلم", "كتاب", "ورقة", "مقص", "مظلة", "حقيبة", "حذاء", "قميص", "قبعة", "مرآة", "فرشاة", "منشفة", "وسادة", "سرير", "كرسي", "طاولة", "أريكة", "سجادة", "باب", "نافذة", "مصباح", "ملعقة", "شوكة", "سكين", "صحن", "كوب",
      
-        "سماعة", "شاحن", "بطارية", "لوحة مفاتيح", "فأرة الحاموب", "شاشة", "طابعة", "ماسح ضوئي", "راوتر", "فلاشة", "قرص صلب", "تكييف", "مروحة", "مدفأة", "ثلاجة", "غسالة", "نشافة", "جلاية الصحون", "فرن", "مايكرويف", "خلاط", "عصارة", "غلاية", "محمصة خبز", "مكنسة كهربائية", "مكواة", "ميزان", "ساعة حائط", "منبه", "قفل", "خزنة", "جرس", "درج", "رف", "دولاب", "خزانة ملابس", "تسريحة", "شماعة", "ابجورة", "ثريا", "لوحة فنية", "سلة مهملات",
+        "سماعة", "شاحن", "بطارية", "لوحة مفاتيح", "فأرة الحاسوب", "شاشة", "طابعة", "ماسح ضوئي", "راوتر", "فلاشة", "قرص صلب", "تكييف", "مروحة", "مدفأة", "ثلاجة", "غسالة", "نشافة", "جلاية الصحون", "فرن", "مايكرويف", "خلاط", "عصارة", "غلاية", "محمصة خبز", "مكنسة كهربائية", "مكواة", "ميزان", "ساعة حائط", "منبه", "قفل", "خزنة", "جرس", "درج", "رف", "دولاب", "خزانة ملابس", "تسريحة", "شماعة", "ابجورة", "ثريا", "لوحة فنية", "سلة مهملات",
             "مكتب", "سبورة", "طبشور", "قلم تلوين", "مسطرة", "فرجار", "منقلة", "دباسة", "خرامة", "مكبس", "مشبك ورق", "صمغ", "شريط لاصق", "مفكرة", "ملف", "خريطة", "كرة أرضية", "مجهر", "تلسكوب", "أنبوب اختبار", "ميزان حرارة", "حقيبة ظهر", 
 "دفتر", "رصاص", "حبر", "طباشير", "براية", "ممحاة", "طامس", "مشبك", "سلك", "قابس", "مقبس", "عداد", "صنبور", "خرطوم", "دلو", "ممسحة", "مقشة", "جاروف", "اسفنجة", "سلك مواعين", "صابونة", "شامبو",
             "سيارة", "دراجة هوائية", "دراجة نارية", "شاحنة", "حافلة", "قطار", "طائرة", "سفينة", "قارب", "يخت", "مروحية", "منطاد", "صاروخ", "قمر صناعي", "رافعة", "جرار", "جرافة", "حاوية", "عربة", "إطار", "مقود", "محرك", "بطارية سيارة", "مصباح أمامي", "لوحة أرقام", "حزام أمان", "مقعد سيارة", "وسادة هوائية", "ممسحة زجاج", "خزان وقود", "رادياتير", "فرامل", "مكابح", "ناقل حركة", "عادم", "هيكل", "مفتاح ربط", "مفك", "مطرقة", "كماشة"
@@ -252,45 +271,46 @@ background:var(--imposter);">تتويج البطل 🏆</button>
    'دول': [
             "الجزائر", "تونس", "المغرب", "مصر", "السعودية", "الإمارات", "قطر", "فرنسا", "إسبانيا", "إيطاليا", "ألمانيا", "إنجلترا", "البرازيل", "الأرجنتين", "اليابان", "الصين", "روسيا", "أمريكا", "كندا", "أستراليا", "تركيا", "المكسيك", "الهند", "كوريا الجنوبية", "جنوب إفريقيا", "البرتغال", "بلجيكا", "هولندا", "سويسرا", "السويد",
             "ليبيا", "موريتانيا", "السودان", "الصومال", "جيبوتي", "جزر القمر", "فلسطين", "الأردن", "لبنان", "سوريا", "العراق", "الكويت", "البحرين", "عمان", "اليمن", "اليونان", "البرتغال", "أيرلندا", "اسكتلندا", "ويلز", "النمسا", "بلجيكا", "النرويج", "الدنمارك", "فنلندا", "بولندا", "أوكرانيا", "رومانيا", "بلغاريا", "المجر", "التشيك", "سلوفاكيا", "كرواتيا", "صربيا", "سلوفينيا", "البوسنة والهرسك", "ألبانيا", "مقدونيا", "مولدوفا", "بيلاروسيا", 
-"ليتوانيا", "لاتفيا", "إستونيا", "أندورا", "موناكو", "سان مارينو", "الفاتيكان", "مالطا", "قبرص",
-            "باكستان", "أفغانستان", "إيران", "أذربيجان", "أرمينيا", "جورجيا", "كازاخستان", "أوزبكستان", "تركمانستان", "تاجيكستان", "قرغيزستان", "منغوليا", "كوريا الشمالية", "تايوان", "فيتنام", "لاوس", "كمبوديا", "تايلاند", "ميانمار", "ماليزيا", "سنغافورة", "إندونيسيا", "الفلبين", "بروناي", "تيمور الشرقية", "بنغلاديش", "سريلانكا", "جزر المالديف", "نيpal", "بوتان", "نيوزيلندا", "فيجي", "بابوا غينيا الجديدة", "ساموا", "تونغا", "فانواتو", "بالاو", "ميكرونيزيا", "جزر مارشال", "جزر سليمان", "توفالو", "ناورو",
+"ليتانيا", "لاتفيا", "إستونيا", "أندورا", "موناكو", "سان مارينو", "الفاتيكان", "مالطا", "قبرص",
+            "باكستان", "أفغانستان", "إيران", "أذربيجان", "أرمينيا", "جورجيا", "كازاخستان", "أوزبكستان", "تركمانستان", "تاجيكستان", "قرغيزستان", "منغوليا", "كوريا الشمالية", "تايوان", "فيتنام", "لاوس", "كمبوديا", "تايلاند", "ميانمار", "ماليزيا", "سنغافورة", "إندونيسيا", "الفلبين", "بروناي", "تيمور الشرقية", "بنغلاديش", "سريلانكا", "جزر المالديف", "نيبال", "بوتان", "نيوزيلندا", "فيجي", "بابوا غينيا الجديدة", "ساموا", "تونغا", "فانواتو", "بالاو", "ميكرونيزيا", "جزر مارشال", "جزر سليمان", "توفالو", "ناورو",
             "نيجيريا", "إثيوبيا", "كينيا", "تنزانيا", "أوغندا", "غانا", "ساحل العاج", "السنغال", "الكاميرون", "أنغولا", "موزمبيق", "مدغشقر", "زيمبابوي", "زامبيا", "ناميبيا", "بوتسوانا", "الغابون", "الكونغو", 
 "النيجر", "مالي", "تشاد", "غينيا", "سيراليون", "ليبيريا", "توغو", "بنين", "بوركينا فاسو", "رواندا", "بوروندي", "كولومبيا", "فنزويلا", "البيرو", "تشيلي", "الأوروغواي", "الباراغواي", "بوليفيا", "الإكوادور", "غيانا", "سورينام", "كوبا", "جامايكا"
         ]
     };
-// تشغيل الرادار + التنظيف الذاتي للغرف القديمة عند الإقلاع
+
     listenToAvailableRooms();
     cleanOldRooms();
-function showScreen(id) {
+
+    function showScreen(id) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById(id).classList.add('active');
-}
+    }
 
     function selectCat(cat, btn) {
         selectedCategory = cat;
-document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('selected'));
+        document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('selected'));
         btn.classList.add('selected');
     }
 
     function selectImpCount(count, btn) {
         allowedImpostersCount = count;
-document.querySelectorAll('.imp-toggle-btn').forEach(b => b.classList.remove('selected'));
+        document.querySelectorAll('.imp-toggle-btn').forEach(b => b.classList.remove('selected'));
         btn.classList.add('selected');
     }
 
     function disableHomeButtons() {
         document.getElementById('create-btn').disabled = true;
-document.getElementById('create-btn').innerText = "جاري الاتصال...";
+        document.getElementById('create-btn').innerText = "جاري الاتصال...";
         document.getElementById('join-btn').disabled = true;
         document.getElementById('join-btn').innerText = "جاري الاتصال...";
-}
+    }
 
     function enableHomeButtons() {
         document.getElementById('create-btn').disabled = false;
-document.getElementById('create-btn').innerText = "إنشاء غرفة جديدة";
+        document.getElementById('create-btn').innerText = "إنشاء غرفة جديدة";
         document.getElementById('join-btn').disabled = false;
         document.getElementById('join-btn').innerText = "انضمام للغرفة";
-}
+    }
 
     function cleanOldRooms() {
         db.ref('rooms').once('value', snap => {
@@ -300,17 +320,15 @@ document.getElementById('create-btn').innerText = "إنشاء غرفة جديد�
             const sixHours = 6 * 60 * 60 * 1000;
 
             Object.keys(rooms).forEach(roomId => {
-    
-            const room = rooms[roomId];
+                const room = rooms[roomId];
                 if (!room.createdAt) {
                     db.ref('rooms/' + roomId).update({ createdAt: now });
                 } else if (now - room.createdAt > sixHours || !room.players) {
-                
-    db.ref('rooms/' + roomId).remove();
+                    db.ref('rooms/' + roomId).remove();
                 }
             });
         });
-}
+    }
 
     function listenToAvailableRooms() {
         db.ref('rooms').on('value', snap => {
@@ -319,51 +337,46 @@ document.getElementById('create-btn').innerText = "إنشاء غرفة جديد�
             const roomsData = snap.val();
             if(!roomsData) {
                 container.innerHTML = "لا توجد غرف نشطة حالياً";
-     
-           return;
+                return;
             }
             
             container.innerHTML = "";
             let hasRooms = false;
             
             Object.keys(roomsData).forEach(roomId => {
-          
-      const room = roomsData[roomId];
+                const room = roomsData[roomId];
                 if(room.status === 'waiting') {
                     hasRooms = true;
                     let hostId = room.host;
                     let hostName = room.players && room.players[hostId] ? 
-room.players[hostId].name : "مجهول";
+                    room.players[hostId].name : "مجهول";
                     let pCount = room.players ? Object.keys(room.players).length : 0;
                     
                     container.innerHTML += `
                         <div class="room-item" onclick="quickJoin('${roomId}')">
-   
-                          <span style="color:var(--success)">🎯 غرفة: ${hostName}</span>
+                            <span style="color:var(--success)">🎯 غرفة: ${hostName}</span>
                             <span style="color:#aaa">${pCount} لاعبين ❯</span>
                         </div>
-                 
-   `;
+                    `;
                 }
             });
-if(!hasRooms) container.innerHTML = "لا توجد غرف نشطة حالياً";
+            if(!hasRooms) container.innerHTML = "لا توجد غرف نشطة حالياً";
         });
     }
 
     function quickJoin(roomId) {
         document.getElementById('room-id-input').value = roomId;
-joinExistingRoom();
+        joinExistingRoom();
     }
 
     function createNewRoom() {
         myName = document.getElementById('user-name').value;
-if(!myName) return alert("اكتب اسمك أولاً");
+        if(!myName) return alert("اكتب اسمك أولاً");
         
-
         disableHomeButtons();
         currentRoom = Math.floor(1000 + Math.random() * 9000).toString();
         isHost = true;
-myId = "u_" + Date.now();
+        myId = "u_" + Date.now();
         
         saveSessionLocally();
         db.ref('rooms/' + currentRoom).set({ 
@@ -373,186 +386,217 @@ myId = "u_" + Date.now();
             createdAt: Date.now(),
             players: { [myId]: {name: myName, score: 0} } 
         }).then(() => {
-       
-     listenToRoom();
+            listenToRoom();
         }).catch(() => {
             enableHomeButtons();
         });
-document.getElementById('host-controls').style.display = 'block';
+        document.getElementById('host-controls').style.display = 'block';
         document.getElementById('delete-room-btn').style.display = 'block';
     }
 
     function joinExistingRoom() {
         let inputId = document.getElementById('room-id-input').value;
-myName = document.getElementById('user-name').value;
+        myName = document.getElementById('user-name').value;
         if(!myName || !inputId) return alert("اكمل البيانات");
-        
-        
         
         disableHomeButtons();
         currentRoom = inputId;
         myId = "u_" + Date.now();
-db.ref('rooms/' + currentRoom).once('value', snap => {
+        db.ref('rooms/' + currentRoom).once('value', snap => {
             if(snap.exists()) {
                 saveSessionLocally();
                 db.ref('rooms/' + currentRoom + '/players/' + myId).set({name: myName, score: 0})
                 .then(() => listenToRoom());
             } else { 
-        
-        alert("الغرفة غير موجودة"); 
+                alert("الغرفة غير موجودة"); 
                 enableHomeButtons();
             }
         }).catch(() => enableHomeButtons());
-}
+    }
 
     function kickPlayer(playerId) {
         if(!isHost) return;
-db.ref('rooms/' + currentRoom + '/players/' + playerId).remove();
+        db.ref('rooms/' + currentRoom + '/players/' + playerId).remove();
     }
 
     function deleteRoomByHost() {
         if(!isHost || !currentRoom) return;
-if(confirm("هل أنت متأكد من رغبتك في إغلاق وحذف هذه الغرفة نهائياً؟")) {
+        if(confirm("هل أنت متأكد من رغبتك في إغلاق وحذف هذه الغرفة نهائياً؟")) {
             db.ref('rooms/' + currentRoom).remove().then(() => {
                 clearAndReload();
             });
-}
+        }
     }
 
     function saveSessionLocally() {
         localStorage.setItem('savedName', myName);
-localStorage.setItem('lastRoom', currentRoom);
+        localStorage.setItem('lastRoom', currentRoom);
         localStorage.setItem('myId', myId);
     }
 
     function clearAndReload() {
         localStorage.removeItem('lastRoom');
         localStorage.removeItem('myId');
-location.reload();
+        location.reload();
     }
 
     function checkAutoReconnect() {
         const oldRoom = localStorage.getItem('lastRoom');
-const oldId = localStorage.getItem('myId');
+        const oldId = localStorage.getItem('myId');
         db.ref('rooms/' + oldRoom).once('value', snap => {
             if(snap.exists() && snap.val().players[oldId]) {
                 currentRoom = oldRoom; myId = oldId;
                 myName = snap.val().players[oldId].name;
                 isHost = (snap.val().host === myId);
-                if(isHost) 
-{
+                if(isHost) {
                     document.getElementById('host-controls').style.display = 'block';
                     document.getElementById('delete-room-btn').style.display = 'block';
                 }
                 listenToRoom();
             } else { alert("لا يمكن الاستعادة"); localStorage.removeItem('lastRoom'); location.reload(); }
-    
-    });
+        });
+    }
+
+    // دالة إرسال رسائل الدردشة في الـ Lobby
+    function sendLobbyMessage() {
+        const input = document.getElementById('chat-msg-input');
+        const text = input.value.trim();
+        if (!text || !currentRoom) return;
+
+        const msgData = {
+            sender: myName,
+            text: text,
+            timestamp: Date.now()
+        };
+
+        db.ref('rooms/' + currentRoom + '/lobbyChat').push(msgData).then(() => {
+            input.value = "";
+        });
+    }
+
+    // دالة الاستماع المباشر للدردشة وتحديث الواجهة
+    function listenToLobbyChat() {
+        db.ref('rooms/' + currentRoom + '/lobbyChat').on('value', snap => {
+            const container = document.getElementById('chat-messages-container');
+            if (!container) return;
+            container.innerHTML = "";
+            const messages = snap.val();
+            if (!messages) return;
+
+            Object.values(messages).forEach(msg => {
+                container.innerHTML += `
+                    <div class="chat-msg">
+                        <span class="sender">${msg.sender}:</span><span>${msg.text}</span>
+                    </div>
+                `;
+            });
+            container.scrollTop = container.scrollHeight;
+        });
     }
 
     function listenToRoom() {
         document.getElementById('display-room-id').innerText = currentRoom;
-document.getElementById('reconnect-hint').style.display = "none";
+        document.getElementById('reconnect-hint').style.display = "none";
         
         db.ref('rooms/' + currentRoom + '/players/' + myId).on('value', snap => {
             if(!snap.exists() && currentRoom !== null && !isHost) {
                 db.ref('rooms/' + currentRoom).off();
+                db.ref('rooms/' + currentRoom + '/lobbyChat').off();
                 alert("تم طردك من الغرفة بواسطة الآدمين");
                 clearAndReload();
             }
-  
-      });
+        });
+
+        // تشغيل الاستماع للدردشة بمجرد دخول الغرفة
+        listenToLobbyChat();
 
         db.ref('rooms/' + currentRoom).on('value', snap => {
             const data = snap.val(); 
             
             if(!data && currentRoom !== null) {
                 db.ref('rooms/' + currentRoom).off();
+                db.ref('rooms/' + currentRoom + '/lobbyChat').off();
                 if(!isHost) alert("تم إغلاق الغرفة من قبل المضيف");
-   
-             clearAndReload();
+                clearAndReload();
                 return;
             }
             
             gameData = data;
             if(data.status === 'waiting') {
                 showScreen('lobby-screen');
-  
-              enableHomeButtons(); 
+                enableHomeButtons(); 
                 document.getElementById('round-display').innerText = `الجولة: ${data.round} / 5`;
             }
             const list = document.getElementById('player-list-container');
             list.innerHTML = "";
             
-           
- Object.keys(data.players).forEach(pId => { 
+            Object.keys(data.players).forEach(pId => { 
                 const p = data.players[pId];
                 let kickMarkup = (isHost && pId !== myId) ? `<button class="kick-btn" onclick="kickPlayer('${pId}')">❌</button>` : '';
-list.innerHTML += `<div class="player-tag">${p.name} (${p.score}) ${kickMarkup}</div>`; 
+                list.innerHTML += `<div class="player-tag">${p.name} (${p.score}) ${kickMarkup}</div>`; 
             });
             
             const pCount = Object.keys(data.players).length;
-            const requiredPlayers = (allowedImpostersCount === 2) ?
-4 : 3;
+            const requiredPlayers = (allowedImpostersCount === 2) ? 4 : 3;
             
             if(isHost && data.status === 'waiting' && pCount >= requiredPlayers) {
                 document.getElementById('start-game-btn').style.display = 'block';
-} else {
+            } else {
                 document.getElementById('start-game-btn').style.display = 'none';
-}
+            }
             
             if(data.status === 'playing') setupGame();
-if(data.status === 'voting') renderVoteOptions();
+            if(data.status === 'voting') renderVoteOptions();
             if(data.status === 'results') showFinalResults();
         });
     }
 
     function triggerStart() {
         const words = megaDatabase[selectedCategory], word = words[Math.floor(Math.random() * words.length)];
-const pIds = Object.keys(gameData.players);
+        const pIds = Object.keys(gameData.players);
         const previousImposters = gameData.imposters || [];
-// تصفية اللاعبين لاستبعاد من كان محتالاً في الجولة السابقة لمنع التكرار المتتالي
         let eligiblePlayers = pIds.filter(id => !previousImposters.includes(id));
-// حماية: إذا كان عدد اللاعبين المتبقين غير كافٍ لعدد المحتالين المطلوب، نلغي الاستبعاد ونعتمد على الجميع
         if (eligiblePlayers.length < allowedImpostersCount) {
             eligiblePlayers = pIds;
-}
+        }
 
         let imposterIds = [];
-if (allowedImpostersCount === 2 && eligiblePlayers.length >= 4) {
+        if (allowedImpostersCount === 2 && eligiblePlayers.length >= 4) {
             let firstImp = eligiblePlayers[Math.floor(Math.random() * eligiblePlayers.length)];
-imposterIds.push(firstImp);
+            imposterIds.push(firstImp);
             
             let remainingEligible = eligiblePlayers.filter(id => id !== firstImp);
             let secondImp = remainingEligible[Math.floor(Math.random() * remainingEligible.length)];
             imposterIds.push(secondImp);
-} else {
+        } else {
             imposterIds.push(eligiblePlayers[Math.floor(Math.random() * eligiblePlayers.length)]);
-}
+        }
 
+        // الحذف النهائي والتصفير الفوري لتاريخ الدردشة (lobbyChat: null) عند بدء الجولة
         db.ref('rooms/' + currentRoom).update({ 
             status: 'playing', 
             word: word, 
             category: selectedCategory, 
             imposters: imposterIds, 
             votes: {},
-            understandVotes: {} // تصفير تصويتات الفهم للجولة الجديدة
+            understandVotes: {},
+            lobbyChat: null 
         });
-}
+    }
 
     function changeCurrentWord() {
         if(!isHost || !currentRoom || !gameData.category) return;
-const words = megaDatabase[gameData.category];
+        const words = megaDatabase[gameData.category];
         let newWord;
         do {
             newWord = words[Math.floor(Math.random() * words.length)];
-} while (newWord === gameData.word);
+        } while (newWord === gameData.word);
 
         db.ref('rooms/' + currentRoom).update({ 
             word: newWord,
-            understandVotes: {} // تصفير تصويتات الفهم للكلمة الجديدة
+            understandVotes: {} 
         });
-}
+    }
 
     function setupGame() {
         showScreen('play-screen');
@@ -560,13 +604,11 @@ const words = megaDatabase[gameData.category];
         document.getElementById('category-hint').innerText = "المجال: " + gameData.category;
         document.getElementById('secret-content').innerText = "[ اضغط لفك التشفير ]";
         
-        // إعادة تهيئة مظهر أزرار الفهم محلياً عند بدء جولة أو كلمة جديدة
         document.getElementById('und-yes').className = "und-btn yes-btn";
         document.getElementById('und-no').className = "und-btn no-btn";
         document.getElementById('und-yes').disabled = false;
         document.getElementById('und-no').disabled = false;
 
-        // الاستماع لتصويتات الفهم لتحديث الواجهة ديناميكياً للمضيف واللاعبين
         db.ref('rooms/' + currentRoom + '/understandVotes').on('value', snap => {
             if (gameData.status !== 'playing') return;
             
@@ -581,10 +623,8 @@ const words = megaDatabase[gameData.category];
                 if (v === false) noCount++;
             });
 
-            // تحديث نص الحالة للاعبين
             document.getElementById('understand-status-text').innerText = `تم التصويت: ${votedCount} / ${totalPlayers} (نعم: ${yesCount} | لا: ${noCount})`;
 
-            // تمييز الزر الذي اختاره اللاعب حالياً
             if (uVotes[myId] !== undefined) {
                 if (uVotes[myId] === true) {
                     document.getElementById('und-yes').className = "und-btn selected-yes";
@@ -598,16 +638,13 @@ const words = megaDatabase[gameData.category];
             if (isHost) {
                 const votesFinished = (votedCount === totalPlayers);
                 const mostYes = (yesCount > totalPlayers / 2);
-                const mostNo = (noCount >= totalPlayers / 2);
 
-                // 1. التحكم في زر الانتقال للتصويت للمضيف (يظهر فقط إذا صوت الجميع والأغلبية نعم)
                 if (votesFinished && mostYes) {
                     document.getElementById('go-to-vote-btn').style.display = 'block';
                 } else {
                     document.getElementById('go-to-vote-btn').style.display = 'none';
                 }
 
-                // 2. التحكم في زر تغيير الكلمة للمضيف (يعطل إذا لم ينته التصويت أو الأغلبية نعم)
                 document.getElementById('change-word-btn').style.display = 'block';
                 if (!votesFinished || mostYes) {
                     document.getElementById('change-word-btn').disabled = true;
@@ -627,76 +664,72 @@ const words = megaDatabase[gameData.category];
     }
 
     function toggleSecret() {
-    const imps = gameData.imposters ||
-[];
-    const isImp = imps.includes(myId);
-    const content = document.getElementById('secret-content');
+        const imps = gameData.imposters || [];
+        const isImp = imps.includes(myId);
+        const content = document.getElementById('secret-content');
 
-    if (!isImp) {
-        // اللاعب العادي يرى الكلمة السرية فقط باللون الأخضر المميز
-        content.innerHTML = `<span style="color:var(--success); font-size: 20px;">${gameData.word}</span>`;
-} else {
-        // المحتال يرى جملة "أنت المحتال" فقط باللون الأخضر المميز
-        content.innerHTML = `<span style="color:var(--success); font-size: 20px;">أنت المحتال</span>`;
-}
-}
+        if (!isImp) {
+            content.innerHTML = `<span style="color:var(--success); font-size: 20px;">${gameData.word}</span>`;
+        } else {
+            content.innerHTML = `<span style="color:var(--success); font-size: 20px;">أنت المحتال</span>`;
+        }
+    }
 
     function showVoteScreen() { 
-        db.ref('rooms/' + currentRoom + '/understandVotes').off(); // قطع الاستماع عند مغادرة الصفحة
+        db.ref('rooms/' + currentRoom + '/understandVotes').off(); 
         db.ref('rooms/' + currentRoom).update({ status: 'voting' });
-}
+    }
 
     function renderVoteOptions() {
         showScreen('vote-screen');
         const container = document.getElementById('vote-options');
-const title = document.getElementById('vote-screen-title');
+        const title = document.getElementById('vote-screen-title');
         const impsCount = (gameData.imposters || []).length;
-if (gameData.votes && gameData.votes[myId]) {
+        if (gameData.votes && gameData.votes[myId]) {
             container.innerHTML = "<p>تم تسجيل صوتك بنجاح. انتظر البقية...</p>";
-checkVotesComplete(); return;
+            checkVotesComplete(); return;
         }
         
         selectedVotes = [];
-title.innerText = (impsCount === 2) ? "اختر المحتال الأول (1)" : "من هو المحتال؟";
+        title.innerText = (impsCount === 2) ? "اختر المحتال الأول (1)" : "من هو المحتال؟";
 
         container.innerHTML = "";
-Object.keys(gameData.players).forEach(id => {
+        Object.keys(gameData.players).forEach(id => {
             if (id !== myId) {
                 const btn = document.createElement('button');
                 btn.className = "vote-btn";
                 btn.id = "v-btn-" + id;
                 btn.innerText = gameData.players[id].name;
-       
-                 btn.onclick = () => handleVoteSelection(id, btn);
+                btn.onclick = () => handleVoteSelection(id, btn);
                 container.appendChild(btn);
             }
         });
-}
+    }
 
     function handleVoteSelection(votedId, btnElement) {
         const impsCount = (gameData.imposters || []).length;
-const title = document.getElementById('vote-screen-title');
+        const title = document.getElementById('vote-screen-title');
 
         if (impsCount === 2) {
             selectedVotes.push(votedId);
-btnElement.disabled = true; 
+            btnElement.disabled = true; 
             
             if (selectedVotes.length === 1) {
                 title.innerText = "اختر المحتال الثاني (2)";
-} else if (selectedVotes.length === 2) {
+            } else if (selectedVotes.length === 2) {
                 document.querySelectorAll('.vote-btn').forEach(btn => btn.disabled = true);
-let mergedVotes = selectedVotes.join(","); 
+                let mergedVotes = selectedVotes.join(","); 
                 submitVote(mergedVotes);
             }
         } else {
             document.querySelectorAll('.vote-btn').forEach(btn => btn.disabled = true);
-submitVote(votedId);
+            submitVote(votedId);
         }
     }
 
     function submitVote(votedValue) {
         db.ref('rooms/' + currentRoom + '/votes/' + myId).set(votedValue).then(() => checkVotesComplete());
-}
+    }
 
     function checkVotesComplete() {
         db.ref('rooms/' + currentRoom).once('value', snap => {
@@ -704,18 +737,17 @@ submitVote(votedId);
             const votesData = data.votes || {};
             const votersCount = Object.keys(votesData).length;
             const totalRequired = Object.keys(data.players).length;
-            if (votersCount >= totalRequired && data.status === 
-'voting') calculateScores(data);
+            if (votersCount >= totalRequired && data.status === 'voting') calculateScores(data);
         });
-}
+    }
 
     function calculateScores(data) {
         let updates = {};
-const imps = data.imposters || [];
+        const imps = data.imposters || [];
         let votesAgainstEachImp = {};
         
         imps.forEach(id => { votesAgainstEachImp[id] = 0; });
-const totalVoters = Object.keys(data.players).length - imps.length;
+        const totalVoters = Object.keys(data.players).length - imps.length;
 
         Object.keys(data.players).forEach(pId => {
             let currentScore = data.players[pId].score || 0;
@@ -723,53 +755,49 @@ const totalVoters = Object.keys(data.players).length - imps.length;
             if (!imps.includes(pId)) {
                 let voteValue = data.votes[pId] || "";
                 let playerVotes = voteValue.split(","); 
-        
                 
                 playerVotes.forEach(votedFor => {
                     if (imps.includes(votedFor)) {
                         currentScore += 1;
                         votesAgainstEachImp[votedFor]++;
-  
                    }
                 });
             }
             updates[`players/${pId}/score`] = currentScore;
         });
-imps.forEach(impId => {
+        imps.forEach(impId => {
             let impScore = data.players[impId].score || 0;
             let votesAgainstThisImp = votesAgainstEachImp[impId] || 0;
             
             if (votesAgainstThisImp < (totalVoters / 2)) {
                 impScore += 2;
             }
-    
-         updates[`players/${impId}/score`] = impScore;
+            updates[`players/${impId}/score`] = impScore;
         });
-updates['status'] = 'results';
+        updates['status'] = 'results';
         db.ref('rooms/' + currentRoom).update(updates);
     }
 
     function showFinalResults() {
         showScreen('result-screen');
-const imps = gameData.imposters || [];
+        const imps = gameData.imposters || [];
         let impNames = imps.map(id => gameData.players[id] ? gameData.players[id].name : "لاعب غادر").join(" و ");
-document.getElementById('res-imp-name').innerText = impNames;
+        document.getElementById('res-imp-name').innerText = impNames;
         const container = document.getElementById('scores-container');
         container.innerHTML = "";
         
         const sorted = Object.keys(gameData.players).sort((a,b) => gameData.players[b].score - gameData.players[a].score);
-sorted.forEach(id => {
+        sorted.forEach(id => {
             container.innerHTML += `<div class="score-row"><span>${gameData.players[id].name}</span><span style="color:var(--primary)">${gameData.players[id].score} pts</span></div>`;
         });
-document.getElementById('next-round-btn').style.display = (isHost && gameData.round < 5) ? 'block' : 'none';
-        document.getElementById('finish-btn').style.display = (isHost && gameData.round >= 5) ?
-'block' : 'none';
+        document.getElementById('next-round-btn').style.display = (isHost && gameData.round < 5) ? 'block' : 'none';
+        document.getElementById('finish-btn').style.display = (isHost && gameData.round >= 5) ? 'block' : 'none';
         document.getElementById('exit-btn').style.display = (!isHost && gameData.round >= 5) ? 'block' : 'none';
-}
+    }
 
     function backToLobby() {
         db.ref('rooms/' + currentRoom).update({ status: 'waiting', round: gameData.round + 1, votes: {}, word: null });
-}
+    }
 </script>
 </body>
 </html>
