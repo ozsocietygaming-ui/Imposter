@@ -8,118 +8,223 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     <style>
-        :root { --bg: #0a0a12; --primary: #00f2ff; --secondary: #7000ff; --imposter: #ff0055; --card-bg: #161625; --text: #e0e0ff; --success: #00ff9d; }
-        html, body { overflow: hidden; overscroll-behavior-y: contain; position: fixed; width: 100%; height: 100%; margin: 0; padding: 0; }
-        body { background: var(--bg); color: var(--text); font-family: 'Cairo', sans-serif; display: flex; align-items: center; justify-content: center; }
-        .app-viewport { width: 95%; max-width: 400px; height: 620px; background: var(--card-bg); border: 2px solid var(--primary); border-radius: 20px; position: relative; overflow: hidden; box-shadow: 0 0 30px rgba(0,242,255,0.2); }
-        .screen { position: absolute; width: 100%; height: 100%; padding: 25px; display: none; flex-direction: column; align-items: center; box-sizing: border-box; }
-        .active { display: flex; animation: fadeIn 0.3s; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        h1 { font-family: 'Press Start 2P'; font-size: 11px; color: var(--primary); margin-bottom: 20px; text-align: center; }
-        .main-btn { width: 100%; padding: 14px; border-radius: 12px; border: none; background: var(--secondary); color: white; font-weight: bold; cursor: pointer; margin-top: 8px; box-shadow: 0 4px 0 #4a00aa; }
-        .main-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 #4a00aa; }
-        .main-btn:disabled { background: #444 !important; box-shadow: none !important; color: #aaa; cursor: not-allowed; }
-        input { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #333; background: #000; color: #fff; text-align: center; margin-bottom: 10px; }
-        .player-list { width: 100%; flex-grow: 1; overflow-y: auto; background: rgba(0,0,0,0.3); border-radius: 10px; padding: 10px; margin-bottom: 10px; border: 1px solid #222; }
-        .player-tag { background: #252535; padding: 6px 12px; margin: 3px; border-radius: 20px; display: inline-flex; align-items: center; gap: 8px; font-size: 11px; border: 1px solid var(--primary); }
-        .kick-btn { background: none; border: none; color: var(--imposter); font-weight: bold; cursor: pointer; padding: 0; font-size: 12px; }
-        .round-badge { background: var(--imposter); color: white; padding: 4px 15px; border-radius: 20px; font-size: 11px; font-weight: bold; margin-bottom: 15px; }
-        .cat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; margin-bottom: 10px; }
-        .cat-btn { background: #1a1a2e; color: #aaa; border: 1px solid #333; padding: 10px; border-radius: 8px; font-size: 12px; cursor: pointer; }
-        .cat-btn.selected { background: var(--primary); color: #000; border-color: var(--primary); }
-        .secret-card { width: 100%; height: 150px; background: #05050a; border: 2px dashed var(--secondary); border-radius: 15px; display: flex; align-items: center; justify-content: center; margin: 15px 0; cursor: pointer; text-align: center; }
-        .vote-btn { background: #2d2d44; color: white; border: 1px solid var(--primary); padding: 10px; margin: 5px 0; width: 100%; border-radius: 8px; cursor: pointer; text-align: center; }
-        .vote-btn:disabled { opacity: 0.4; cursor: not-allowed; border-color: #333; }
-        .score-row { display: flex; justify-content: space-between; width: 100%; padding: 8px 10px; border-bottom: 1px solid #333; font-size: 14px; }
-        .config-label { font-size: 11px; color: var(--primary); margin: 5px 0; width: 100%; text-align: right; }
-        .imp-toggle-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; margin-bottom: 15px; }
-        .imp-toggle-btn { background: #1a1a2e; color: #aaa; border: 1px solid #333; padding: 8px; border-radius: 8px; font-size: 11px; cursor: pointer; font-family: 'Cairo'; }
-        .imp-toggle-btn.selected { background: var(--imposter); color: #fff; border-color: var(--imposter); box-shadow: 0 0 10px var(--imposter); }
-        .rooms-radar { width: 100%; background: rgba(0,0,0,0.4); border: 1px dashed #333; border-radius: 12px; padding: 10px; margin-top: 10px; max-height: 110px; overflow-y: auto; box-sizing: border-box; }
-        .radar-title { font-size: 10px; color: var(--primary); text-align: center; margin-bottom: 6px; letter-spacing: 1px; }
-        .room-item { background: #1a1a2e; border: 1px solid var(--secondary); padding: 8px; margin-bottom: 5px; border-radius: 8px; font-size: 11px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
-        .room-item:hover { border-color: var(--success); }
+        :root { --bg: #0a0a12;
+--primary: #00f2ff; --secondary: #7000ff; --imposter: #ff0055; --card-bg: #161625; --text: #e0e0ff; --success: #00ff9d;
+}
+        html, body { overflow: hidden; overscroll-behavior-y: contain; position: fixed; width: 100%;
+height: 100%; margin: 0; padding: 0; }
+        body { background: var(--bg); color: var(--text);
+font-family: 'Cairo', sans-serif; display: flex; align-items: center; justify-content: center; }
+        .app-viewport { width: 95%;
+max-width: 400px; height: 620px; background: var(--card-bg); border: 2px solid var(--primary); border-radius: 20px; position: relative; overflow: hidden;
+box-shadow: 0 0 30px rgba(0,242,255,0.2); }
+        .screen { position: absolute; width: 100%;
+height: 100%; padding: 25px; display: none; flex-direction: column; align-items: center; box-sizing: border-box;
+}
+        .active { display: flex; animation: fadeIn 0.3s;
+}
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1;
+} }
+        h1 { font-family: 'Press Start 2P'; font-size: 11px; color: var(--primary);
+margin-bottom: 20px; text-align: center; }
+        .main-btn { width: 100%; padding: 14px; border-radius: 12px;
+border: none; background: var(--secondary); color: white; font-weight: bold; cursor: pointer; margin-top: 8px; box-shadow: 0 4px 0 #4a00aa;
+}
+        .main-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 #4a00aa;
+}
+        .main-btn:disabled { background: #444 !important; box-shadow: none !important; color: #aaa; cursor: not-allowed;
+}
+        input { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #333;
+background: #000; color: #fff; text-align: center; margin-bottom: 10px; }
+        .player-list { width: 100%;
+flex-grow: 1; overflow-y: auto; background: rgba(0,0,0,0.3); border-radius: 10px; padding: 10px; margin-bottom: 10px; border: 1px solid #222;
+}
+        .player-tag { background: #252535; padding: 6px 12px; margin: 3px; border-radius: 20px;
+display: inline-flex; align-items: center; gap: 8px; font-size: 11px; border: 1px solid var(--primary);
+}
+        .kick-btn { background: none; border: none; color: var(--imposter); font-weight: bold; cursor: pointer;
+padding: 0; font-size: 12px; }
+        .round-badge { background: var(--imposter); color: white;
+padding: 4px 15px; border-radius: 20px; font-size: 11px; font-weight: bold; margin-bottom: 15px;
+}
+        .cat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%;
+margin-bottom: 10px; }
+        .cat-btn { background: #1a1a2e; color: #aaa; border: 1px solid #333;
+padding: 10px; border-radius: 8px; font-size: 12px; cursor: pointer; }
+        .cat-btn.selected { background: var(--primary);
+color: #000; border-color: var(--primary); }
+        .secret-card { width: 100%; height: 130px; background: #05050a;
+border: 2px dashed var(--secondary); border-radius: 15px; display: flex; align-items: center; justify-content: center; margin: 10px 0; cursor: pointer; text-align: center;
+}
+        .vote-btn { background: #2d2d44; color: white; border: 1px solid var(--primary); padding: 10px;
+margin: 5px 0; width: 100%; border-radius: 8px; cursor: pointer; text-align: center;
+}
+        .vote-btn:disabled { opacity: 0.4; cursor: not-allowed; border-color: #333;
+}
+        .score-row { display: flex; justify-content: space-between; width: 100%; padding: 8px 10px;
+border-bottom: 1px solid #333; font-size: 14px; }
+        .config-row { font-size: 11px; color: var(--primary);
+margin: 5px 0; width: 100%; text-align: right; }
+        .config-scroll-area { width: 100%; max-height: 120px; overflow-y: auto; background: rgba(0,0,0,0.2); padding: 5px; border-radius: 10px; box-sizing: border-box; margin-bottom: 10px; border: 1px solid #222; }
+        .imp-toggle-grid { display: grid;
+grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; margin-bottom: 15px; }
+        .imp-toggle-btn { background: #1a1a2e;
+color: #aaa; border: 1px solid #333; padding: 8px; border-radius: 8px; font-size: 11px; cursor: pointer; font-family: 'Cairo';
+}
+        .imp-toggle-btn.selected { background: var(--imposter); color: #fff; border-color: var(--imposter);
+box-shadow: 0 0 10px var(--imposter); }
+        
+        .rooms-radar { width: 100%;
+background: rgba(0,0,0,0.4); border: 1px dashed #333; border-radius: 12px; padding: 10px; margin-top: 10px; max-height: 110px; overflow-y: auto; box-sizing: border-box;
+}
+        .radar-title { font-size: 10px; color: var(--primary); text-align: center; margin-bottom: 6px; letter-spacing: 1px;
+}
+        .room-item { background: #1a1a2e; border: 1px solid var(--secondary); padding: 8px; margin-bottom: 5px;
+border-radius: 8px; font-size: 11px; display: flex; justify-content: space-between; align-items: center; cursor: pointer;
+}
+        .room-item:hover { border-color: var(--success);
+}
 
-        /* أنماط المحادثة المراقبة */
-        .chat-area { width: 100%; flex-grow: 1; overflow-y: auto; background: rgba(0,0,0,0.5); border-radius: 12px; padding: 12px; border: 1px solid #222; margin-bottom: 10px; font-size: 13px; }
-        .chat-bubble { padding: 8px 12px; border-radius: 10px; margin-bottom: 8px; max-width: 85%; word-wrap: break-word; line-height: 1.5; }
-        .chat-bubble.system { background: rgba(0, 242, 255, 0.1); border: 1px dashed var(--primary); color: var(--primary); text-align: center; max-width: 100%; font-size: 11px; }
-        .chat-bubble.ask { background: var(--secondary); color: #fff; margin-left: auto; border-bottom-right-radius: 2px; text-align: right; }
-        .chat-bubble.answer { background: #252535; color: var(--success); border: 1px solid #333; margin-right: auto; border-bottom-left-radius: 2px; text-align: left; }
-        .target-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; width: 100%; margin-bottom: 10px; }
-        .target-btn { background: #1a1a2e; color: #fff; border: 1px solid var(--secondary); padding: 8px; border-radius: 8px; font-size: 12px; cursor: pointer; font-family: 'Cairo'; }
+        /* تنسيقات قسم فهم الكلمة */
+        .understand-section { width: 100%; display: flex; flex-direction: column; align-items: center; margin-bottom: 10px; background: rgba(255,255,255,0.03); padding: 8px; border-radius: 10px; border: 1px solid #222; box-sizing: border-box; }
+        .understand-title { font-size: 12px; color: var(--text); margin-bottom: 6px; font-weight: bold; }
+        .understand-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; }
+        .und-btn { padding: 8px; border: 1px solid #444; background: #111; color: #fff; border-radius: 8px; font-weight: bold; cursor: pointer; font-family: 'Cairo'; font-size: 12px; }
+        .und-btn.yes-btn:hover { background: var(--success); color: #000; border-color: var(--success); }
+        .und-btn.no-btn:hover { background: var(--imposter); color: #fff; border-color: var(--imposter); }
+        .und-btn.selected-yes { background: var(--success); color: #000; border-color: var(--success); box-shadow: 0 0 8px var(--success); }
+        .und-btn.selected-no { background: var(--imposter); color: #fff; border-color: var(--imposter); box-shadow: 0 0 8px var(--imposter); }
+        .understand-status { font-size: 11px; color: #aaa; margin-top: 4px; text-align: center; }
+
+        /* تنسيقات قسم دردشة الـ Lobby */
+        .lobby-chat-box { width: 100%; display: flex; flex-direction: column; background: rgba(0,0,0,0.4); border: 1px solid #222; border-radius: 12px; margin-bottom: 10px; height: 110px; overflow: hidden; box-sizing: border-box; }
+        .chat-messages { flex-grow: 1; overflow-y: auto; padding: 6px 10px; font-size: 11px; display: flex; flex-direction: column; gap: 4px; text-align: right; }
+        .chat-msg { background: rgba(255,255,255,0.03); padding: 4px 8px; border-radius: 6px; border-right: 2px solid var(--secondary); word-break: break-all; }
+        .chat-msg .sender { color: var(--primary); font-weight: bold; margin-left: 5px; }
+        .chat-input-area { display: flex; border-top: 1px solid #222; background: #000; }
+        .chat-input-area input { flex-grow: 1; border: none; padding: 6px 10px; font-size: 11px; background: transparent; color: #fff; margin: 0; text-align: right; }
+        .chat-input-area button { background: var(--secondary); color: white; border: none; padding: 0 15px; font-size: 11px; font-weight: bold; cursor: pointer; font-family: 'Cairo'; }
+        
+        /* تنسيق زر المغادرة العلوي الثابت */
+        .leave-game-btn { background: #33101a; border: 1px dashed var(--imposter); color: var(--imposter); font-size: 11px; padding: 4px 12px; border-radius: 6px; cursor: pointer; font-family: 'Cairo'; position: absolute; top: 10px; left: 10px; z-index: 100; display: none; font-weight: bold; }
+        .leave-game-btn:hover { background: var(--imposter); color: #fff; }
+
+        /* التنسيقات الجديدة لنوع الغرفة */
+        .room-type-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; margin-bottom: 8px; }
+        .type-btn { background: #1a1a2e; color: #aaa; border: 1px solid #333; padding: 10px; border-radius: 8px; font-size: 12px; cursor: pointer; font-family: 'Cairo'; font-weight: bold; }
+        .type-btn.selected { background: var(--secondary); color: #fff; border-color: var(--secondary); }
+
+        /* تنسيقات صندوق دردشة اللعب أونلاين الجديدة والمضافة دون المساس بالتصميم الأساسي */
+        .ingame-chat-box { width: 100%; display: flex; flex-direction: column; background: rgba(0,0,0,0.5); border: 1px solid var(--primary); border-radius: 12px; margin-top: 10px; height: 110px; overflow: hidden; box-sizing: border-box; }
+        .ingame-messages { flex-grow: 1; overflow-y: auto; padding: 6px 10px; font-size: 11px; display: flex; flex-direction: column; gap: 4px; text-align: right; }
+        .ingame-msg { background: rgba(0,242,255,0.03); padding: 4px 8px; border-radius: 6px; border-right: 2px solid var(--primary); word-break: break-all; }
+        .ingame-msg .sender { color: var(--success); font-weight: bold; margin-left: 5px; }
+        .ingame-input-area { display: flex; border-top: 1px solid #222; background: #000; }
+        .ingame-input-area input { flex-grow: 1; border: none; padding: 6px 10px; font-size: 11px; background: transparent; color: #fff; margin: 0; text-align: right; }
+        .ingame-input-area button { background: var(--primary); color: black; border: none; padding: 0 15px; font-size: 11px; font-weight: bold; cursor: pointer; font-family: 'Cairo'; }
     </style>
 </head>
 <body>
 
 <div class="app-viewport">
+    <button id="global-leave-btn" class="leave-game-btn" onclick="playerDisconnectAction()">مغادرة اللعبة 🚪</button>
+
     <div id="home-screen" class="screen active">
         <h1>IMPOSTER OS<br><span style="color:var(--secondary)">TOURNAMENT PRO</span></h1>
         <input type="text" id="user-name" placeholder="أدخل اسمك">
+        
+        <div class="room-type-grid">
+            <button id="type-public-btn" class="type-btn selected" onclick="setRoomPrivacy('public')">🔓 غرفة عامة</button>
+            <button id="type-private-btn" class="type-btn" onclick="setRoomPrivacy('private')">🔒 غرفة برمز سري</button>
+        </div>
+        <input type="number" id="custom-password-input" placeholder="أدخل رمز سري (4 أرقام)" style="display:none;" oninput="if(this.value.length > 4) this.value = this.value.slice(0,4)">
+
         <button id="create-btn" class="main-btn" onclick="createNewRoom()">إنشاء غرفة جديدة</button>
         <div style="margin: 5px 0; font-size: 10px; color: #444;">— أو انضم لصديق —</div>
         <input type="text" id="room-id-input" placeholder="أدخل كود الغرفة">
-        <button id="join-btn" class="main-btn" style="background:#333; box-shadow: 0 4px 0 #111;" onclick="joinExistingRoom()">انضمام للغرفة</button>
+        <button id="join-btn" class="main-btn" style="background:#333; box-shadow: 0 4px 0 #111;"
+onclick="joinExistingRoom()">انضمام للغرفة</button>
         
         <div class="rooms-radar">
             <div class="radar-title">📡 الرادارات النشطة (غرف متاحة)</div>
             <div id="available-rooms-container" style="color:#666; font-size:10px; text-align:center; padding-top:10px;">جاري البحث عن إشارات...</div>
         </div>
         
-        <p id="reconnect-hint" style="display:none; font-size: 10px; color: var(--success); margin-top: 10px; cursor:pointer;" onclick="checkAutoReconnect()">قطع الاتصال؟ اضغط للاستعادة</p>
+        <p id="reconnect-hint" style="display:none; font-size: 10px; color: var(--success); margin-top: 10px; cursor:pointer;"
+onclick="checkAutoReconnect()">قطع الاتصال؟ اضغط للاستعادة</p>
     </div>
 
     <div id="lobby-screen" class="screen">
         <div class="round-badge" id="round-display">الجولة: 1 / 5</div>
-        <h1>ID الغرفة: <span id="display-room-id" style="color:var(--success)">----</span></h1>
+        <h1>ID الغرفة: <span id="display-room-id" style="color:var(--success)">----</span> <span id="display-room-privacy" style="font-size:10px; color:#aaa;"></span></h1>
         
         <div id="host-controls" style="display:none; width: 100%;">
-            <div class="config-label">اختر الفئة:</div>
-            <div class="cat-grid">
-                <button class="cat-btn selected" onclick="selectCat('حيوانات وحشرات', this)">حيوانات وحشرات</button>
-                <button class="cat-btn" onclick="selectCat('طعام', this)">طعام</button>
-                <button class="cat-btn" onclick="selectCat('أماكن', this)">أماكن</button>
-                <button class="cat-btn" onclick="selectCat('جماد', this)">جماد</button>
-                <button class="cat-btn" onclick="selectCat('دول', this)">دول</button>
+            <div class="config-row">اختر الفئة:</div>
+            <div class="config-scroll-area">
+                <div class="cat-grid">
+                    <button class="cat-btn selected" onclick="selectCat('حيوانات وحشرات', this)">حيوانات وحشرات</button>
+                    <button class="cat-btn" onclick="selectCat('طعام', this)">طعام</button>
+                    <button class="cat-btn" onclick="selectCat('أماكن', this)">أماكن</button>
+                    <button class="cat-btn" onclick="selectCat('جماد', this)">جماد</button>
+                    <button class="cat-btn" onclick="selectCat('دول', this)">دول</button>
+                    <button class="cat-btn" onclick="selectCat('شخصيات مشهورة', this)">شخصيات مشهورة</button>
+                </div>
             </div>
-            
-            <div class="config-label">عدد المحتالين في الجولة:</div>
+        
+            <div class="config-row">عدد المحتالين في الجولة:</div>
             <div class="imp-toggle-grid">
                 <button class="imp-toggle-btn selected" onclick="selectImpCount(1, this)">محتال واحد (1)</button>
                 <button class="imp-toggle-btn" onclick="selectImpCount(2, this)">محتالين اثنين (2)</button>
             </div>
-
-            <div class="config-label">وضع الغرفة ونظام الاستجواب:</div>
-            <div class="imp-toggle-grid">
-                <button id="room-normal-btn" class="imp-toggle-btn selected" onclick="selectRoomType('normal', this)">غرفة عادية (تصويت مباشرة)</button>
-                <button id="room-chat-btn" class="imp-toggle-btn" onclick="selectRoomType('controlledChat', this)">محادثة خاضعة للرقابة 💬</button>
-            </div>
         </div>
+ 
         
         <div class="player-list" id="player-list-container"></div>
-        <button id="start-game-btn" class="main-btn" style="display:none; background: var(--success); color:#000;" onclick="triggerStart()">بدء العملية</button>
-        <button id="delete-room-btn" class="main-btn" style="display:none; background: var(--imposter); box-shadow: 0 4px 0 #b3003b; margin-top: 5px;" onclick="deleteRoomByHost()">إغلاق وحذف الغرفة نهائياً 🗑️</button>
+
+        <div class="lobby-chat-box">
+            <div class="chat-messages" id="chat-messages-container"></div>
+            <div class="chat-input-area">
+                <input type="text" id="chat-msg-input" placeholder="اكتب رسالة للاعبين..." onkeypress="if(event.key === 'Enter') sendLobbyMessage()">
+                <button onclick="sendLobbyMessage()">إإرسال</button>
+            </div>
+        </div>
+
+        <button id="start-game-btn" class="main-btn" style="display:none;
+background: var(--success); color:#000;" onclick="triggerStart()">بدء العملية</button>
+        <button id="delete-room-btn" class="main-btn" style="display:none; background: var(--imposter);
+box-shadow: 0 4px 0 #b3003b; margin-top: 5px;" onclick="deleteRoomByHost()">إغلاق وحذف الغرفة نهائياً 🗑️</button>
     </div>
 
     <div id="play-screen" class="screen">
-        <div id="category-hint" style="background: rgba(0,242,255,0.1); padding: 5px 20px; border-radius: 20px; color: var(--primary); border: 1px solid var(--primary); margin-bottom: 10px;"></div>
+        <div id="category-hint" style="background: rgba(0,242,255,0.1);
+padding: 5px 20px; border-radius: 20px; color: var(--primary); border: 1px solid var(--primary);
+margin-bottom: 10px;"></div>
+        
         <div class="secret-card" onclick="toggleSecret()">
             <div id="secret-content" style="color: #555;">[ اضغط لفك التشفير ]</div>
         </div>
-        <button class="main-btn" id="change-word-btn" onclick="changeCurrentWord()" style="display:none; background: #d97706; box-shadow: 0 4px 0 #92400e; margin-bottom: 5px;">تغيير الكلمة الحالية 🔄</button>
-        <button class="main-btn" id="go-to-vote-btn" onclick="handlePlayScreenNextAction()">انتقل للخطوة التالية</button>
-    </div>
 
-    <!-- واجهة شاشة المحادثة الخاضعة للرقابة -->
-    <div id="controlled-chat-screen" class="screen">
-        <div class="round-badge" id="chat-round-phase" style="background:var(--secondary)">جولة الأسئلة الخطية</div>
-        <h1 id="chat-status-indicator" style="color:var(--primary); margin-bottom:10px;">جاري تحميل نظام الاستجواب...</h1>
-        <div class="chat-area" id="controlled-chat-box"></div>
-        <div id="chat-target-selection" class="target-grid" style="display:none;"></div>
-        <div id="chat-input-container" style="width:100%; display:none;">
-            <input type="text" id="controlled-chat-input" placeholder="اكتب رسالتك هنا...">
-            <button class="main-btn" id="controlled-chat-send-btn" style="background:var(--success); color:#000; margin-top:0; margin-bottom:10px;" onclick="submitControlledChat()">إرسال الرسالة</button>
+        <div class="understand-section">
+            <div class="understand-title">هل فهمت الكلمة؟</div>
+            <div class="understand-grid">
+                <button id="und-yes" class="und-btn yes-btn" onclick="submitUnderstanding(true)">نعم 👍</button>
+                <button id="und-no" class="und-btn no-btn" onclick="submitUnderstanding(false)">لا 👎</button>
+            </div>
+            <div id="understand-status-text" class="understand-status">انتظار تصويت اللاعبين...</div>
         </div>
+
+        <!-- صندوق دردشة التحكم الجديد للتحقيق والأسئلة أونلاين أثناء اللعب عن بعد -->
+        <div class="ingame-chat-box">
+            <div class="ingame-messages" id="ingame-messages-container"></div>
+            <div class="ingame-input-area">
+                <input type="text" id="ingame-msg-input" placeholder="اطرح سؤالاً أو أجب هنا..." onkeypress="if(event.key === 'Enter') sendInGameMessage()">
+                <button onclick="sendInGameMessage()">إرسال</button>
+            </div>
+        </div>
+
+        <button class="main-btn" id="change-word-btn" onclick="changeCurrentWord()" style="display:none;
+background: #d97706; box-shadow: 0 4px 0 #92400e; margin-bottom: 5px; margin-top: 10px;">تغيير الكلمة الحالية 🔄</button>
+        <button class="main-btn" id="go-to-vote-btn" onclick="showVoteScreen()" style="display:none; margin-top: 10px;">انتقل للتصويت</button>
     </div>
 
     <div id="vote-screen" class="screen">
@@ -129,11 +234,15 @@
 
     <div id="result-screen" class="screen">
         <h1 style="color:var(--primary)">نتائج التحقيق</h1>
-        <div style="font-size:14px; margin-bottom:10px;">المحتالون كانوا: <span id="res-imp-name" style="color:var(--imposter); font-weight:bold;"></span></div>
-        <div id="scores-container" style="width:100%; background:rgba(0,0,0,0.4); border-radius:10px; padding:10px;"></div>
+        <div style="font-size:14px;
+margin-bottom:10px;">المحتالون كانوا: <span id="res-imp-name" style="color:var(--imposter); font-weight:bold;"></span></div>
+        <div id="scores-container" style="width:100%; background:rgba(0,0,0,0.4); border-radius:10px;
+padding:10px;"></div>
         <button id="next-round-btn" class="main-btn" onclick="backToLobby()" style="display:none;">الجولة القادمة ❯</button>
-        <button id="exit-btn" class="main-btn" onclick="clearAndReload()" style="display:none; background:#444;">الخروج للرئيسية</button>
-        <button id="finish-btn" class="main-btn" onclick="clearAndReload()" style="display:none; background:var(--imposter);">تتويج البطل 🏆</button>
+        <button id="finish-btn" class="main-btn" onclick="clearAndReload()" style="display:none;
+background:var(--imposter);">تتويج البطل 🏆</button>
+        <button id="exit-btn" class="main-btn" onclick="clearAndReload()" style="display:none;
+background:#444;">الخروج للرئيسية</button>
     </div>
 </div>
 
@@ -152,53 +261,65 @@
     const db = firebase.database();
 
     document.getElementById('user-name').value = localStorage.getItem('savedName') || "";
+ 
     if(localStorage.getItem('lastRoom')) {
         document.getElementById('reconnect-hint').style.display = "block";
+        setTimeout(checkAutoReconnect, 500);
     }
 
     let currentRoom = null, myId = null, myName = "", isHost = false, gameData = {}, selectedCategory = "حيوانات وحشرات", allowedImpostersCount = 1;
-    let selectedRoomType = "normal"; 
+    let roomPrivacySetting = "public"; // متغير لتخزين خيار الخصوصية الافتراضي
+    
     let selectedVotes = []; 
 
     const megaDatabase = {
         'حيوانات وحشرات': [
             "أسد", "نمر", "فهد", "ذئب", "ثعلب", "دب قطبي", "كنغر", "بطريق", "قرش", "دلفين", 
-            "حوت", "أخطبوط", "نسر", "صقر", "بومة", "تمساح", "سلحفاة", "جمل", "زرافة", "قرد", "باندا", "راكون", "سنجاب", "ضفدع", "ببغاء", "طاووس", "نعامة", "خفاش", "نحلة", "فراشة", "غزال", "كركدن", "فقمة", "عنكبوت", "نملة", "إوزة", "كلب", "قطة", "أرنب", "حصان", "حمار", "بقرة", "خروف", "ماعز", "فيل", "ذبابة", "بعوضة", "صرصور", "جرادة", "حلزون", "دجاجة", "ديك", "حمامة", "عصفور", "بطة", "سمكة", "قنديل البحر",
+"حوت", "أخطبوط", "نسر", "صقر", "بومة", "تمساح", "سلحفاة", "جمل", "زرافة", "قرد", "باندا", "راكون", "سنجاب", "ضفدع", "ببغاء", "طاووس", "نعامة", "خفاش", "نحلة", "فراشة", "غزال", "كركدن", "فقمة", "عنكبوت", "نملة", "إوزة", "كلب", "قطة", "أرنب", "حصان", "حمار", "بقرة", "خروف", "ماعز", "فيل", "ذبابة", "بعوضة", "صرصور", "جرادة", "حلزون", "دجاجة", "ديك", "حمامة", "عصفور", "بطة", "سمكة", "قنديل البحر",
             "سنجاب", "قنفذ", "ظربان", "فرس النهر", "وحيد القرن", "حمار وحشي", "غوريلا", "شمبانزي", "سلحفاة بحرية", "نجم البحر", "سرطان البحر", "روبيان", "قمري", "حبار", "عقرب", "أفعى", "ثعبان", "حرباء", "ضب", "سحلية", "جرذ", "فأر", "بغل", "ثور", "عجل", "خنزير", "نعجة", "حمل", "تيس", "جدي", "ناقة", "خروف", "طير", "بجع", "لقلق", 
-            "هدهد", "بلبل", "غراب", "بومة", "شاهين", "حسون", "سمان", "حجل", "وزة", "ببغاء",
+"هدهد", "بلبل", "غراب", "بومة", "شاهين", "حسون", "سمان", "حجل", "وزة", "ببغاء",
             "يعسوب", "دبور", "زنبور", "نملة بيضاء", "جراد الصحراء", "خنفساء", "مضيئة", "فراشة الليل", "سوسة", "برغوث", "قملة", "قراد", "بق", "ذباب الخيل", "ذباب الفاكهة",  "يرقة", "شرنقة", "دودة القز", "دودة الأرض", "علق", "أم أربعة وأربعين", "حشرة العصا",  "جندب", "صرصور الليل", "نملة نارية", "نحلة العسل", "ملك النحل", "عاملة النحل", "طنان", "خنافس المفرقعة", "خنفساء الروث", "جعل", "دعسوقة", "أبو العيد", "سوسة النخيل", "حشرة القشرة",
             "سمك السلمون", "سمك التونة", "سمك السردين", "فرس البحر", "تنين البحر", 
-            "سمك المنشار", "سمك المطرقة", "سمك السيف", "سمك الرعاد", "سمك الطيار", "أنقليس", "ثعبان البحر", "كلب البحر", "أسد البحر", "فيل البحر", "الفقمة", "دب البحر", "عروس البحر", "الحوت الأزرق", "الحوت الأحدب", "الحوت القاتل", "حوت العنبر", "حوت أوركا", "حوت بالين", "الدلفين", "الخنزير البحري"
+  "سمك المنشار", "سمك المطرقة", "سمك السيف", "سمك الرعاد", "سمك الطيار", "أنقليس", "ثعبان البحر", "كلب البحر", "أسد البحر", "فيل البحر", "الفقمة", "دب البحر", "عروس البحر", "الحوت الأزرق", "الحوت الأحدب", "الحوت القاتل", "حوت العنبر", "حوت أوركا", "حوت بالين", "الدلفين", "الخنزير البحري"
         ],
         'طعام': [
             "بيتزا", "برجر", "سوشي", "تاکو", "باستا", "شاورما", "كباب", "فلافل", "حمص", "مندي", "كسكسي", "طاجين", "برياني", "شوكولاتة", "آيس كريم", "كيك", "دونات", "كرواسون", "وافل", "عسل", "مربى", "زيتون", "جبنة", "بيض", "جمبري", "سلمون", "ذرة", "فشار", "بطاطس", "مكسرات", "مانجو", 
-            "أناناس",
+"أناناس",
             "أرز", "خبز", "توست", "صمون", "فطيرة", "مناقيش", "حواوشي", "ملوخية", "بامية", "فاصولياء", "عدس", "فول", "شوربة", "حساء", "مرق", "ثريد", "مكبوس", "مظبي", "مدفون", "بخاري", "سليق", "جريش", "قرصان", "مفتول", "كبة", "ورق عنب", "ملفوف", "محشي", "شيش برك", "مسقعة", "مقلوبة", "منسف", "مبشور", "تكة", "شيش طاووق", "ريش", "ستيك", "لحم مفروم", "بسطرمة", "سجق", "مرتديلا", "دجاج مشوي", "دجاج مقلي", "بروستد", "كبدة", "عصبان", "قلاية",
-            "تفاح", "موز", "برتقال", "فراولة", "عنب", "بطيخ", "شمام", "خوخ", "مشمش", "برقوق", "كرز", "رمان", "تین", "تمر", "توت", "كيوي", "جوافة", "كمثرى", "يوسفي", "ليمون", "جريب فروت", "جوز الهند", 
-            "أفوكادو", "بابايا", "تين شوكي", "خيار", "طماطم", "جزر", "خس", "جرجير", "بقدونس", "كزبرة", "نعناع", "بصل", "ثوم", "زنجبيل", "فلفل حار", "فلفل حلو", "باذنجان", "كوسة", "كرنب", "قرنبيط", "بروكلي", "سبانخ", "سلق", "فجل", "لفت", "شمندر", "بطاطا حلوة",
+            "تفاح", "موز", "برتقال", "فراولة", "عنب", "بطيخ", "شمام", "خوخ", "مشمش", "برقوق", "كرز", "رمان", "تين", "تمر", "توت", "كيوي", "جوافة", "كمثرى", "يوسفي", "ليمون", "جريب فروت", "جوز الهند", 
+"أفوكادو", "بابايا", "تين شوكي", "خيار", "طماطم", "جزر", "خس", "جرجير", "بقدونس", "كزبرة", "نعناع", "بصل", "ثوم", "زنجبيل", "فلفل حار", "فلفل حلو", "باذنجان", "كوسة", "كرنب", "قرنبيط", "بروكلي", "سبانخ", "سلق", "فجل", "لفت", "شمندر", "بطاطا حلوة",
             "بقلاوة", "كنافة", "بسبوسة", "هريسة", "قطايف", "بلح الشام", "لقيمات", "عوامة", "غريبة", "معمول", "كعك", "بسكويت", "مهلبية", "أم علي", "رز بلبن", "كاسترد", "جيلي", "تارت", "مادلين", "مافن", "كاب كيك", "براونيز", "تشيز كيك", "بان كيك", "كراميل", "نوغة", "حلقوم", "طحينة", "حلاوة طحينية", "غزل البنات", "كورن فليكس", "موس الشوكولاتة", "سوفليه", "باوند كيك", "إكلير", "سينابون", "بيتي فور", "سحلب", "كابتشينو", "إسبريسو", "شاي أخضر"
-        ],
+     
+   ],
         'أماكن': [
             "المطبخ", "المستشفى", "المطار", "السينما", "المسرح", "المكتبة", "المتحف", "المسجد", "المدرسة", "الجامعة", "الفندق", "المطعم", "المقهى", "البنك", "السجن", "القلعة", "القصر", "الغابة", "الصحراء", "الجبل", "الشاطئ", "الكهف", "المزرعة", "المصنع", "المكتب", "الصيدلية", "السوق", "الحديقة", "السطح", "القبو", "غرفة النوم",
             "العيادة", "المختبر", "الطوارئ", "الميناء", "محطة القطار", "محطة الحافلات", "المترو", "الموقف", "الكراج", "المدرج", "الملعب", "النادي", "الصالة الرياضية", "المسبح", "المضمار", "الحلبة", "المركز التجاري", "المول", "الدكان", "البقالة", "المخبز", "الملحمة", "المصبغة", "الصالون", "الحلاق", "المشغل", "المعرض", "الورشة", "المستودع", 
-            "المخزن", "المكتبة المركزية", "دار الأوبرا", "قاعة الأفراح", "المؤتمرات", "البلدية", "المحكمة", "المخفر", "المركز", "الوزارة", "السفارة", "القنصلية",
+"المخزن", "المكتبة المركزية", "دار الأوبرا", "قاعة الأفراح", "المؤتمرات", "البلدية", "المحكمة", "المخفر", "المركز", "الوزارة", "السفارة", "القنصلية",
             "الساحة", "الميدان", "الدوار", "الشارع", "الزقاق", "الجسر", "النفق", "الرصيف", "الحديقة العامة", "المنتزه", "المحمية", "شلال", "نهر", "بحيرة", "مستنقع", "واحة", "وادي", "هضبة", "سهل", "تلة", "منحدر", "شاطئ رملي", "شاطئ صخري", "مرسى", "ميناء بحري", "صومعة", "طاحونة", "بئر", "خزان", "سد", "مجمع سكني", "حي", "قرية", "مدينة", "عاصمة", "محافظة", "ولاية", "إقليم", "قارة", "جزيرة", "شبه جزيرة", "مضيق", "خليج", "محيط",
-            "المصعد", "الدرج", "الممر", "الشرفة", "البلكونة", "الصالون", "المجلس", "الديوانية", "صالة الطعام", "الحمام", "المغسلة", "المخزن المنزلي", "الحديقة الخلفية", "موقف السيارات", "غرفة الضيوف", "غرفة الأطفال", "غرفة الدراسة", "الملحق", "الخيمة", "البيت الزجاجي", "قن الدجاج", "الحظيرة", "الإسطبل", "برج المراقبة", "المنارة", "المقبرة", "الضريح", "الآثار", "الموقع الأثري", "المنجم", "حقل النفط", "المحطة النووية", "توليد الكهرباء"
+            "المصعد", "الدرج", "الممر", "الشرفة", "البلكونة", "الصالون", "المجلس", "الديوانية", "صالة الطعام", "الحمام", "المغسلة", "المخزن المنزلي", "الحديقة الخلفية", "موقف السيارات", "غرفة الضيوف", "غرفة الأطفال", "غرفة الدراسة", "الملحق", "الخيمة", "البيت الزجاجي", "قن الدجاج", "الحظيرة", "إسطبل", "برج المراقبة", "المنارة", "المقبرة", "الضريح", "الآثار", "الموقع الأثري", "المنجم", "حقل النفط", "المحطة النووية", "توليد الكهرباء"
         ],
         'جماد': [
             "هاتف", "حاسوب", "تلفاز", "كاميرا", "ساعة", "نظارة", "مفتاح", "محفظة", "قلم", "كتاب", "ورقة", "مقص", "مظلة", "حقيبة", "حذاء", "قميص", "قبعة", "مرآة", "فرشاة", "منشفة", "وسادة", "سرير", "كرسي", "طاولة", "أريكة", "سجادة", "باب", "نافذة", "مصباح", "ملعقة", "شوكة", "سكين", "صحن", "كوب",
-            "سماعة", "شاحن", "بطارية", "لوحة keyboard", "فأرة الحاموب", "شاشة", "طابعة", "ماسح ضوئي", "راوتر", "فلاشة", "قرص صلب", "تكييف", "مروحة", "مدفأة", "ثلاجة", "غسالة", "نشافة", "جلاية الصحون", "فرن", "مايكرويف", "خلاط", "عصارة", "غلاية", "محمصة خبز", "مكنسة كهربائية", "مكواة", "ميزان", "ساعة حائط", "منبه", "قفل", "خزنة", "جرس", "درج", "رف", "دولاب", "خزانة ملابس", "تسريحة", "شماعة", "ابجورة", "ثريا", "لوحة فنية", "سلة مهملات",
+     
+        "سماعة", "شاحن", "بطارية", "لوحة مفايح", "فأرة الحاسوب", "شاشة", "طابعة", "ماسح ضوئي", "راوتر", "فلاشة", "قرص صلب", "تكييف", "مروحة", "مدفأة", "ثلاجة", "غسالة", "نشافة", "جلاية الصحون", "فرن", "مايكرويف", "خلاط", "عصارة", "غلاية", "محمصة خبز", "مكنسة كهربائية", "مكواة", "ميزان", "ساعة حائط", "منبه", "قفل", "خزنة", "جرس", "درج", "رف", "دولاب", "خزانة ملابس", "تسريحة", "شماعة", "ابجورة", "ثريا", "لوحة فنية", "سلة مهملات",
             "مكتب", "سبورة", "طبشور", "قلم تلوين", "مسطرة", "فرجار", "منقلة", "دباسة", "خرامة", "مكبس", "مشبك ورق", "صمغ", "شريط لاصق", "مفكرة", "ملف", "خريطة", "كرة أرضية", "مجهر", "تلسكوب", "أنبوب اختبار", "ميزان حرارة", "حقيبة ظهر", 
-            "دفتر", "رصاص", "حبر", "طباشير", "براية", "ممحاة", "طامس", "مشبك", "سلك", "قابس", "مقبس", "عداد", "صنبور", "خرطوم", "دلو", "ممسحة", "مقشة", "جاروف", "اسفنجة", "سلك مواعين", "صابونة", "شامبو",
+"دفتر", "رصاص", "حبر", "طباشير", "براية", "ممحاة", "طامس", "مشبك", "سلك", "قابس", "مقبس", "عداد", "صنبور", "خرطوم", "دلو", "ممسحة", "مقشة", "جاروف", "اسفنجة", "سلك مواعين", "صابونة", "شامبو",
             "سيارة", "دراجة هوائية", "دراجة نارية", "شاحنة", "حافلة", "قطار", "طائرة", "سفينة", "قارب", "يخت", "مروحية", "منطاد", "صاروخ", "قمر صناعي", "رافعة", "جرار", "جرافة", "حاوية", "عربة", "إطار", "مقود", "محرك", "بطارية سيارة", "مصباح أمامي", "لوحة أرقام", "حزام أمان", "مقعد سيارة", "وسادة هوائية", "ممسحة زجاج", "خزان وقود", "رادياتير", "فرامل", "مكابح", "ناقل حركة", "عادم", "هيكل", "مفتاح ربط", "مفك", "مطرقة", "كماشة"
         ],
         'دول': [
-            "الجزائر", "تونس", "المغرب", "مصر", "السعودية", "الإمارات", "قطر", "فرنسا", "إسبانيا", "إيطاليا", "ألمانيا", "إنجلترا", "البرازيل", "الأرجنتين", "اليابان", "الصين", "روسيا", "أمريكا", "كندا", "أستراليا", "تركيا", "المكسيك", "الهند", "كوريا الجنوبية", "جنوب إفريقيا", "البرتغال", "بلجيكا", "هولندا", "سويسرا", "السويد",
+            "الجزائر", "تونس", "المغرب", "مصر", "السعودية", "الإمارات", "قطر", "فرنسا", "إسبانيا", "إيطاليا", "ألمانيا", "إنجلترا", "البرازيل", "الأرجنتين", "اليابان", "الصين", "روسيا", "أمريكا", "كندا", "أسٹريليا", "تركيا", "المكسيك", "الهند", "كوريا الجنوبية", "جنوب إفريقيا", "البرتغال", "بلجيكا", "هولندا", "سويسرا", "السويد",
             "ليبيا", "موريتانيا", "السودان", "الصومال", "جيبوتي", "جزر القمر", "فلسطين", "الأردن", "لبنان", "سوريا", "العراق", "الكويت", "البحرين", "عمان", "اليمن", "اليونان", "البرتغال", "أيرلندا", "اسكتلندا", "ويلز", "النمسا", "بلجيكا", "النرويج", "الدنمارك", "فنلندا", "بولندا", "أوكرانيا", "رومانيا", "بلغاريا", "المجر", "التشيك", "سلوفاكيا", "كرواتيا", "صربيا", "سلوفينيا", "البوسنة والهرسك", "ألبانيا", "مقدونيا", "مولدوفا", "بيلاروسيا", 
-            "ليتوانيا", "لاتفيا", "إستونيا", "أندورا", "موناكو", "سان مارينو", "الفاتيكان", "مالطا", "قبرص",
-            "باكستان", "أفغانستان", "إران", "أذربيجان", "أرمينيا", "جورجيا", "كازاخستان", "أوزبكستان", "تركمانستان", "تاجيكستان", "قرغيزستان", "منغوليا", "كوريا الشمالية", "تايوان", "فيتنام", "لاوس", "كمبوديا", "تايلاند", "ميانمار", "ماليزيا", "سنغافورة", "إندونيسيا", "الفلبين", "بروناي", "تيمور الشرقية", "بنغلاديش", "سريلانكا", "جزر المالديف", "نيبال", "بوتان", "نيوزيلندا", "فيجي", "بابوا غينيا الجديدة", "ساموا", "تونغا", "فانواتو", "بالاو", "ميكرونيزيا", "جزر مارشال", "جزر سليمان", "توفالو", "ناورو",
-            "نيجيريا", "إثيوبيا", "كينيا", "تنزانيا", "أوغندا", "غانا", "ساحل العاج", "السنغال", "الكاميرون", "أنغولا", "موزمبيق", "مدغشقر", "زيمبابوي", "زامبيا", "ناميبيا", "بوتسوانا", "الغابون", "الكونغو", 
-            "النيجر", "مالي", "تشاد", "غينيا", "سيراليون", "ليبيريا", "توغو", "بنين", "بوركينا فاسو", "رواندا", "بوروندي", "كولومبيا", "فنزويلا", "البيرو", "تشيلي", "الأوروغواي", "الباراغواي", "بوليفيا", "الإكوادور", "غيانا", "سورينام", "كوبا", "جامايكا"
+"ليتانيا", "لاتفيا", "إستونيا", "أندورا", "موناكو", "سان مارينو", "الفاتيكان", "مالطا", "قبرص",
+            "باكستان", "أفغانستان", "إيران", "أذربيجان", "أرمينيا", "جورجيا", "كازاخستان", "أوزبكستان", "تركمانستان", "تاجيكستان", "قرغيزستان", "منغوليا", "كوريا الشمالية", "تايوان", "فيتنام", "لاوس", "كمبوديا", "تايلاند", "ميانمار", "ماليزيا", "سنغافورة", "إندونيسيا", "الفلبين", "بروناي", "تيمور الشرقية", "بنغلاديش", "سريلانكا", "جزر المالديف", "نيpal", "بوتان", "نيوزيلندا", "فيجي", "بابوا غينيا الجديدة", "ساموا", "تونغا", "فانواتو", "بالاو", "ميكرونيزيا", "جزر مارشال", "جزر سليمان", "توفالو", "ناورو",
+            "نيجر", "إثيوبيا", "كينيا", "تنزانيا", "أوغندا", "غانا", "ساحل العاج", "السنغال", "الكاميرون", "أنغولا", "موزمبيق", "مدغشقر", "زيمبابوي", "زامبيا", "ناميبيا", "بوتسوانا", "الغابون", "الكونغو", 
+"النيجر", "مالي", "تشاد", "غينيا", "سيراليون", "ليبيريا", "توغو", "بنين", "بوركينا فاسو", "رواندا", "بوروندي", "كولومبيا", "فنزويلا", "البيرو", "تشيلي", "الأوروغواي", "الباراغواي", "بوليفيا", "الإكوادور", "غيانا", "سورينام", "كوبا", "جامايكا"
+        ],
+        'شخصيات مشهورة': [
+            "أبو بكر الصديق", "عمر بن خطاب", "عثمان بن عفان", "علي بن أبي طالب", "خالد بن الوليد", "صلاح الدين الأيوبي", "طارق بن زياد", "عقبة بن نافع", "محمد الفاتح", "عمر المختار", "الأمير عبد القادر", "حمزة بن عبد المطلب", "سعد بن أبي وقاص", "عمرو بن العاص", "الظاهر بيبرس", "سيف الدين قطز", "يوسف بن تاشفين", "موسى بن نصير", "قتيبة بن مسلم", "نور الدين زنكي", "الباب العالي", "سليمان القانوني", "هارون الرشيد", "عمر بن عبد العزيز", "المعتصم بالله", "أرطغرل", "الملك فيصل", "المهدي المنتظر", "الإمام الشافعي", "الإمام مالك", "الإمام أحمد بن حنبل", "الإمام أبو حنيفة", "البخاري", "مسلم", "ابن تيمية", "الغزالي", "ابن قيم الجوزية", "العز بن عبد السلام", "أحمد ديدات", "ذاكر نايك",
+            "ابن سينا", "ابن الهيثم", "الخوارزمي", "جابر بن حيان", "الرازي", "ابن خلدون", "الإدريسي", "ابن بطوطة", "البيروني", "ألبيرت أينشتاين", "إسحاق نيوتن", "نيكولا تيسلا", "توماس أديسون", "غاليليو غاليلي", "ماري كوري", "تشارلز داروين", "ستيفن هوكينغ", "ألكسندر غراهام بيل", "لويس باستور", "ألكسندر فليمنغ", "مايكل فارادي", "جيمس وات", "ماكس بلانك", "ريتشارد فاراينمان", "أرخميدس", "فيثاغورس", "أرسطو", "أفلاطون", "سقراط", "ابن رشد", "ابن النفيس", "أحمد زويل", "فاروق الباز", "مجدي يعقوب", "عباس بن فرناس", "الجزري", "الكندي", "الفارابي", "ثابت بن قره", "عمر الخيام",
+            "ليونيل ميسي", "كريستيانو رونانيدو", "دييغو مارادونا", "بيليه", "زين الدين زيدان", "رونالدو البرازيلي", "رونالدينيو", "تيري هنري", "ديفيد بيكهام", "كيليان مبابي", "نيمار دا سيلفا", "محمد صلاح", "رياض محرز", "أشرف حكيمي", "ياسين بونو", "ساديو ماني", "إيميريك أوباميانغ", "كريم بنزيما", "لوكا مودريتش", "إيرلينغ هالاند", "مايكل جوردان", "كوبي براينت", "ليبرون جيمس", "شاكيل أونيل", "محمد علي كلاي", "مايك تايسون", "فليد ميرفي", "يوسين بولت", "مايكل فيلبس", "رافائيل نادال", "روجر فيدرر", "نوفاك دجوكوفيتش", "سيرينا ويليامز", "تايجر وودز", "لويس هاميلتون", "مايكل شوماخر", "كليان جورنيت", "حبيب نورماغوميدوف", "إislam ماخاشيف", "كونور ماكغريغور",
+            "الإسكندر الأكبر", "يوليوس قيصر", "حنبعل", "سبارتاكوس", "نابودان", "بونابرت", "ونستون تشرشل", "شارل ديغول", "جورج واشنطن", "أبراهام لينكون", "جون كينيدي", "باراك أوباما", "نيلسون مانيلا", "مهاتما غاندي", "مارتن لوثر كينغ", "تشي جيفارا", "فيدل كاسترو", "الملكة إليزابيث", "فيكتوريا", "كليوباترا", "نفرتيتي", "جنكيز خان", "تيمورلنك", "أتيلا الهوني", "وليم والاس", "ريتشارد قلب الأسد", "صلاح الدين", "اليساندرو فولت", "أندريا بيرلو", "جوزيه مورينيو", "بيب غوارديولا", "سير أليكس فيرغسون", "كارلو أنشيلوتي", "يورغن كلوب", "زين الدين", "رابح ماجر", "مصطفى بن بولعيد", "العربي بن مهيدي", "ديدوش مراد", "زيغود يوسف",
+            "أحمد بن بلة", "هواري بومدين", "ياسر عرفات", "صدام حسين", "معمر القذافي", "الملك عبد العزيز", "الشيخ زايد", "ستيف جوبز", "بيل غيتس", "إيلون ماسك", "مارك زوكربرغ", "جيف بيزوس", "نيل آرمسترونغ", "يوري غاغارين", "كريستانتوس كولومبوس", "فاسكو دا غاما", "ماجلان", "ماركو بولو", "ويليام شكسبير", "المتنبي", "أحمد شوقي", "طه حسين", "نجيب محفوظ", "ابن عربي", "جلال الدين الرومي", "تشارلي تشابلن", "والت ديزني", "ألفرد نوبل", "لوتشيانو بافاروتي", "أم كلثوم", "فيروز", "عبد الحليم حافظ", "فريد الأطرش", "ميكل أنجلو", "ليوناردو دا فينشي", "بابلو بيكاسو", "فان غوخ", "إدغار آلان بو", "أجاثا كريستي المبدعة", "سلفادور دالي"
         ]
     };
 
@@ -208,6 +329,52 @@
     function showScreen(id) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById(id).classList.add('active');
+        
+        if(id === 'home-screen') {
+            document.getElementById('global-leave-btn').style.display = 'none';
+        } else {
+            document.getElementById('global-leave-btn').style.display = 'block';
+        }
+    }
+
+    function setRoomPrivacy(privacy) {
+        roomPrivacySetting = privacy;
+        document.getElementById('type-public-btn').className = "type-btn";
+        document.getElementById('type-private-btn').className = "type-btn";
+        
+        if (privacy === 'public') {
+            document.getElementById('type-public-btn').className = "type-btn selected";
+            document.getElementById('custom-password-input').style.display = "none";
+        } else {
+            document.getElementById('type-private-btn').className = "type-btn selected";
+            document.getElementById('custom-password-input').style.display = "block";
+        }
+    }
+
+    function playerDisconnectAction() {
+        if(!currentRoom || !myId) return;
+        
+        let confirmMsg = isHost ? "أنت المضيف (Host)، إذا غادرت سيتم حذف الغرفة وطرد جميع اللاعبين. هل تريد المغادرة؟" : "هل أنت متأكد من رغبتك في مغادرة اللعبة والعودة للرئيسية؟";
+        
+        if(confirm(confirmMsg)) {
+            if(isHost) {
+                db.ref('rooms/' + currentRoom).remove().then(() => {
+                    clearAndReload();
+                });
+            } else {
+                db.ref('rooms/' + currentRoom + '/players/' + myId).remove();
+                db.ref('rooms/' + currentRoom + '/understandVotes/' + myId).remove();
+                db.ref('rooms/' + currentRoom + '/votes/' + myId).remove();
+
+                db.ref('rooms/' + currentRoom).off();
+                db.ref('rooms/' + currentRoom + '/lobbyChat').off();
+                db.ref('rooms/' + currentRoom + '/inGameChat').off();
+                
+                currentRoom = null;
+                myId = null;
+                clearAndReload();
+            }
+        }
     }
 
     function selectCat(cat, btn) {
@@ -219,13 +386,6 @@
     function selectImpCount(count, btn) {
         allowedImpostersCount = count;
         document.querySelectorAll('.imp-toggle-btn').forEach(b => b.classList.remove('selected'));
-        btn.classList.add('selected');
-    }
-
-    function selectRoomType(type, btn) {
-        selectedRoomType = type;
-        document.getElementById('room-normal-btn').classList.remove('selected');
-        document.getElementById('room-chat-btn').classList.remove('selected');
         btn.classList.add('selected');
     }
 
@@ -273,16 +433,26 @@
             
             container.innerHTML = "";
             let hasRooms = false;
+            
             Object.keys(roomsData).forEach(roomId => {
                 const room = roomsData[roomId];
-                if(room.status === 'waiting') {
+                if(room.status === 'waiting' || room.status === 'playing' || room.status === 'voting' || room.status === 'results') {
                     hasRooms = true;
                     let hostId = room.host;
-                    let hostName = room.players && room.players[hostId] ? room.players[hostId].name : "مجهول";
+                    let hostName = room.players && room.players[hostId] ? 
+                    room.players[hostId].name : "مجهول";
                     let pCount = room.players ? Object.keys(room.players).length : 0;
+                    
+                    let statusLabel = "";
+                    if(room.status === 'playing') statusLabel = " (جارِ اللعب 🎮)";
+                    if(room.status === 'voting') statusLabel = " (جارِ التصويت ⚖️)";
+                    if(room.status === 'results') statusLabel = " (النتائج 🏆)";
+
+                    let lockIcon = (room.privacy === 'private') ? " 🔒 (خاصة)" : " 🔓 (عامة)";
+
                     container.innerHTML += `
                         <div class="room-item" onclick="quickJoin('${roomId}')">
-                            <span style="color:var(--success)">🎯 غرفة: ${hostName}</span>
+                            <span style="color:var(--success)">🎯 غرفة: ${hostName}${lockIcon}${statusLabel}</span>
                             <span style="color:#aaa">${pCount} لاعبين ❯</span>
                         </div>
                     `;
@@ -298,46 +468,92 @@
     }
 
     function createNewRoom() {
-        myName = document.getElementById('user-name').value;
+        myName = document.getElementById('user-name').value.trim();
         if(!myName) return alert("اكتب اسمك أولاً");
+        
+        let roomPass = "";
+        if (roomPrivacySetting === "private") {
+            roomPass = document.getElementById('custom-password-input').value.trim();
+            if (roomPass.length !== 4 || isNaN(roomPass)) {
+                return alert("الرجاء إدخال رمز سري مكون من 4 أرقام بالضبط للغرفة الخاصة!");
+            }
+        }
+        
         disableHomeButtons();
         currentRoom = Math.floor(1000 + Math.random() * 9000).toString();
         isHost = true;
         myId = "u_" + Date.now();
+        
         saveSessionLocally();
-
-        db.ref('rooms/' + currentRoom).set({
-            host: myId,
-            status: 'waiting',
-            roomType: 'normal', 
+        db.ref('rooms/' + currentRoom).set({ 
+            host: myId, 
+            status: 'waiting', 
+            privacy: roomPrivacySetting,
+            password: roomPass,
             round: 1,
             createdAt: Date.now(),
-            players: { [myId]: {name: myName, score: 0} }
+            players: { [myId]: {name: myName, score: 0} } 
         }).then(() => {
             listenToRoom();
         }).catch(() => {
             enableHomeButtons();
         });
-
         document.getElementById('host-controls').style.display = 'block';
         document.getElementById('delete-room-btn').style.display = 'block';
     }
 
     function joinExistingRoom() {
-        let inputId = document.getElementById('room-id-input').value;
-        myName = document.getElementById('user-name').value;
+        let inputId = document.getElementById('room-id-input').value.trim();
+        myName = document.getElementById('user-name').value.trim();
         if(!myName || !inputId) return alert("اكمل البيانات");
+        
         disableHomeButtons();
         currentRoom = inputId;
-        myId = "u_" + Date.now();
-
+        
         db.ref('rooms/' + currentRoom).once('value', snap => {
             if(snap.exists()) {
-                saveSessionLocally();
-                db.ref('rooms/' + currentRoom + '/players/' + myId).set({name: myName, score: 0})
-                .then(() => listenToRoom());
-            } else {
-                alert("الغرفة غير موجودة");
+                const data = snap.val();
+                const players = data.players || {};
+                
+                let foundExistingId = null;
+                Object.keys(players).forEach(pId => {
+                    if (players[pId].name === myName) {
+                        foundExistingId = pId;
+                    }
+                });
+
+                if (foundExistingId) {
+                    myId = foundExistingId;
+                    isHost = (data.host === myId);
+                    if(isHost) {
+                        document.getElementById('host-controls').style.display = 'block';
+                        document.getElementById('delete-room-btn').style.display = 'block';
+                    }
+                    saveSessionLocally();
+                    listenToRoom();
+                } else {
+                    if(data.status !== 'waiting') {
+                        alert("عذراً، بدأت الجولة بالفعل داخل هذه الغرفة! انتظر حتى يعود اللاعبون للمكتب الرئيسي (Lobby).");
+                        enableHomeButtons();
+                        return;
+                    }
+                    
+                    if (data.privacy === "private") {
+                        let enteredPass = prompt("هذه الغرفة محمية برمز سري🔒. أدخل الرمز المكون من 4 أرقام للدخول:");
+                        if (enteredPass !== data.password) {
+                            alert("الرمز السري خاطئ! لم يتم السماح بالاتصال.");
+                            enableHomeButtons();
+                            return;
+                        }
+                    }
+                    
+                    myId = "u_" + Date.now();
+                    saveSessionLocally();
+                    db.ref('rooms/' + currentRoom + '/players/' + myId).set({name: myName, score: 0})
+                    .then(() => listenToRoom());
+                }
+            } else { 
+                alert("الغرفة غير موجودة"); 
                 enableHomeButtons();
             }
         }).catch(() => enableHomeButtons());
@@ -346,6 +562,8 @@
     function kickPlayer(playerId) {
         if(!isHost) return;
         db.ref('rooms/' + currentRoom + '/players/' + playerId).remove();
+        db.ref('rooms/' + currentRoom + '/understandVotes/' + playerId).remove();
+        db.ref('rooms/' + currentRoom + '/votes/' + playerId).remove();
     }
 
     function deleteRoomByHost() {
@@ -372,10 +590,11 @@
     function checkAutoReconnect() {
         const oldRoom = localStorage.getItem('lastRoom');
         const oldId = localStorage.getItem('myId');
+        if(!oldRoom || !oldId) return;
+        
         db.ref('rooms/' + oldRoom).once('value', snap => {
             if(snap.exists() && snap.val().players[oldId]) {
-                currentRoom = oldRoom;
-                myId = oldId;
+                currentRoom = oldRoom; myId = oldId;
                 myName = snap.val().players[oldId].name;
                 isHost = (snap.val().host === myId);
                 if(isHost) {
@@ -383,422 +602,374 @@
                     document.getElementById('delete-room-btn').style.display = 'block';
                 }
                 listenToRoom();
-            } else {
-                alert("لا يمكن الاستعادة");
-                localStorage.removeItem('lastRoom');
-                localStorage.removeItem('myId');
-            }
+            } else { localStorage.removeItem('lastRoom'); }
+        });
+    }
+
+    function sendLobbyMessage() {
+        const input = document.getElementById('chat-msg-input');
+        const text = input.value.trim();
+        if (!text || !currentRoom) return;
+
+        const msgData = {
+            sender: myName,
+            text: text,
+            timestamp: Date.now()
+        };
+
+        db.ref('rooms/' + currentRoom + '/lobbyChat').push(msgData).then(() => {
+            input.value = "";
+        });
+    }
+
+    function listenToLobbyChat() {
+        db.ref('rooms/' + currentRoom + '/lobbyChat').on('value', snap => {
+            const container = document.getElementById('chat-messages-container');
+            if (!container) return;
+            container.innerHTML = "";
+            const messages = snap.val();
+            if (!messages) return;
+
+            Object.values(messages).forEach(msg => {
+                container.innerHTML += `
+                    <div class="chat-msg">
+                        <span class="sender">${msg.sender}:</span><span>${msg.text}</span>
+                    </div>
+                `;
+            });
+            container.scrollTop = container.scrollHeight;
+        });
+    }
+
+    // دوال جديدة خاصة بوضع دردشة التحقيق الخاضع للتحكم أثناء اللعب أونلاين
+    function sendInGameMessage() {
+        const input = document.getElementById('ingame-msg-input');
+        const text = input.value.trim();
+        if (!text || !currentRoom) return;
+
+        const msgData = {
+            sender: myName,
+            text: text,
+            timestamp: Date.now()
+        };
+
+        db.ref('rooms/' + currentRoom + '/inGameChat').push(msgData).then(() => {
+            input.value = "";
+        });
+    }
+
+    function listenToInGameChat() {
+        db.ref('rooms/' + currentRoom + '/inGameChat').on('value', snap => {
+            const container = document.getElementById('ingame-messages-container');
+            if (!container) return;
+            container.innerHTML = "";
+            const messages = snap.val();
+            if (!messages) return;
+
+            Object.values(messages).forEach(msg => {
+                container.innerHTML += `
+                    <div class="ingame-msg">
+                        <span class="sender">${msg.sender}:</span><span>${msg.text}</span>
+                    </div>
+                `;
+            });
+            container.scrollTop = container.scrollHeight;
         });
     }
 
     function listenToRoom() {
-        db.ref('rooms/' + currentRoom).on('value', snap => {
-            gameData = snap.val();
-            if(!gameData) {
-                alert("تم إغلاق الغرفة من قبل المضيف");
+        document.getElementById('display-room-id').innerText = currentRoom;
+        document.getElementById('reconnect-hint').style.display = "none";
+        
+        db.ref('rooms/' + currentRoom + '/players/' + myId).on('value', snap => {
+            if(!snap.exists() && currentRoom !== null && !isHost) {
+                db.ref('rooms/' + currentRoom).off();
+                db.ref('rooms/' + currentRoom + '/lobbyChat').off();
+                db.ref('rooms/' + currentRoom + '/inGameChat').off();
+                alert("تم إغلاق الغرفة من قبل المضيف أو تم طردك منها");
                 clearAndReload();
-                return;
-            }
-
-            if(!gameData.players || !gameData.players[myId]) {
-                alert("تم طردك أو لم تعد موجوداً في الغرفة");
-                clearAndReload();
-                return;
-            }
-
-            updateLobbyUI();
-
-            if(gameData.status === 'waiting') {
-                showScreen('lobby-screen');
-            } else if(gameData.status === 'playing') {
-                setupPlayScreen();
-                showScreen('play-screen');
-            } else if(gameData.status === 'controlledChat') {
-                setupControlledChatScreen();
-                showScreen('controlled-chat-screen');
-            } else if(gameData.status === 'voting') {
-                setupVoteScreenUI();
-                showScreen('vote-screen');
-            } else if(gameData.status === 'results') {
-                showFinalResults();
             }
         });
-    }
 
-    function updateLobbyUI() {
-        document.getElementById('display-room-id').innerText = currentRoom;
-        document.getElementById('round-display').innerText = `الجولة: ${gameData.round || 1} / 5`;
-        
-        const container = document.getElementById('player-list-container');
-        container.innerHTML = "";
-        
-        if(gameData.players) {
-            Object.keys(gameData.players).forEach(pId => {
-                const p = gameData.players[pId];
-                let tag = `<div class="player-tag">👤 ${p.name}`;
-                if(pId === gameData.host) tag += ` <span style="color:var(--success)">[المضيف]</span>`;
-                if(isHost && pId !== myId) {
-                    tag += ` <button class="kick-btn" onclick="kickPlayer('${pId}')">❌</button>`;
-                }
-                tag += `</div>`;
-                container.innerHTML += tag;
+        listenToLobbyChat();
+        listenToInGameChat();
+
+        db.ref('rooms/' + currentRoom).on('value', snap => {
+            const data = snap.val(); 
+            
+            if(!data && currentRoom !== null) {
+                db.ref('rooms/' + currentRoom).off();
+                db.ref('rooms/' + currentRoom + '/lobbyChat').off();
+                db.ref('rooms/' + currentRoom + '/inGameChat').off();
+                if(!isHost) alert("تم إغلاق الغرفة من قبل المضيف");
+                clearAndReload();
+                return;
+            }
+            
+            gameData = data;
+            if(data.status === 'waiting') {
+                showScreen('lobby-screen');
+                enableHomeButtons(); 
+                document.getElementById('round-display').innerText = `الجولة: ${data.round} / 5`;
+                document.getElementById('display-room-privacy').innerText = (data.privacy === 'private') ? "🔒 (خاصة)" : "🔓 (عامة)";
+            }
+            const list = document.getElementById('player-list-container');
+            list.innerHTML = "";
+            
+            Object.keys(data.players).forEach(pId => { 
+                const p = data.players[pId];
+                let kickMarkup = (isHost && pId !== myId) ? `<button class="kick-btn" onclick="kickPlayer('${pId}')">❌</button>` : '';
+                list.innerHTML += `<div class="player-tag">${p.name} (${p.score}) ${kickMarkup}</div>`; 
             });
-        }
-
-        if(isHost) {
-            document.getElementById('start-game-btn').style.display = 'block';
-        } else {
-            document.getElementById('start-game-btn').style.display = 'none';
-        }
+            
+            const pCount = Object.keys(data.players).length;
+            const requiredPlayers = (allowedImpostersCount === 2) ? 4 : 3;
+            
+            if(isHost && data.status === 'waiting' && pCount >= requiredPlayers) {
+                document.getElementById('start-game-btn').style.display = 'block';
+            } else {
+                document.getElementById('start-game-btn').style.display = 'none';
+            }
+            
+            if(data.status === 'playing') setupGame();
+            if(data.status === 'voting') renderVoteOptions();
+            if(data.status === 'results') showFinalResults();
+        });
     }
 
     function triggerStart() {
-        if(!isHost) return;
-        const playerIds = Object.keys(gameData.players);
-        if(playerIds.length < 3) {
-            return alert("يجب أن يكون هناك 3 لاعبين على الأقل للبدء!");
+        const words = megaDatabase[selectedCategory], word = words[Math.floor(Math.random() * words.length)];
+        const pIds = Object.keys(gameData.players);
+        const previousImposters = gameData.imposters || [];
+        let eligiblePlayers = pIds.filter(id => !previousImposters.includes(id));
+        if (eligiblePlayers.length < allowedImpostersCount) {
+            eligiblePlayers = pIds;
         }
 
-        const list = megaDatabase[selectedCategory];
-        const randomWord = list[Math.floor(Math.random() * list.length)];
-        
-        let shuffled = [...playerIds].sort(() => 0.5 - Math.random());
-        let imposters = shuffled.slice(0, allowedImpostersCount);
+        let imposterIds = [];
+        if (allowedImpostersCount === 2 && eligiblePlayers.length >= 4) {
+            let firstImp = eligiblePlayers[Math.floor(Math.random() * eligiblePlayers.length)];
+            imposterIds.push(firstImp);
+            
+            let remainingEligible = eligiblePlayers.filter(id => id !== firstImp);
+            let secondImp = remainingEligible[Math.floor(Math.random() * remainingEligible.length)];
+            imposterIds.push(secondImp);
+        } else {
+            imposterIds.push(eligiblePlayers[Math.floor(Math.random() * eligiblePlayers.length)]);
+        }
 
-        db.ref('rooms/' + currentRoom).update({
-            status: 'playing',
-            roomType: selectedRoomType, // المزامنة الصارمة لنوع الغرفة من المتغير المختار مباشرة
-            secretWord: randomWord,
-            category: selectedCategory,
-            imposters: imposters,
-            votes: null,
-            controlledChat: null 
+        db.ref('rooms/' + currentRoom).update({ 
+            status: 'playing', 
+            word: word, 
+            category: selectedCategory, 
+            imposters: imposterIds, 
+            votes: {},
+            understandVotes: {},
+            lobbyChat: null,
+            inGameChat: null 
         });
-    }
-
-    function setupPlayScreen() {
-        document.getElementById('category-hint').innerText = `الفئة الحالية: ${gameData.category}`;
-        document.getElementById('secret-content').innerText = "[ اضغط لفك التشفير ]";
-        document.getElementById('secret-content').style.color = "#555";
-        
-        if(isHost) {
-            document.getElementById('change-word-btn').style.display = 'block';
-            document.getElementById('go-to-vote-btn').style.display = 'block';
-        } else {
-            document.getElementById('change-word-btn').style.display = 'none';
-            document.getElementById('go-to-vote-btn').style.display = 'none';
-        }
-    }
-
-    function toggleSecret() {
-        const content = document.getElementById('secret-content');
-        const imps = gameData.imposters || [];
-        if(imps.includes(myId)) {
-            content.innerText = "🕵️ أنت المحتال (Imposter)";
-            content.style.color = varToString('--imposter');
-        } else {
-            content.innerText = `الكلمة السرية: ${gameData.secretWord}`;
-            content.style.color = varToString('--success');
-        }
-    }
-
-    function varToString(v) {
-        return v === '--imposter' ? '#ff0055' : '#00ff9d';
     }
 
     function changeCurrentWord() {
-        if(!isHost) return;
-        const list = megaDatabase[gameData.category];
-        const randomWord = list[Math.floor(Math.random() * list.length)];
-        db.ref('rooms/' + currentRoom).update({ secretWord: randomWord });
-    }
+        if(!isHost || !currentRoom || !gameData.category) return;
+        const words = megaDatabase[gameData.category];
+        let newWord;
+        do {
+            newWord = words[Math.floor(Math.random() * words.length)];
+        } while (newWord === gameData.word);
 
-    function handlePlayScreenNextAction() {
-        if(!isHost) return;
-        
-        // جلب البيانات من السيرفر مباشرة لقطع الشك باليقين، وضمان قراءة القيمة الحقيقية المخزنة
-        db.ref('rooms/' + currentRoom).once('value', snap => {
-            const currentRoomData = snap.val();
-            if(!currentRoomData) return;
-
-            if(currentRoomData.roomType === 'controlledChat') {
-                const pIds = Object.keys(currentRoomData.players);
-                db.ref('rooms/' + currentRoom).update({
-                    status: 'controlledChat',
-                    controlledChat: {
-                        phase: 'linear', 
-                        turnIndex: 0,
-                        step: 'asking', 
-                        asker: pIds[0],
-                        target: pIds[1],
-                        history: `<div class="chat-bubble system">بدأت الغرفة المحادثة الخاضعة للرقابة الأمنية.</div>`
-                    }
-                });
-            } else {
-                db.ref('rooms/' + currentRoom).update({ status: 'voting' });
-            }
+        db.ref('rooms/' + currentRoom).update({ 
+            word: newWord,
+            understandVotes: {} 
         });
     }
 
-    /* -------------------------------------------------------------
-       نظام التحكم بالمحادثة المراقبة
-    ------------------------------------------------------------- */
-    function setupControlledChatScreen() {
-        const chatData = gameData.controlledChat;
-        if(!chatData) return;
-
-        const statusIndicator = document.getElementById('chat-status-indicator');
-        const chatBox = document.getElementById('controlled-chat-box');
-        const inputContainer = document.getElementById('chat-input-container');
-        const targetSelection = document.getElementById('chat-target-selection');
-        const phaseBadge = document.getElementById('chat-round-phase');
-
-        if(chatData.phase === 'linear') {
-            phaseBadge.innerText = "جولة الأسئلة الخطية الدائرية";
-            phaseBadge.style.background = "var(--secondary)";
-        } else {
-            phaseBadge.innerText = "جولة الشك والاختيار الحر";
-            phaseBadge.style.background = "var(--imposter)";
-        }
-
-        chatBox.innerHTML = chatData.history || `<div class="chat-bubble system">بدأت الغرفة المحادثة الخاضعة للرقابة الأمنية.</div>`;
-        chatBox.scrollTop = chatBox.scrollHeight;
-
-        const askerName = gameData.players[chatData.asker] ? gameData.players[chatData.asker].name : "لاعب غادر";
-        const targetName = gameData.players[chatData.target] ? gameData.players[chatData.target].name : "لاعب غادر";
-
-        inputContainer.style.display = 'none';
-        targetSelection.style.display = 'none';
-
-        if(chatData.phase === 'linear') {
-            if(chatData.step === 'asking') {
-                statusIndicator.innerText = `دور اللاعب [ ${askerName} ] ليسأل [ ${targetName} ]`;
-                if(myId === chatData.asker) {
-                    inputContainer.style.display = 'block';
-                    document.getElementById('controlled-chat-input').placeholder = `اكتب سؤالك لـ ${targetName}...`;
-                }
-            } else if(chatData.step === 'answering') {
-                statusIndicator.innerText = `دور اللاعب [ ${targetName} ] للإجابة على سؤال [ ${askerName} ]`;
-                if(myId === chatData.target) {
-                    inputContainer.style.display = 'block';
-                    document.getElementById('controlled-chat-input').placeholder = "اكتب إجابتك هنا...";
-                }
-            }
-        } else if(chatData.phase === 'doubt') {
-            if(chatData.step === 'selectingTarget') {
-                statusIndicator.innerText = `بانتظار اختيار [ ${askerName} ] للاعب الذي سيقوم بسؤاله...`;
-                if(myId === chatData.asker) {
-                    targetSelection.style.display = 'grid';
-                    targetSelection.innerHTML = "";
-                    Object.keys(gameData.players).forEach(pId => {
-                        if(pId !== myId) {
-                            const name = gameData.players[pId].name;
-                            targetSelection.innerHTML += `<button class="target-btn" onclick="selectDoubtTarget('${pId}')">❓ اسأل ${name}</button>`;
-                        }
-                    });
-                }
-            } else if(chatData.step === 'asking') {
-                statusIndicator.innerText = `دور اللاعب [ ${askerName} ] ليسأل [ ${targetName} ]`;
-                if(myId === chatData.asker) {
-                    inputContainer.style.display = 'block';
-                    document.getElementById('controlled-chat-input').placeholder = `اكتب سؤالك المباشر لـ ${targetName}...`;
-                }
-            } else if(chatData.step === 'answering') {
-                statusIndicator.innerText = `دور اللاعب [ ${targetName} ] للإجابة على سؤال [ ${askerName} ]`;
-                if(myId === chatData.target) {
-                    inputContainer.style.display = 'block';
-                    document.getElementById('controlled-chat-input').placeholder = "اكتب ردك والدفاع عن نفسك...";
-                }
-            }
-        }
-    }
-
-    function selectDoubtTarget(targetId) {
-        const chatData = gameData.controlledChat;
-        if(myId !== chatData.asker || chatData.step !== 'selectingTarget') return;
-
-        db.ref('rooms/' + currentRoom + '/controlledChat').update({
-            target: targetId,
-            step: 'asking'
-        });
-    }
-
-    function submitControlledChat() {
-        const inputField = document.getElementById('controlled-chat-input');
-        const text = inputField.value.trim();
-        if(!text) return;
-
-        const chatData = gameData.controlledChat;
-        const playerIds = Object.keys(gameData.players);
+    function setupGame() {
+        showScreen('play-screen');
+        clickState = 0;
+        document.getElementById('category-hint').innerText = "المجال: " + gameData.category;
+        document.getElementById('secret-content').innerText = "[ اضغط لفك التشفير ]";
         
-        let currentHistory = chatData.history || "";
-        let updates = {};
+        document.getElementById('und-yes').className = "und-btn yes-btn";
+        document.getElementById('und-no').className = "und-btn no-btn";
+        document.getElementById('und-yes').disabled = false;
+        document.getElementById('und-no').disabled = false;
 
-        const askerName = gameData.players[chatData.asker].name;
-        const targetName = gameData.players[chatData.target].name;
-
-        if(chatData.step === 'asking') {
-            if(myId !== chatData.asker) return;
-            currentHistory += `<div class="chat-bubble ask"><strong>${askerName} إلى ${targetName}:</strong> ${text}</div>`;
+        db.ref('rooms/' + currentRoom + '/understandVotes').on('value', snap => {
+            if (gameData.status !== 'playing') return;
             
-            updates['history'] = currentHistory;
-            updates['step'] = 'answering';
+            const uVotes = snap.val() || {};
+            const totalPlayers = Object.keys(gameData.players).length;
+            const votedCount = Object.keys(uVotes).length;
             
-            inputField.value = "";
-            db.ref('rooms/' + currentRoom + '/controlledChat').update(updates);
-
-        } else if(chatData.step === 'answering') {
-            if(myId !== chatData.target) return;
-            currentHistory += `<div class="chat-bubble answer"><strong>رد ${targetName}:</strong> ${text}</div>`;
-            updates['history'] = currentHistory;
-
-            if(chatData.phase === 'linear') {
-                let nextTurnIndex = chatData.turnIndex + 1;
-                if(nextTurnIndex >= playerIds.length) {
-                    updates['phase'] = 'doubt';
-                    updates['turnIndex'] = 0;
-                    updates['step'] = 'selectingTarget';
-                    updates['asker'] = playerIds[0];
-                    updates['target'] = "";
-                    currentHistory += `<div class="chat-bubble system">📢 انتهت الجولة الخطية! بدأت الآن جولة الشك واختيار الأهداف بحرية.</div>`;
-                    updates['history'] = currentHistory;
-                } else {
-                    updates['turnIndex'] = nextTurnIndex;
-                    updates['step'] = 'asking';
-                    updates['asker'] = playerIds[nextTurnIndex];
-                    let nextTargetIndex = nextTurnIndex + 1;
-                    if(nextTargetIndex >= playerIds.length) nextTargetIndex = 0; 
-                    updates['target'] = playerIds[nextTargetIndex];
-                }
-                
-                inputField.value = "";
-                db.ref('rooms/' + currentRoom + '/controlledChat').update(updates);
-
-            } else if(chatData.phase === 'doubt') {
-                let nextTurnIndex = chatData.turnIndex + 1;
-                if(nextTurnIndex >= playerIds.length) {
-                    inputField.value = "";
-                    db.ref('rooms/' + currentRoom).update({ status: 'voting' });
-                } else {
-                    updates['turnIndex'] = nextTurnIndex;
-                    updates['step'] = 'selectingTarget';
-                    updates['asker'] = playerIds[nextTurnIndex];
-                    updates['target'] = "";
-                    
-                    inputField.value = "";
-                    db.ref('rooms/' + currentRoom + '/controlledChat').update(updates);
-                }
-            }
-        }
-    }
-
-    /* -------------------------------------------------------------
-       بقية وظائف اللعبة الأساسية
-    ------------------------------------------------------------- */
-    function setupVoteScreenUI() {
-        document.getElementById('vote-screen-title').innerText = "من هو المحتال؟";
-        const container = document.getElementById('vote-options');
-        container.innerHTML = "";
-
-        if(!gameData.players) return;
-
-        const alreadyVoted = gameData.votes && gameData.votes[myId];
-
-        Object.keys(gameData.players).forEach(pId => {
-            const p = gameData.players[pId];
-            let btnText = p.name;
-            
-            if(gameData.votes) {
-                let voters = [];
-                Object.keys(gameData.votes).forEach(voterId => {
-                    if(gameData.votes[voterId] === pId) {
-                        voters.push(gameData.players[voterId] ? gameData.players[voterId].name : "لاعب");
-                    }
-                });
-                if(voters.length > 0) {
-                    btnText += ` (${voters.join(", ")})`;
-                }
-            }
-
-            let disabledStr = alreadyVoted ? "disabled" : "";
-            container.innerHTML += `<button class="vote-btn" ${disabledStr} onclick="castVote('${pId}')">${btnText}</button>`;
-        });
-
-        if(isHost) {
-            checkAllVotesCalculated();
-        }
-    }
-
-    function castVote(targetId) {
-        if(gameData.votes && gameData.votes[myId]) return;
-        db.ref('rooms/' + currentRoom + '/votes/' + myId).set(targetId);
-    }
-
-    function checkAllVotesCalculated() {
-        if(!isHost || !gameData.players || !gameData.votes) return;
-        const pIds = Object.keys(gameData.players);
-        const vIds = Object.keys(gameData.votes);
-
-        if(vIds.length >= pIds.length) {
-            setTimeout(() => {
-                tallyVotesAndFinishRound();
-            }, 2000);
-        }
-    }
-
-    function tallyVotesAndFinishRound() {
-        if(!isHost) return;
-        let voteCounts = {};
-        const pIds = Object.keys(gameData.players);
-        
-        pIds.forEach(id => voteCounts[id] = 0);
-        
-        if(gameData.votes) {
-            Object.values(gameData.votes).forEach(targetId => {
-                if(voteCounts[targetId] !== undefined) voteCounts[targetId]++;
+            let yesCount = 0;
+            let noCount = 0;
+            Object.values(uVotes).forEach(v => {
+                if (v === true) yesCount++;
+                if (v === false) noCount++;
             });
-        }
 
-        let maxVotes = -1;
-        let votedOutId = null;
-        let tie = false;
+            document.getElementById('understand-status-text').innerText = `تم التصويت: ${votedCount} / ${totalPlayers} (نعم: ${yesCount} | لا: ${noCount})`;
 
-        Object.keys(voteCounts).forEach(id => {
-            if(voteCounts[id] > maxVotes) {
-                maxVotes = voteCounts[id];
-                votedOutId = id;
-                tie = false;
-            } else if(voteCounts[id] === maxVotes) {
-                tie = true;
+            if (uVotes[myId] !== undefined) {
+                if (uVotes[myId] === true) {
+                    document.getElementById('und-yes').className = "und-btn selected-yes";
+                    document.getElementById('und-no').className = "und-btn no-btn";
+                } else {
+                    document.getElementById('und-yes').className = "und-btn yes-btn";
+                    document.getElementById('und-no').className = "und-btn selected-no";
+                }
+            }
+
+            if (isHost) {
+                const votesFinished = (votedCount === totalPlayers);
+                const mostYes = (yesCount > totalPlayers / 2);
+
+                if (votesFinished && mostYes) {
+                    document.getElementById('go-to-vote-btn').style.display = 'block';
+                } else {
+                    document.getElementById('go-to-vote-btn').style.display = 'none';
+                }
+
+                document.getElementById('change-word-btn').style.display = 'block';
+                if (!votesFinished || mostYes) {
+                    document.getElementById('change-word-btn').disabled = true;
+                } else {
+                    document.getElementById('change-word-btn').disabled = false;
+                }
+            } else {
+                document.getElementById('change-word-btn').style.display = 'none';
+                document.getElementById('go-to-vote-btn').style.display = 'none';
             }
         });
+    }
 
+    function submitUnderstanding(status) {
+        if (!currentRoom || gameData.status !== 'playing') return;
+        db.ref('rooms/' + currentRoom + '/understandVotes/' + myId).set(status);
+    }
+
+    function toggleSecret() {
         const imps = gameData.imposters || [];
-        let updates = {};
+        const isImp = imps.includes(myId);
+        const content = document.getElementById('secret-content');
 
-        if(!tie && votedOutId) {
-            if(imps.includes(votedOutId)) {
-                pIds.forEach(id => {
-                    if(!imps.includes(id)) {
-                        let currentScore = gameData.players[id].score || 0;
-                        updates[`players/${id}/score`] = currentScore + 3;
-                    }
-                });
+        if (content.innerText !== "[ اضغط لفك التشفير ]") {
+            content.innerText = "[ اضغط لفك التشفير ]";
+        } else {
+            if (!isImp) {
+                content.innerHTML = `<span style="color:var(--success); font-size: 20px;">${gameData.word}</span>`;
             } else {
-                imps.forEach(impId => {
-                    let impScore = gameData.players[impId] ? (gameData.players[impId].score || 0) : 0;
-                    impScore += 2;
-                    updates[`players/${impId}/score`] = impScore;
-                });
+                content.innerHTML = `<span style="color:var(--success); font-size: 20px;">أنت المحتال</span>`;
+            }
+        }
+    }
+
+    function showVoteScreen() { 
+        db.ref('rooms/' + currentRoom + '/understandVotes').off(); 
+        db.ref('rooms/' + currentRoom).update({ status: 'voting' });
+    }
+
+    function renderVoteOptions() {
+        showScreen('vote-screen');
+        const container = document.getElementById('vote-options');
+        const title = document.getElementById('vote-screen-title');
+        const impsCount = (gameData.imposters || []).length;
+        if (gameData.votes && gameData.votes[myId]) {
+            container.innerHTML = "<p>تم تسجيل صوتك بنجاح. انتظر البقية...</p>";
+            checkVotesComplete(); return;
+        }
+        
+        selectedVotes = [];
+        title.innerText = (impsCount === 2) ? "اختر المحتال الأول (1)" : "من هو المحتال؟";
+
+        container.innerHTML = "";
+        Object.keys(gameData.players).forEach(id => {
+            if (id !== myId) {
+                const btn = document.createElement('button');
+                btn.className = "vote-btn";
+                btn.id = "v-btn-" + id;
+                btn.innerText = gameData.players[id].name;
+                btn.onclick = () => handleVoteSelection(id, btn);
+                container.appendChild(btn);
+            }
+        });
+    }
+
+    function handleVoteSelection(votedId, btnElement) {
+        const impsCount = (gameData.imposters || []).length;
+        const title = document.getElementById('vote-screen-title');
+
+        if (impsCount === 2) {
+            selectedVotes.push(votedId);
+            btnElement.disabled = true; 
+            
+            if (selectedVotes.length === 1) {
+                title.innerText = "اختر المحتال الثاني (2)";
+            } else if (selectedVotes.length === 2) {
+                document.querySelectorAll('.vote-btn').forEach(btn => btn.disabled = true);
+                let mergedVotes = selectedVotes.join(","); 
+                submitVote(mergedVotes);
             }
         } else {
-            imps.forEach(impId => {
-                let impScore = gameData.players[impId] ? (gameData.players[impId].score || 0) : 0;
-                impScore += 2;
-                updates[`players/${impId}/score`] = impScore;
-            });
+            document.querySelectorAll('.vote-btn').forEach(btn => btn.disabled = true);
+            submitVote(votedId);
         }
+    }
 
+    function submitVote(votedValue) {
+        db.ref('rooms/' + currentRoom + '/votes/' + myId).set(votedValue).then(() => checkVotesComplete());
+    }
+
+    function checkVotesComplete() {
+        db.ref('rooms/' + currentRoom).once('value', snap => {
+            const data = snap.val();
+            const votesData = data.votes || {};
+            const votersCount = Object.keys(votesData).length;
+            const totalRequired = Object.keys(data.players).length;
+            if (votersCount >= totalRequired && data.status === 'voting') calculateScores(data);
+        });
+    }
+
+    function calculateScores(data) {
+        let updates = {};
+        const imps = data.imposters || [];
+        let votesAgainstEachImp = {};
+        
+        imps.forEach(id => { votesAgainstEachImp[id] = 0; });
+        const totalVoters = Object.keys(data.players).length - imps.filter(id => data.players[id]).length;
+
+        Object.keys(data.players).forEach(pId => {
+            let currentScore = data.players[pId].score || 0;
+            
+            if (!imps.includes(pId)) {
+                let voteValue = data.votes[pId] || "";
+                let playerVotes = voteValue.split(","); 
+                
+                playerVotes.forEach(votedFor => {
+                    if (imps.includes(votedFor)) {
+                        currentScore += 1;
+                        if(votesAgainstEachImp[votedFor] !== undefined) {
+                            votesAgainstEachImp[votedFor]++;
+                        }
+                   }
+                });
+            }
+            updates[`players/${pId}/score`] = currentScore;
+        });
+        
+        imps.forEach(impId => {
+            if (data.players[impId]) {
+                let impScore = data.players[impId].score || 0;
+                let votesAgainstThisImp = votesAgainstEachImp[impId] || 0;
+                
+                if (votesAgainstThisImp < (totalVoters / 2)) {
+                    impScore += 2;
+                }
+                updates[`players/${impId}/score`] = impScore;
+            }
+        });
+        
         updates['status'] = 'results';
         db.ref('rooms/' + currentRoom).update(updates);
     }
@@ -807,7 +978,6 @@
         showScreen('result-screen');
         const imps = gameData.imposters || [];
         let impNames = imps.map(id => gameData.players[id] ? gameData.players[id].name : "لاعب غادر").join(" و ");
-        
         document.getElementById('res-imp-name').innerText = impNames;
         const container = document.getElementById('scores-container');
         container.innerHTML = "";
@@ -816,21 +986,13 @@
         sorted.forEach(id => {
             container.innerHTML += `<div class="score-row"><span>${gameData.players[id].name}</span><span style="color:var(--primary)">${gameData.players[id].score} pts</span></div>`;
         });
-        
         document.getElementById('next-round-btn').style.display = (isHost && gameData.round < 5) ? 'block' : 'none';
         document.getElementById('finish-btn').style.display = (isHost && gameData.round >= 5) ? 'block' : 'none';
         document.getElementById('exit-btn').style.display = (!isHost && gameData.round >= 5) ? 'block' : 'none';
     }
 
     function backToLobby() {
-        if(!isHost) return;
-        const nextRound = (gameData.round || 1) + 1;
-        db.ref('rooms/' + currentRoom).update({
-            status: 'waiting',
-            round: nextRound,
-            votes: null,
-            controlledChat: null 
-        });
+        db.ref('rooms/' + currentRoom).update({ status: 'waiting', round: gameData.round + 1, votes: {}, word: null });
     }
 </script>
 </body>
