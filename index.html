@@ -66,6 +66,8 @@ border-bottom: 1px solid #333; font-size: 14px; }
         .config-row { font-size: 11px; color: var(--primary);
 margin: 5px 0; width: 100%; text-align: right; }
         .config-scroll-area { width: 100%; max-height: 120px; overflow-y: auto; background: rgba(0,0,0,0.2); padding: 5px; border-radius: 10px; box-sizing: border-box; margin-bottom: 10px; border: 1px solid #222; }
+        .config-row { font-size: 11px; color: var(--primary); margin: 5px 0; width: 100%; text-align: right; }
+        .config-scroll-area { width: 100%; max-height: 120px; overflow-y: auto; background: rgba(0,0,0,0.2); padding: 5px; border-radius: 10px; box-sizing: border-box; margin-bottom: 10px; border: 1px solid #222; }
         .imp-toggle-grid { display: grid;
 grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; margin-bottom: 15px; }
         .imp-toggle-btn { background: #1a1a2e;
@@ -110,17 +112,17 @@ border-radius: 8px; font-size: 11px; display: flex; justify-content: space-betwe
         .type-btn { background: #1a1a2e; color: #aaa; border: 1px solid #333; padding: 10px; border-radius: 8px; font-size: 12px; cursor: pointer; font-family: 'Cairo'; font-weight: bold; }
         .type-btn.selected { background: var(--secondary); color: #fff; border-color: var(--secondary); }
 
-        /* تنسيقات قسم التحقيق الجديد والمحكم */
-        .ingame-chat-box { width: 100%; display: flex; flex-direction: column; background: rgba(0,0,0,0.5); border: 1px solid var(--primary); border-radius: 12px; margin-top: 5px; height: 110px; overflow: hidden; box-sizing: border-box; }
-        .ingame-messages { flex-grow: 1; overflow-y: auto; padding: 6px 10px; font-size: 11px; display: flex; flex-direction: column; gap: 4px; text-align: right; }
-        .ingame-msg { background: rgba(0,242,255,0.03); padding: 4px 8px; border-radius: 6px; border-right: 2px solid var(--primary); word-break: break-all; }
+        /* تنسيقات قسم التحقيق المنظم والجديد */
+        .ingame-chat-box { width: 100%; display: flex; flex-direction: column; background: rgba(0,0,0,0.5); border: 1px solid var(--primary); border-radius: 12px; margin-top: 5px; flex-grow: 1; overflow: hidden; box-sizing: border-box; }
+        .ingame-messages { flex-grow: 1; overflow-y: auto; padding: 10px; font-size: 12px; display: flex; flex-direction: column; gap: 6px; text-align: right; }
+        .ingame-msg { background: rgba(0,242,255,0.03); padding: 6px 10px; border-radius: 6px; border-right: 2px solid var(--primary); word-break: break-all; }
         .ingame-msg .sender { color: var(--success); font-weight: bold; margin-left: 5px; }
-        .control-turn-bar { background: #221a35; padding: 4px 8px; font-size: 11px; color: var(--primary); text-align: center; border-bottom: 1px solid #333; font-weight: bold; }
+        .control-turn-bar { background: #221a35; padding: 8px; font-size: 12px; color: var(--primary); text-align: center; border-bottom: 1px solid #333; font-weight: bold; }
         .ingame-input-area { display: flex; border-top: 1px solid #222; background: #000; }
-        .ingame-input-area input { flex-grow: 1; border: none; padding: 6px 10px; font-size: 11px; background: transparent; color: #fff; margin: 0; text-align: right; }
-        .ingame-input-area button { background: var(--primary); color: black; border: none; padding: 0 15px; font-size: 11px; font-weight: bold; cursor: pointer; font-family: 'Cairo'; }
-        .target-selector-area { display: flex; gap: 4px; background: #111; padding: 4px; justify-content: center; width: 100%; box-sizing: border-box; border-top: 1px solid #222; }
-        .target-mini-btn { background: #222; color: #fff; border: 1px solid var(--primary); font-size: 10px; padding: 3px 8px; border-radius: 4px; cursor: pointer; font-family: 'Cairo'; }
+        .ingame-input-area input { flex-grow: 1; border: none; padding: 12px; font-size: 12px; background: transparent; color: #fff; margin: 0; text-align: right; }
+        .ingame-input-area button { background: var(--primary); color: black; border: none; padding: 0 20px; font-size: 12px; font-weight: bold; cursor: pointer; font-family: 'Cairo'; }
+        .target-selector-area { display: flex; gap: 4px; background: #111; padding: 6px; justify-content: center; width: 100%; box-sizing: border-box; border-top: 1px solid #222; flex-wrap: wrap; }
+        .target-mini-btn { background: #222; color: #fff; border: 1px solid var(--primary); font-size: 11px; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-family: 'Cairo'; }
     </style>
 </head>
 <body>
@@ -199,10 +201,9 @@ background: var(--success); color:#000;" onclick="triggerStart()">بدء الع�
 box-shadow: 0 4px 0 #b3003b; margin-top: 5px;" onclick="deleteRoomByHost()">إغلاق وحذف الغرفة نهائياً 🗑️</button>
     </div>
 
+    <!-- الصفحة الأولى للعب: فك تشفير الكلمة والتصويت بالفهم -->
     <div id="play-screen" class="screen">
-        <div id="category-hint" style="background: rgba(0,242,255,0.1);
-padding: 5px 20px; border-radius: 20px; color: var(--primary); border: 1px solid var(--primary);
-margin-bottom: 5px;"></div>
+        <div id="category-hint" style="background: rgba(0,242,255,0.1); padding: 5px 20px; border-radius: 20px; color: var(--primary); border: 1px solid var(--primary); margin-bottom: 5px;"></div>
         
         <div class="secret-card" onclick="toggleSecret()">
             <div id="secret-content" style="color: #555;">[ اضغط لفك التشفير ]</div>
@@ -217,8 +218,18 @@ margin-bottom: 5px;"></div>
             <div id="understand-status-text" class="understand-status">انتظار تصويت اللاعبين...</div>
         </div>
 
-        <!-- واجهة وضع الدردشة المنظم والتحقيق المحكم -->
-        <div class="ingame-chat-box" id="controlled-chat-ui" style="display:none;">
+        <button class="main-btn" id="change-word-btn" onclick="changeCurrentWord()" style="display:none; background: #d97706; box-shadow: 0 4px 0 #92400e; margin-bottom: 5px; margin-top: 5px;">تغيير الكلمة الحالية 🔄</button>
+        
+        <!-- الأزرار الديناميكية للتنقل بناءً على وضع اللعب المختار -->
+        <button class="main-btn" id="go-to-questions-btn" onclick="switchToQuestionsStage()" style="display:none; margin-top: 5px; background:var(--secondary);">الانتقال لجلسة الأسئلة ❯</button>
+        <button class="main-btn" id="go-to-vote-btn" onclick="showVoteScreen()" style="display:none; margin-top: 5px;">انتقل للتصويت</button>
+    </div>
+
+    <!-- الصفحة الجديدة تماماً والمستقلة: جلسة التحقيق المحكم وشات الأسئلة التلقائي -->
+    <div id="investigation-screen" class="screen">
+        <div id="investigation-category-hint" style="background: rgba(112,0,255,0.1); padding: 5px 20px; border-radius: 20px; color: var(--primary); border: 1px solid var(--secondary); margin-bottom: 5px; font-size:12px;"></div>
+        
+        <div class="ingame-chat-box">
             <div id="turn-indicator-bar" class="control-turn-bar">جاري التجهيز للتحقيق...</div>
             <div class="ingame-messages" id="ingame-messages-container"></div>
             
@@ -231,9 +242,7 @@ margin-bottom: 5px;"></div>
             </div>
         </div>
 
-        <button class="main-btn" id="change-word-btn" onclick="changeCurrentWord()" style="display:none;
-background: #d97706; box-shadow: 0 4px 0 #92400e; margin-bottom: 5px; margin-top: 5px;">تغيير الكلمة الحالية 🔄</button>
-        <button class="main-btn" id="go-to-vote-btn" onclick="showVoteScreen()" style="display:none; margin-top: 5px;">انتقل للتصويت</button>
+        <button class="main-btn" id="host-trigger-vote-btn" onclick="showVoteScreen()" style="display:none; background: var(--success); color:#000; margin-top: 10px;">انتقل للتصويت ⚖️</button>
     </div>
 
     <div id="vote-screen" class="screen">
@@ -243,15 +252,11 @@ background: #d97706; box-shadow: 0 4px 0 #92400e; margin-bottom: 5px; margin-top
 
     <div id="result-screen" class="screen">
         <h1 style="color:var(--primary)">نتائج التحقيق</h1>
-        <div style="font-size:14px;
-margin-bottom:10px;">المحتالون كانوا: <span id="res-imp-name" style="color:var(--imposter); font-weight:bold;"></span></div>
-        <div id="scores-container" style="width:100%; background:rgba(0,0,0,0.4); border-radius:10px;
-padding:10px;"></div>
+        <div style="font-size:14px; margin-bottom:10px;">المحتالون كانوا: <span id="res-imp-name" style="color:var(--imposter); font-weight:bold;"></span></div>
+        <div id="scores-container" style="width:100%; background:rgba(0,0,0,0.4); border-radius:10px; padding:10px;"></div>
         <button id="next-round-btn" class="main-btn" onclick="backToLobby()" style="display:none;">الجولة القادمة ❯</button>
-        <button id="finish-btn" class="main-btn" onclick="clearAndReload()" style="display:none;
-background:var(--imposter);">تتويج البطل 🏆</button>
-        <button id="exit-btn" class="main-btn" onclick="clearAndReload()" style="display:none;
-background:#444;">الخروج للرئيسية</button>
+        <button id="finish-btn" class="main-btn" onclick="clearAndReload()" style="display:none; background:var(--imposter);">تتويج البطل 🏆</button>
+        <button id="exit-btn" class="main-btn" onclick="clearAndReload()" style="display:none; background:#444;">الخروج للرئيسية</button>
     </div>
 </div>
 
@@ -278,7 +283,7 @@ background:#444;">الخروج للرئيسية</button>
 
     let currentRoom = null, myId = null, myName = "", isHost = false, gameData = {}, selectedCategory = "حيوانات وحشرات", allowedImpostersCount = 1;
     let roomPrivacySetting = "public"; 
-    let chosenPlayMode = "normal"; // الوضع الافتراضي للعب القديم بدون شات منظم
+    let chosenPlayMode = "normal"; 
     let selectedVotes = []; 
 
     const megaDatabase = {
@@ -423,11 +428,11 @@ background:#444;">الخروج للرئيسية</button>
             container.innerHTML = ""; let hasRooms = false;
             Object.keys(roomsData).forEach(roomId => {
                 const room = roomsData[roomId];
-                if(room.status === 'waiting' || room.status === 'playing' || room.status === 'voting' || room.status === 'results') {
+                if(room.status === 'waiting' || room.status === 'playing' || room.status === 'questions' || room.status === 'voting' || room.status === 'results') {
                     hasRooms = true; let hostId = room.host;
                     let hostName = room.players && room.players[hostId] ? room.players[hostId].name : "مجهول";
                     let pCount = room.players ? Object.keys(room.players).length : 0;
-                    let statusLabel = room.status === 'playing' ? " (جارِ اللعب 🎮)" : room.status === 'voting' ? " (جارِ التصويت ⚖️)" : room.status === 'results' ? " (النتائج 🏆)" : "";
+                    let statusLabel = (room.status === 'playing' || room.status === 'questions') ? " (جارِ اللعب 🎮)" : room.status === 'voting' ? " (جارِ التصويت ⚖️)" : room.status === 'results' ? " (النتائج 🏆)" : "";
                     let lockIcon = (room.privacy === 'private') ? " 🔒 (خاصة)" : " 🔓 (عامة)";
                     container.innerHTML += `<div class="room-item" onclick="quickJoin('${roomId}')"><span style="color:var(--success)">🎯 غرفة: ${hostName}${lockIcon}${statusLabel}</span><span style="color:#aaa">${pCount} لاعبين ❯</span></div>`;
                 }
@@ -443,7 +448,7 @@ background:#444;">الخروج للرئيسية</button>
         let roomPass = "";
         if (roomPrivacySetting === "private") {
             roomPass = document.getElementById('custom-password-input').value.trim();
-            if (roomPass.length !== 4 || isNaN(roomPass)) return alert("الرجاء إدخال رمز سري مكون من 4 أرقام بالضبط!");
+            if (roomPass.length !== 4 || isNaN(roomPass)) return alert("الرجاء إدخل رمز سري مكون من 4 أرقام بالضبط!");
         }
         disableHomeButtons(); currentRoom = Math.floor(1000 + Math.random() * 9000).toString(); isHost = true; myId = "u_" + Date.now();
         saveSessionLocally();
@@ -546,6 +551,7 @@ background:#444;">الخروج للرئيسية</button>
             else document.getElementById('start-game-btn').style.display = 'none';
             
             if(data.status === 'playing') setupGame();
+            if(data.status === 'questions') setupQuestionsScreen();
             if(data.status === 'voting') renderVoteOptions();
             if(data.status === 'results') showFinalResults();
         });
@@ -562,11 +568,10 @@ background:#444;">الخروج للرئيسية</button>
             let secondImp = remainingEligible[Math.floor(Math.random() * remainingEligible.length)]; imposterIds.push(secondImp);
         } else { imposterIds.push(eligiblePlayers[Math.floor(Math.random() * eligiblePlayers.length)]); }
 
-        // إعداد هيكلية التحقيق المحكم بالترتيب التلقائي
         let investigation = {
-            currentStage: 'round_robin', // 'round_robin' -> 'doubt' -> 'finished'
+            currentStage: 'round_robin', 
             turnIndex: 0,
-            subStep: 'ask', // 'ask' (انتظار السؤال) -> 'answer' (انتظار الإجابة)
+            subStep: 'ask', 
             askerId: pIds[0],
             targetId: pIds[1] || pIds[0],
             doubtIndex: 0,
@@ -592,15 +597,6 @@ background:#444;">الخروج للرئيسية</button>
         document.getElementById('und-yes').className = "und-btn yes-btn"; document.getElementById('und-no').className = "und-btn no-btn";
         document.getElementById('und-yes').disabled = false; document.getElementById('und-no').disabled = false;
 
-        // إدارة إظهار وإخفاء الشات بناءً على وضع اللعب المحدد من الـ Host
-        if (gameData.playMode === "controlled_chat") {
-            document.getElementById('controlled-chat-ui').style.display = 'flex';
-            manageControlledChatEngine();
-        } else {
-            document.getElementById('controlled-chat-ui').style.display = 'none';
-            db.ref('rooms/' + currentRoom + '/controlledChat').off();
-        }
-
         db.ref('rooms/' + currentRoom + '/understandVotes').on('value', snap => {
             if (gameData.status !== 'playing') return;
             const uVotes = snap.val() || {}; const totalPlayers = Object.keys(gameData.players).length; const votedCount = Object.keys(uVotes).length;
@@ -615,8 +611,13 @@ background:#444;">الخروج للرئيسية</button>
 
             if (isHost) {
                 const votesFinished = (votedCount === totalPlayers); const mostYes = (yesCount > totalPlayers / 2);
-                // في وضع الشات المحكم، الانتقال للتصويت يتم بعد انتهاء مرحلة الأسئلة بالكامل تلقائياً
-                if (gameData.playMode !== "controlled_chat") {
+                
+                if (gameData.playMode === "controlled_chat") {
+                    document.getElementById('go-to-vote-btn').style.display = 'none';
+                    if (votesFinished && mostYes) document.getElementById('go-to-questions-btn').style.display = 'block';
+                    else document.getElementById('go-to-questions-btn').style.display = 'none';
+                } else {
+                    document.getElementById('go-to-questions-btn').style.display = 'none';
                     if (votesFinished && mostYes) document.getElementById('go-to-vote-btn').style.display = 'block';
                     else document.getElementById('go-to-vote-btn').style.display = 'none';
                 }
@@ -625,11 +626,24 @@ background:#444;">الخروج للرئيسية</button>
             } else {
                 document.getElementById('change-word-btn').style.display = 'none';
                 document.getElementById('go-to-vote-btn').style.display = 'none';
+                document.getElementById('go-to-questions-btn').style.display = 'none';
             }
         });
     }
 
-    /* محرك إدارة نظام التحقيق المحكم والمراحل التلقائية لغرفة الدردشة */
+    function switchToQuestionsStage() {
+        if(!isHost || !currentRoom) return;
+        db.ref('rooms/' + currentRoom + '/understandVotes').off();
+        db.ref('rooms/' + currentRoom).update({ status: 'questions' });
+    }
+
+    /* إعداد شاشة التحقيق المستقلة الجديدة */
+    function setupQuestionsScreen() {
+        showScreen('investigation-screen');
+        document.getElementById('investigation-category-hint').innerText = "تحقيق - المجال: " + gameData.category;
+        manageControlledChatEngine();
+    }
+
     function manageControlledChatEngine() {
         db.ref('rooms/' + currentRoom + '/controlledChat').on('value', snap => {
             const container = document.getElementById('ingame-messages-container'); if (!container) return;
@@ -663,6 +677,7 @@ background:#444;">الخروج للرئيسية</button>
                 if (myId === inv.targetId) { msgInput.disabled = false; sendBtn.disabled = false; msgInput.placeholder = "اكتب إجابتك هنا..."; }
                 else { msgInput.placeholder = `انتظار إجابة ${currentTargetName}...`; }
             }
+            if (isHost) document.getElementById('host-trigger-vote-btn').style.display = 'none';
         } 
         else if (inv.currentStage === 'doubt') {
             let currentDoubterId = pIds[inv.doubtIndex];
@@ -691,11 +706,12 @@ background:#444;">الخروج للرئيسية</button>
                     else { msgInput.placeholder = `انتظار إجابة ${targetName}...`; }
                 }
             }
+            if (isHost) document.getElementById('host-trigger-vote-btn').style.display = 'none';
         } 
         else if (inv.currentStage === 'finished') {
             bar.innerText = "✨ انتهت جلسة التحقيق! الانتقال للتصويت الآن.";
             msgInput.placeholder = "تم قفل الدردشة الموجهة.";
-            if (isHost) document.getElementById('go-to-vote-btn').style.display = 'block';
+            if (isHost) document.getElementById('host-trigger-vote-btn').style.display = 'block';
         }
     }
 
@@ -767,6 +783,7 @@ background:#444;">الخروج للرئيسية</button>
 
     function showVoteScreen() { 
         db.ref('rooms/' + currentRoom + '/understandVotes').off(); 
+        db.ref('rooms/' + currentRoom + '/controlledChat').off();
         db.ref('rooms/' + currentRoom).update({ status: 'voting' });
     }
 
