@@ -53,7 +53,7 @@ margin-bottom: 10px; }
 padding: 10px; border-radius: 8px; font-size: 12px; cursor: pointer; }
         .cat-btn.selected { background: var(--primary);
 color: #000; border-color: var(--primary); }
-        .secret-card { width: 100%; height: 130px; background: #05050a;
+        .secret-card { width: 100%; height: 110px; background: #05050a;
 border: 2px dashed var(--secondary); border-radius: 15px; display: flex; align-items: center; justify-content: center; margin: 10px 0; cursor: pointer; text-align: center;
 }
         .vote-btn { background: #2d2d44; color: white; border: 1px solid var(--primary); padding: 10px;
@@ -85,7 +85,6 @@ border-radius: 8px; font-size: 11px; display: flex; justify-content: space-betwe
         .room-item:hover { border-color: var(--success);
 }
 
-        /* تنسيقات قسم فهم الكلمة */
         .understand-section { width: 100%; display: flex; flex-direction: column; align-items: center; margin-bottom: 10px; background: rgba(255,255,255,0.03); padding: 8px; border-radius: 10px; border: 1px solid #222; box-sizing: border-box; }
         .understand-title { font-size: 12px; color: var(--text); margin-bottom: 6px; font-weight: bold; }
         .understand-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; }
@@ -96,7 +95,6 @@ border-radius: 8px; font-size: 11px; display: flex; justify-content: space-betwe
         .und-btn.selected-no { background: var(--imposter); color: #fff; border-color: var(--imposter); box-shadow: 0 0 8px var(--imposter); }
         .understand-status { font-size: 11px; color: #aaa; margin-top: 4px; text-align: center; }
 
-        /* تنسيقات قسم دردشة الـ Lobby */
         .lobby-chat-box { width: 100%; display: flex; flex-direction: column; background: rgba(0,0,0,0.4); border: 1px solid #222; border-radius: 12px; margin-bottom: 10px; height: 110px; overflow: hidden; box-sizing: border-box; }
         .chat-messages { flex-grow: 1; overflow-y: auto; padding: 6px 10px; font-size: 11px; display: flex; flex-direction: column; gap: 4px; text-align: right; }
         .chat-msg { background: rgba(255,255,255,0.03); padding: 4px 8px; border-radius: 6px; border-right: 2px solid var(--secondary); word-break: break-all; }
@@ -105,23 +103,24 @@ border-radius: 8px; font-size: 11px; display: flex; justify-content: space-betwe
         .chat-input-area input { flex-grow: 1; border: none; padding: 6px 10px; font-size: 11px; background: transparent; color: #fff; margin: 0; text-align: right; }
         .chat-input-area button { background: var(--secondary); color: white; border: none; padding: 0 15px; font-size: 11px; font-weight: bold; cursor: pointer; font-family: 'Cairo'; }
         
-        /* تنسيق زر المغادرة العلوي الثابت */
         .leave-game-btn { background: #33101a; border: 1px dashed var(--imposter); color: var(--imposter); font-size: 11px; padding: 4px 12px; border-radius: 6px; cursor: pointer; font-family: 'Cairo'; position: absolute; top: 10px; left: 10px; z-index: 100; display: none; font-weight: bold; }
         .leave-game-btn:hover { background: var(--imposter); color: #fff; }
 
-        /* التنسيقات الجديدة لنوع الغرفة */
         .room-type-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; margin-bottom: 8px; }
         .type-btn { background: #1a1a2e; color: #aaa; border: 1px solid #333; padding: 10px; border-radius: 8px; font-size: 12px; cursor: pointer; font-family: 'Cairo'; font-weight: bold; }
         .type-btn.selected { background: var(--secondary); color: #fff; border-color: var(--secondary); }
 
-        /* تنسيقات صندوق دردشة اللعب أونلاين الجديدة والمضافة دون المساس بالتصميم الأساسي */
-        .ingame-chat-box { width: 100%; display: flex; flex-direction: column; background: rgba(0,0,0,0.5); border: 1px solid var(--primary); border-radius: 12px; margin-top: 10px; height: 110px; overflow: hidden; box-sizing: border-box; }
+        /* تنسيقات قسم التحقيق الجديد والمحكم */
+        .ingame-chat-box { width: 100%; display: flex; flex-direction: column; background: rgba(0,0,0,0.5); border: 1px solid var(--primary); border-radius: 12px; margin-top: 5px; height: 110px; overflow: hidden; box-sizing: border-box; }
         .ingame-messages { flex-grow: 1; overflow-y: auto; padding: 6px 10px; font-size: 11px; display: flex; flex-direction: column; gap: 4px; text-align: right; }
         .ingame-msg { background: rgba(0,242,255,0.03); padding: 4px 8px; border-radius: 6px; border-right: 2px solid var(--primary); word-break: break-all; }
         .ingame-msg .sender { color: var(--success); font-weight: bold; margin-left: 5px; }
+        .control-turn-bar { background: #221a35; padding: 4px 8px; font-size: 11px; color: var(--primary); text-align: center; border-bottom: 1px solid #333; font-weight: bold; }
         .ingame-input-area { display: flex; border-top: 1px solid #222; background: #000; }
         .ingame-input-area input { flex-grow: 1; border: none; padding: 6px 10px; font-size: 11px; background: transparent; color: #fff; margin: 0; text-align: right; }
         .ingame-input-area button { background: var(--primary); color: black; border: none; padding: 0 15px; font-size: 11px; font-weight: bold; cursor: pointer; font-family: 'Cairo'; }
+        .target-selector-area { display: flex; gap: 4px; background: #111; padding: 4px; justify-content: center; width: 100%; box-sizing: border-box; border-top: 1px solid #222; }
+        .target-mini-btn { background: #222; color: #fff; border: 1px solid var(--primary); font-size: 10px; padding: 3px 8px; border-radius: 4px; cursor: pointer; font-family: 'Cairo'; }
     </style>
 </head>
 <body>
@@ -159,6 +158,12 @@ onclick="checkAutoReconnect()">قطع الاتصال؟ اضغط للاستعاد
         <h1>ID الغرفة: <span id="display-room-id" style="color:var(--success)">----</span> <span id="display-room-privacy" style="font-size:10px; color:#aaa;"></span></h1>
         
         <div id="host-controls" style="display:none; width: 100%;">
+            <div class="config-row">وضع اللعب للدردشة:</div>
+            <div class="imp-toggle-grid" style="margin-bottom:8px;">
+                <button id="mode-normal-btn" class="imp-toggle-btn selected" onclick="selectPlayMode('normal', this)">الوضع العادي (القديم)</button>
+                <button id="mode-chat-btn" class="imp-toggle-btn" onclick="selectPlayMode('controlled_chat', this)">وضع التحقيق المحكم</button>
+            </div>
+
             <div class="config-row">اختر الفئة:</div>
             <div class="config-scroll-area">
                 <div class="cat-grid">
@@ -178,14 +183,13 @@ onclick="checkAutoReconnect()">قطع الاتصال؟ اضغط للاستعاد
             </div>
         </div>
  
-        
         <div class="player-list" id="player-list-container"></div>
 
         <div class="lobby-chat-box">
             <div class="chat-messages" id="chat-messages-container"></div>
             <div class="chat-input-area">
                 <input type="text" id="chat-msg-input" placeholder="اكتب رسالة للاعبين..." onkeypress="if(event.key === 'Enter') sendLobbyMessage()">
-                <button onclick="sendLobbyMessage()">إإرسال</button>
+                <button onclick="sendLobbyMessage()">إرسال</button>
             </div>
         </div>
 
@@ -198,7 +202,7 @@ box-shadow: 0 4px 0 #b3003b; margin-top: 5px;" onclick="deleteRoomByHost()">إغ
     <div id="play-screen" class="screen">
         <div id="category-hint" style="background: rgba(0,242,255,0.1);
 padding: 5px 20px; border-radius: 20px; color: var(--primary); border: 1px solid var(--primary);
-margin-bottom: 10px;"></div>
+margin-bottom: 5px;"></div>
         
         <div class="secret-card" onclick="toggleSecret()">
             <div id="secret-content" style="color: #555;">[ اضغط لفك التشفير ]</div>
@@ -213,18 +217,23 @@ margin-bottom: 10px;"></div>
             <div id="understand-status-text" class="understand-status">انتظار تصويت اللاعبين...</div>
         </div>
 
-        <!-- صندوق دردشة التحكم الجديد للتحقيق والأسئلة أونلاين أثناء اللعب عن بعد -->
-        <div class="ingame-chat-box">
+        <!-- واجهة وضع الدردشة المنظم والتحقيق المحكم -->
+        <div class="ingame-chat-box" id="controlled-chat-ui" style="display:none;">
+            <div id="turn-indicator-bar" class="control-turn-bar">جاري التجهيز للتحقيق...</div>
             <div class="ingame-messages" id="ingame-messages-container"></div>
+            
+            <!-- أزرار اختيار الهدف في مرحلة الشك -->
+            <div id="doubt-targets-area" class="target-selector-area" style="display:none;"></div>
+
             <div class="ingame-input-area">
-                <input type="text" id="ingame-msg-input" placeholder="اطرح سؤالاً أو أجب هنا..." onkeypress="if(event.key === 'Enter') sendInGameMessage()">
-                <button onclick="sendInGameMessage()">إرسال</button>
+                <input type="text" id="ingame-msg-input" placeholder="اكتب هنا عندما يحين دورك..." onkeypress="if(event.key === 'Enter') sendInGameMessage()">
+                <button id="ingame-send-btn" onclick="sendInGameMessage()">إرسال</button>
             </div>
         </div>
 
         <button class="main-btn" id="change-word-btn" onclick="changeCurrentWord()" style="display:none;
-background: #d97706; box-shadow: 0 4px 0 #92400e; margin-bottom: 5px; margin-top: 10px;">تغيير الكلمة الحالية 🔄</button>
-        <button class="main-btn" id="go-to-vote-btn" onclick="showVoteScreen()" style="display:none; margin-top: 10px;">انتقل للتصويت</button>
+background: #d97706; box-shadow: 0 4px 0 #92400e; margin-bottom: 5px; margin-top: 5px;">تغيير الكلمة الحالية 🔄</button>
+        <button class="main-btn" id="go-to-vote-btn" onclick="showVoteScreen()" style="display:none; margin-top: 5px;">انتقل للتصويت</button>
     </div>
 
     <div id="vote-screen" class="screen">
@@ -268,8 +277,8 @@ background:#444;">الخروج للرئيسية</button>
     }
 
     let currentRoom = null, myId = null, myName = "", isHost = false, gameData = {}, selectedCategory = "حيوانات وحشرات", allowedImpostersCount = 1;
-    let roomPrivacySetting = "public"; // متغير لتخزين خيار الخصوصية الافتراضي
-    
+    let roomPrivacySetting = "public"; 
+    let chosenPlayMode = "normal"; // الوضع الافتراضي للعب القديم بدون شات منظم
     let selectedVotes = []; 
 
     const megaDatabase = {
@@ -289,7 +298,6 @@ background:#444;">الخروج للرئيسية</button>
             "تفاح", "موز", "برتقال", "فراولة", "عنب", "بطيخ", "شمام", "خوخ", "مشمش", "برقوق", "كرز", "رمان", "تين", "تمر", "توت", "كيوي", "جوافة", "كمثرى", "يوسفي", "ليمون", "جريب فروت", "جوز الهند", 
 "أفوكادو", "بابايا", "تين شوكي", "خيار", "طماطم", "جزر", "خس", "جرجير", "بقدونس", "كزبرة", "نعناع", "بصل", "ثوم", "زنجبيل", "فلفل حار", "فلفل حلو", "باذنجان", "كوسة", "كرنب", "قرنبيط", "بروكلي", "سبانخ", "سلق", "فجل", "لفت", "شمندر", "بطاطا حلوة",
             "بقلاوة", "كنافة", "بسبوسة", "هريسة", "قطايف", "بلح الشام", "لقيمات", "عوامة", "غريبة", "معمول", "كعك", "بسكويت", "مهلبية", "أم علي", "رز بلبن", "كاسترد", "جيلي", "تارت", "مادلين", "مافن", "كاب كيك", "براونيز", "تشيز كيك", "بان كيك", "كراميل", "نوغة", "حلقوم", "طحينة", "حلاوة طحينية", "غزل البنات", "كورن فليكس", "موس الشوكولاتة", "سوفليه", "باوند كيك", "إكلير", "سينابون", "بيتي فور", "سحلب", "كابتشينو", "إسبريسو", "شاي أخضر"
-     
    ],
         'أماكن': [
             "المطبخ", "المستشفى", "المطار", "السينما", "المسرح", "المكتبة", "المتحف", "المسجد", "المدرسة", "الجامعة", "الفندق", "المطعم", "المقهى", "البنك", "السجن", "القلعة", "القصر", "الغابة", "الصحراء", "الجبل", "الشاطئ", "الكهف", "المزرعة", "المصنع", "المكتب", "الصيدلية", "السوق", "الحديقة", "السطح", "القبو", "غرفة النوم",
@@ -300,7 +308,6 @@ background:#444;">الخروج للرئيسية</button>
         ],
         'جماد': [
             "هاتف", "حاسوب", "تلفاز", "كاميرا", "ساعة", "نظارة", "مفتاح", "محفظة", "قلم", "كتاب", "ورقة", "مقص", "مظلة", "حقيبة", "حذاء", "قميص", "قبعة", "مرآة", "فرشاة", "منشفة", "وسادة", "سرير", "كرسي", "طاولة", "أريكة", "سجادة", "باب", "نافذة", "مصباح", "ملعقة", "شوكة", "سكين", "صحن", "كوب",
-     
         "سماعة", "شاحن", "بطارية", "لوحة مفايح", "فأرة الحاسوب", "شاشة", "طابعة", "ماسح ضوئي", "راوتر", "فلاشة", "قرص صلب", "تكييف", "مروحة", "مدفأة", "ثلاجة", "غسالة", "نشافة", "جلاية الصحون", "فرن", "مايكرويف", "خلاط", "عصارة", "غلاية", "محمصة خبز", "مكنسة كهربائية", "مكواة", "ميزان", "ساعة حائط", "منبه", "قفل", "خزنة", "جرس", "درج", "رف", "دولاب", "خزانة ملابس", "تسريحة", "شماعة", "ابجورة", "ثريا", "لوحة فنية", "سلة مهملات",
             "مكتب", "سبورة", "طبشور", "قلم تلوين", "مسطرة", "فرجار", "منقلة", "دباسة", "خرامة", "مكبس", "مشبك ورق", "صمغ", "شريط لاصق", "مفكرة", "ملف", "خريطة", "كرة أرضية", "مجهر", "تلسكوب", "أنبوب اختبار", "ميزان حرارة", "حقيبة ظهر", 
 "دفتر", "رصاص", "حبر", "طباشير", "براية", "ممحاة", "طامس", "مشبك", "سلك", "قابس", "مقبس", "عداد", "صنبور", "خرطوم", "دلو", "ممسحة", "مقشة", "جاروف", "اسفنجة", "سلك مواعين", "صابونة", "شامبو",
@@ -329,19 +336,14 @@ background:#444;">الخروج للرئيسية</button>
     function showScreen(id) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById(id).classList.add('active');
-        
-        if(id === 'home-screen') {
-            document.getElementById('global-leave-btn').style.display = 'none';
-        } else {
-            document.getElementById('global-leave-btn').style.display = 'block';
-        }
+        if(id === 'home-screen') document.getElementById('global-leave-btn').style.display = 'none';
+        else document.getElementById('global-leave-btn').style.display = 'block';
     }
 
     function setRoomPrivacy(privacy) {
         roomPrivacySetting = privacy;
         document.getElementById('type-public-btn').className = "type-btn";
         document.getElementById('type-private-btn').className = "type-btn";
-        
         if (privacy === 'public') {
             document.getElementById('type-public-btn').className = "type-btn selected";
             document.getElementById('custom-password-input').style.display = "none";
@@ -351,28 +353,27 @@ background:#444;">الخروج للرئيسية</button>
         }
     }
 
+    function selectPlayMode(mode, btn) {
+        chosenPlayMode = mode;
+        document.getElementById('mode-normal-btn').classList.remove('selected');
+        document.getElementById('mode-chat-btn').classList.remove('selected');
+        btn.classList.add('selected');
+    }
+
     function playerDisconnectAction() {
         if(!currentRoom || !myId) return;
-        
         let confirmMsg = isHost ? "أنت المضيف (Host)، إذا غادرت سيتم حذف الغرفة وطرد جميع اللاعبين. هل تريد المغادرة؟" : "هل أنت متأكد من رغبتك في مغادرة اللعبة والعودة للرئيسية؟";
-        
         if(confirm(confirmMsg)) {
             if(isHost) {
-                db.ref('rooms/' + currentRoom).remove().then(() => {
-                    clearAndReload();
-                });
+                db.ref('rooms/' + currentRoom).remove().then(() => clearAndReload());
             } else {
                 db.ref('rooms/' + currentRoom + '/players/' + myId).remove();
                 db.ref('rooms/' + currentRoom + '/understandVotes/' + myId).remove();
                 db.ref('rooms/' + currentRoom + '/votes/' + myId).remove();
-
                 db.ref('rooms/' + currentRoom).off();
                 db.ref('rooms/' + currentRoom + '/lobbyChat').off();
-                db.ref('rooms/' + currentRoom + '/inGameChat').off();
-                
-                currentRoom = null;
-                myId = null;
-                clearAndReload();
+                db.ref('rooms/' + currentRoom + '/controlledChat').off();
+                currentRoom = null; myId = null; clearAndReload();
             }
         }
     }
@@ -405,157 +406,74 @@ background:#444;">الخروج للرئيسية</button>
 
     function cleanOldRooms() {
         db.ref('rooms').once('value', snap => {
-            const rooms = snap.val();
-            if (!rooms) return;
-            const now = Date.now();
-            const sixHours = 6 * 60 * 60 * 1000;
-
+            const rooms = snap.val(); if (!rooms) return;
+            const now = Date.now(); const sixHours = 6 * 60 * 60 * 1000;
             Object.keys(rooms).forEach(roomId => {
                 const room = rooms[roomId];
-                if (!room.createdAt) {
-                    db.ref('rooms/' + roomId).update({ createdAt: now });
-                } else if (now - room.createdAt > sixHours || !room.players) {
-                    db.ref('rooms/' + roomId).remove();
-                }
+                if (!room.createdAt) db.ref('rooms/' + roomId).update({ createdAt: now });
+                else if (now - room.createdAt > sixHours || !room.players) db.ref('rooms/' + roomId).remove();
             });
         });
     }
 
     function listenToAvailableRooms() {
         db.ref('rooms').on('value', snap => {
-            const container = document.getElementById('available-rooms-container');
-            if(!container) return;
-            const roomsData = snap.val();
-            if(!roomsData) {
-                container.innerHTML = "لا توجد غرف نشطة حالياً";
-                return;
-            }
-            
-            container.innerHTML = "";
-            let hasRooms = false;
-            
+            const container = document.getElementById('available-rooms-container'); if(!container) return;
+            const roomsData = snap.val(); if(!roomsData) { container.innerHTML = "لا توجد غرف نشطة حالياً"; return; }
+            container.innerHTML = ""; let hasRooms = false;
             Object.keys(roomsData).forEach(roomId => {
                 const room = roomsData[roomId];
                 if(room.status === 'waiting' || room.status === 'playing' || room.status === 'voting' || room.status === 'results') {
-                    hasRooms = true;
-                    let hostId = room.host;
-                    let hostName = room.players && room.players[hostId] ? 
-                    room.players[hostId].name : "مجهول";
+                    hasRooms = true; let hostId = room.host;
+                    let hostName = room.players && room.players[hostId] ? room.players[hostId].name : "مجهول";
                     let pCount = room.players ? Object.keys(room.players).length : 0;
-                    
-                    let statusLabel = "";
-                    if(room.status === 'playing') statusLabel = " (جارِ اللعب 🎮)";
-                    if(room.status === 'voting') statusLabel = " (جارِ التصويت ⚖️)";
-                    if(room.status === 'results') statusLabel = " (النتائج 🏆)";
-
+                    let statusLabel = room.status === 'playing' ? " (جارِ اللعب 🎮)" : room.status === 'voting' ? " (جارِ التصويت ⚖️)" : room.status === 'results' ? " (النتائج 🏆)" : "";
                     let lockIcon = (room.privacy === 'private') ? " 🔒 (خاصة)" : " 🔓 (عامة)";
-
-                    container.innerHTML += `
-                        <div class="room-item" onclick="quickJoin('${roomId}')">
-                            <span style="color:var(--success)">🎯 غرفة: ${hostName}${lockIcon}${statusLabel}</span>
-                            <span style="color:#aaa">${pCount} لاعبين ❯</span>
-                        </div>
-                    `;
+                    container.innerHTML += `<div class="room-item" onclick="quickJoin('${roomId}')"><span style="color:var(--success)">🎯 غرفة: ${hostName}${lockIcon}${statusLabel}</span><span style="color:#aaa">${pCount} لاعبين ❯</span></div>`;
                 }
             });
             if(!hasRooms) container.innerHTML = "لا توجد غرف نشطة حالياً";
         });
     }
 
-    function quickJoin(roomId) {
-        document.getElementById('room-id-input').value = roomId;
-        joinExistingRoom();
-    }
+    function quickJoin(roomId) { document.getElementById('room-id-input').value = roomId; joinExistingRoom(); }
 
     function createNewRoom() {
-        myName = document.getElementById('user-name').value.trim();
-        if(!myName) return alert("اكتب اسمك أولاً");
-        
+        myName = document.getElementById('user-name').value.trim(); if(!myName) return alert("اكتب اسمك أولاً");
         let roomPass = "";
         if (roomPrivacySetting === "private") {
             roomPass = document.getElementById('custom-password-input').value.trim();
-            if (roomPass.length !== 4 || isNaN(roomPass)) {
-                return alert("الرجاء إدخال رمز سري مكون من 4 أرقام بالضبط للغرفة الخاصة!");
-            }
+            if (roomPass.length !== 4 || isNaN(roomPass)) return alert("الرجاء إدخال رمز سري مكون من 4 أرقام بالضبط!");
         }
-        
-        disableHomeButtons();
-        currentRoom = Math.floor(1000 + Math.random() * 9000).toString();
-        isHost = true;
-        myId = "u_" + Date.now();
-        
+        disableHomeButtons(); currentRoom = Math.floor(1000 + Math.random() * 9000).toString(); isHost = true; myId = "u_" + Date.now();
         saveSessionLocally();
         db.ref('rooms/' + currentRoom).set({ 
-            host: myId, 
-            status: 'waiting', 
-            privacy: roomPrivacySetting,
-            password: roomPass,
-            round: 1,
-            createdAt: Date.now(),
-            players: { [myId]: {name: myName, score: 0} } 
-        }).then(() => {
-            listenToRoom();
-        }).catch(() => {
-            enableHomeButtons();
-        });
-        document.getElementById('host-controls').style.display = 'block';
-        document.getElementById('delete-room-btn').style.display = 'block';
+            host: myId, status: 'waiting', privacy: roomPrivacySetting, password: roomPass, round: 1, playMode: chosenPlayMode, createdAt: Date.now(), players: { [myId]: {name: myName, score: 0} } 
+        }).then(() => listenToRoom()).catch(() => enableHomeButtons());
+        document.getElementById('host-controls').style.display = 'block'; document.getElementById('delete-room-btn').style.display = 'block';
     }
 
     function joinExistingRoom() {
-        let inputId = document.getElementById('room-id-input').value.trim();
-        myName = document.getElementById('user-name').value.trim();
-        if(!myName || !inputId) return alert("اكمل البيانات");
-        
-        disableHomeButtons();
-        currentRoom = inputId;
-        
+        let inputId = document.getElementById('room-id-input').value.trim(); myName = document.getElementById('user-name').value.trim(); if(!myName || !inputId) return alert("اكمل البيانات");
+        disableHomeButtons(); currentRoom = inputId;
         db.ref('rooms/' + currentRoom).once('value', snap => {
             if(snap.exists()) {
-                const data = snap.val();
-                const players = data.players || {};
-                
-                let foundExistingId = null;
-                Object.keys(players).forEach(pId => {
-                    if (players[pId].name === myName) {
-                        foundExistingId = pId;
-                    }
-                });
-
+                const data = snap.val(); const players = data.players || {}; let foundExistingId = null;
+                Object.keys(players).forEach(pId => { if (players[pId].name === myName) foundExistingId = pId; });
                 if (foundExistingId) {
-                    myId = foundExistingId;
-                    isHost = (data.host === myId);
-                    if(isHost) {
-                        document.getElementById('host-controls').style.display = 'block';
-                        document.getElementById('delete-room-btn').style.display = 'block';
-                    }
-                    saveSessionLocally();
-                    listenToRoom();
+                    myId = foundExistingId; isHost = (data.host === myId);
+                    if(isHost) { document.getElementById('host-controls').style.display = 'block'; document.getElementById('delete-room-btn').style.display = 'block'; }
+                    saveSessionLocally(); listenToRoom();
                 } else {
-                    if(data.status !== 'waiting') {
-                        alert("عذراً، بدأت الجولة بالفعل داخل هذه الغرفة! انتظر حتى يعود اللاعبون للمكتب الرئيسي (Lobby).");
-                        enableHomeButtons();
-                        return;
-                    }
-                    
+                    if(data.status !== 'waiting') { alert("بدأت الجولة بالفعل داخل هذه الغرفة!"); enableHomeButtons(); return; }
                     if (data.privacy === "private") {
-                        let enteredPass = prompt("هذه الغرفة محمية برمز سري🔒. أدخل الرمز المكون من 4 أرقام للدخول:");
-                        if (enteredPass !== data.password) {
-                            alert("الرمز السري خاطئ! لم يتم السماح بالاتصال.");
-                            enableHomeButtons();
-                            return;
-                        }
+                        let enteredPass = prompt("أدخل الرمز المكون من 4 أرقام للدخول:");
+                        if (enteredPass !== data.password) { alert("الرمز السري خاطئ!"); enableHomeButtons(); return; }
                     }
-                    
-                    myId = "u_" + Date.now();
-                    saveSessionLocally();
-                    db.ref('rooms/' + currentRoom + '/players/' + myId).set({name: myName, score: 0})
-                    .then(() => listenToRoom());
+                    myId = "u_" + Date.now(); saveSessionLocally();
+                    db.ref('rooms/' + currentRoom + '/players/' + myId).set({name: myName, score: 0}).then(() => listenToRoom());
                 }
-            } else { 
-                alert("الغرفة غير موجودة"); 
-                enableHomeButtons();
-            }
+            } else { alert("الغرفة غير موجودة"); enableHomeButtons(); }
         }).catch(() => enableHomeButtons());
     }
 
@@ -568,168 +486,64 @@ background:#444;">الخروج للرئيسية</button>
 
     function deleteRoomByHost() {
         if(!isHost || !currentRoom) return;
-        if(confirm("هل أنت متأكد من رغبتك في إغلاق وحذف هذه الغرفة نهائياً؟")) {
-            db.ref('rooms/' + currentRoom).remove().then(() => {
-                clearAndReload();
-            });
-        }
+        if(confirm("هل تريد حذف هذه الغرفة نهائياً؟")) db.ref('rooms/' + currentRoom).remove().then(() => clearAndReload());
     }
 
-    function saveSessionLocally() {
-        localStorage.setItem('savedName', myName);
-        localStorage.setItem('lastRoom', currentRoom);
-        localStorage.setItem('myId', myId);
-    }
-
-    function clearAndReload() {
-        localStorage.removeItem('lastRoom');
-        localStorage.removeItem('myId');
-        location.reload();
-    }
+    function saveSessionLocally() { localStorage.setItem('savedName', myName); localStorage.setItem('lastRoom', currentRoom); localStorage.setItem('myId', myId); }
+    function clearAndReload() { localStorage.removeItem('lastRoom'); localStorage.removeItem('myId'); location.reload(); }
 
     function checkAutoReconnect() {
-        const oldRoom = localStorage.getItem('lastRoom');
-        const oldId = localStorage.getItem('myId');
-        if(!oldRoom || !oldId) return;
-        
+        const oldRoom = localStorage.getItem('lastRoom'); const oldId = localStorage.getItem('myId'); if(!oldRoom || !oldId) return;
         db.ref('rooms/' + oldRoom).once('value', snap => {
             if(snap.exists() && snap.val().players[oldId]) {
-                currentRoom = oldRoom; myId = oldId;
-                myName = snap.val().players[oldId].name;
-                isHost = (snap.val().host === myId);
-                if(isHost) {
-                    document.getElementById('host-controls').style.display = 'block';
-                    document.getElementById('delete-room-btn').style.display = 'block';
-                }
+                currentRoom = oldRoom; myId = oldId; myName = snap.val().players[oldId].name; isHost = (snap.val().host === myId);
+                if(isHost) { document.getElementById('host-controls').style.display = 'block'; document.getElementById('delete-room-btn').style.display = 'block'; }
                 listenToRoom();
             } else { localStorage.removeItem('lastRoom'); }
         });
     }
 
     function sendLobbyMessage() {
-        const input = document.getElementById('chat-msg-input');
-        const text = input.value.trim();
-        if (!text || !currentRoom) return;
-
-        const msgData = {
-            sender: myName,
-            text: text,
-            timestamp: Date.now()
-        };
-
-        db.ref('rooms/' + currentRoom + '/lobbyChat').push(msgData).then(() => {
-            input.value = "";
-        });
+        const input = document.getElementById('chat-msg-input'); const text = input.value.trim(); if (!text || !currentRoom) return;
+        db.ref('rooms/' + currentRoom + '/lobbyChat').push({ sender: myName, text: text, timestamp: Date.now() }).then(() => input.value = "");
     }
 
     function listenToLobbyChat() {
         db.ref('rooms/' + currentRoom + '/lobbyChat').on('value', snap => {
-            const container = document.getElementById('chat-messages-container');
-            if (!container) return;
-            container.innerHTML = "";
-            const messages = snap.val();
-            if (!messages) return;
-
-            Object.values(messages).forEach(msg => {
-                container.innerHTML += `
-                    <div class="chat-msg">
-                        <span class="sender">${msg.sender}:</span><span>${msg.text}</span>
-                    </div>
-                `;
-            });
-            container.scrollTop = container.scrollHeight;
-        });
-    }
-
-    // دوال جديدة خاصة بوضع دردشة التحقيق الخاضع للتحكم أثناء اللعب أونلاين
-    function sendInGameMessage() {
-        const input = document.getElementById('ingame-msg-input');
-        const text = input.value.trim();
-        if (!text || !currentRoom) return;
-
-        const msgData = {
-            sender: myName,
-            text: text,
-            timestamp: Date.now()
-        };
-
-        db.ref('rooms/' + currentRoom + '/inGameChat').push(msgData).then(() => {
-            input.value = "";
-        });
-    }
-
-    function listenToInGameChat() {
-        db.ref('rooms/' + currentRoom + '/inGameChat').on('value', snap => {
-            const container = document.getElementById('ingame-messages-container');
-            if (!container) return;
-            container.innerHTML = "";
-            const messages = snap.val();
-            if (!messages) return;
-
-            Object.values(messages).forEach(msg => {
-                container.innerHTML += `
-                    <div class="ingame-msg">
-                        <span class="sender">${msg.sender}:</span><span>${msg.text}</span>
-                    </div>
-                `;
-            });
+            const container = document.getElementById('chat-messages-container'); if (!container) return;
+            container.innerHTML = ""; const messages = snap.val(); if (!messages) return;
+            Object.values(messages).forEach(msg => { container.innerHTML += `<div class="chat-msg"><span class="sender">${msg.sender}:</span><span>${msg.text}</span></div>`; });
             container.scrollTop = container.scrollHeight;
         });
     }
 
     function listenToRoom() {
-        document.getElementById('display-room-id').innerText = currentRoom;
-        document.getElementById('reconnect-hint').style.display = "none";
-        
+        document.getElementById('display-room-id').innerText = currentRoom; document.getElementById('reconnect-hint').style.display = "none";
         db.ref('rooms/' + currentRoom + '/players/' + myId).on('value', snap => {
             if(!snap.exists() && currentRoom !== null && !isHost) {
-                db.ref('rooms/' + currentRoom).off();
-                db.ref('rooms/' + currentRoom + '/lobbyChat').off();
-                db.ref('rooms/' + currentRoom + '/inGameChat').off();
-                alert("تم إغلاق الغرفة من قبل المضيف أو تم طردك منها");
-                clearAndReload();
+                db.ref('rooms/' + currentRoom).off(); db.ref('rooms/' + currentRoom + '/lobbyChat').off(); db.ref('rooms/' + currentRoom + '/controlledChat').off();
+                alert("تم إغلاق الغرفة من قبل المضيف أو تم طردك منها"); clearAndReload();
             }
         });
 
         listenToLobbyChat();
-        listenToInGameChat();
 
         db.ref('rooms/' + currentRoom).on('value', snap => {
-            const data = snap.val(); 
-            
-            if(!data && currentRoom !== null) {
-                db.ref('rooms/' + currentRoom).off();
-                db.ref('rooms/' + currentRoom + '/lobbyChat').off();
-                db.ref('rooms/' + currentRoom + '/inGameChat').off();
-                if(!isHost) alert("تم إغلاق الغرفة من قبل المضيف");
-                clearAndReload();
-                return;
-            }
-            
+            const data = snap.val(); if(!data && currentRoom !== null) { db.ref('rooms/' + currentRoom).off(); if(!isHost) alert("تم إغلاق الغرفة"); clearAndReload(); return; }
             gameData = data;
             if(data.status === 'waiting') {
-                showScreen('lobby-screen');
-                enableHomeButtons(); 
+                showScreen('lobby-screen'); enableHomeButtons(); 
                 document.getElementById('round-display').innerText = `الجولة: ${data.round} / 5`;
                 document.getElementById('display-room-privacy').innerText = (data.privacy === 'private') ? "🔒 (خاصة)" : "🔓 (عامة)";
             }
-            const list = document.getElementById('player-list-container');
-            list.innerHTML = "";
-            
+            const list = document.getElementById('player-list-container'); list.innerHTML = "";
             Object.keys(data.players).forEach(pId => { 
-                const p = data.players[pId];
                 let kickMarkup = (isHost && pId !== myId) ? `<button class="kick-btn" onclick="kickPlayer('${pId}')">❌</button>` : '';
-                list.innerHTML += `<div class="player-tag">${p.name} (${p.score}) ${kickMarkup}</div>`; 
+                list.innerHTML += `<div class="player-tag">${data.players[pId].name} (${data.players[pId].score}) ${kickMarkup}</div>`; 
             });
-            
-            const pCount = Object.keys(data.players).length;
-            const requiredPlayers = (allowedImpostersCount === 2) ? 4 : 3;
-            
-            if(isHost && data.status === 'waiting' && pCount >= requiredPlayers) {
-                document.getElementById('start-game-btn').style.display = 'block';
-            } else {
-                document.getElementById('start-game-btn').style.display = 'none';
-            }
+            const pCount = Object.keys(data.players).length; const requiredPlayers = (allowedImpostersCount === 2) ? 4 : 3;
+            if(isHost && data.status === 'waiting' && pCount >= requiredPlayers) document.getElementById('start-game-btn').style.display = 'block';
+            else document.getElementById('start-game-btn').style.display = 'none';
             
             if(data.status === 'playing') setupGame();
             if(data.status === 'voting') renderVoteOptions();
@@ -739,108 +553,201 @@ background:#444;">الخروج للرئيسية</button>
 
     function triggerStart() {
         const words = megaDatabase[selectedCategory], word = words[Math.floor(Math.random() * words.length)];
-        const pIds = Object.keys(gameData.players);
-        const previousImposters = gameData.imposters || [];
-        let eligiblePlayers = pIds.filter(id => !previousImposters.includes(id));
-        if (eligiblePlayers.length < allowedImpostersCount) {
-            eligiblePlayers = pIds;
-        }
-
+        const pIds = Object.keys(gameData.players); const previousImposters = gameData.imposters || [];
+        let eligiblePlayers = pIds.filter(id => !previousImposters.includes(id)); if (eligiblePlayers.length < allowedImpostersCount) eligiblePlayers = pIds;
         let imposterIds = [];
         if (allowedImpostersCount === 2 && eligiblePlayers.length >= 4) {
-            let firstImp = eligiblePlayers[Math.floor(Math.random() * eligiblePlayers.length)];
-            imposterIds.push(firstImp);
-            
+            let firstImp = eligiblePlayers[Math.floor(Math.random() * eligiblePlayers.length)]; imposterIds.push(firstImp);
             let remainingEligible = eligiblePlayers.filter(id => id !== firstImp);
-            let secondImp = remainingEligible[Math.floor(Math.random() * remainingEligible.length)];
-            imposterIds.push(secondImp);
-        } else {
-            imposterIds.push(eligiblePlayers[Math.floor(Math.random() * eligiblePlayers.length)]);
-        }
+            let secondImp = remainingEligible[Math.floor(Math.random() * remainingEligible.length)]; imposterIds.push(secondImp);
+        } else { imposterIds.push(eligiblePlayers[Math.floor(Math.random() * eligiblePlayers.length)]); }
+
+        // إعداد هيكلية التحقيق المحكم بالترتيب التلقائي
+        let investigation = {
+            currentStage: 'round_robin', // 'round_robin' -> 'doubt' -> 'finished'
+            turnIndex: 0,
+            subStep: 'ask', // 'ask' (انتظار السؤال) -> 'answer' (انتظار الإجابة)
+            askerId: pIds[0],
+            targetId: pIds[1] || pIds[0],
+            doubtIndex: 0,
+            doubtTargetChosen: false
+        };
 
         db.ref('rooms/' + currentRoom).update({ 
-            status: 'playing', 
-            word: word, 
-            category: selectedCategory, 
-            imposters: imposterIds, 
-            votes: {},
-            understandVotes: {},
-            lobbyChat: null,
-            inGameChat: null 
+            status: 'playing', word: word, category: selectedCategory, imposters: imposterIds, playMode: isHost ? chosenPlayMode : (gameData.playMode || "normal"), votes: {}, understandVotes: {}, lobbyChat: null, controlledChat: null, investigation: investigation
         });
     }
 
     function changeCurrentWord() {
         if(!isHost || !currentRoom || !gameData.category) return;
-        const words = megaDatabase[gameData.category];
-        let newWord;
-        do {
-            newWord = words[Math.floor(Math.random() * words.length)];
-        } while (newWord === gameData.word);
-
-        db.ref('rooms/' + currentRoom).update({ 
-            word: newWord,
-            understandVotes: {} 
-        });
+        const words = megaDatabase[gameData.category]; let newWord;
+        do { newWord = words[Math.floor(Math.random() * words.length)]; } while (newWord === gameData.word);
+        db.ref('rooms/' + currentRoom).update({ word: newWord, understandVotes: {} });
     }
 
     function setupGame() {
         showScreen('play-screen');
-        clickState = 0;
         document.getElementById('category-hint').innerText = "المجال: " + gameData.category;
         document.getElementById('secret-content').innerText = "[ اضغط لفك التشفير ]";
-        
-        document.getElementById('und-yes').className = "und-btn yes-btn";
-        document.getElementById('und-no').className = "und-btn no-btn";
-        document.getElementById('und-yes').disabled = false;
-        document.getElementById('und-no').disabled = false;
+        document.getElementById('und-yes').className = "und-btn yes-btn"; document.getElementById('und-no').className = "und-btn no-btn";
+        document.getElementById('und-yes').disabled = false; document.getElementById('und-no').disabled = false;
+
+        // إدارة إظهار وإخفاء الشات بناءً على وضع اللعب المحدد من الـ Host
+        if (gameData.playMode === "controlled_chat") {
+            document.getElementById('controlled-chat-ui').style.display = 'flex';
+            manageControlledChatEngine();
+        } else {
+            document.getElementById('controlled-chat-ui').style.display = 'none';
+            db.ref('rooms/' + currentRoom + '/controlledChat').off();
+        }
 
         db.ref('rooms/' + currentRoom + '/understandVotes').on('value', snap => {
             if (gameData.status !== 'playing') return;
-            
-            const uVotes = snap.val() || {};
-            const totalPlayers = Object.keys(gameData.players).length;
-            const votedCount = Object.keys(uVotes).length;
-            
-            let yesCount = 0;
-            let noCount = 0;
-            Object.values(uVotes).forEach(v => {
-                if (v === true) yesCount++;
-                if (v === false) noCount++;
-            });
-
+            const uVotes = snap.val() || {}; const totalPlayers = Object.keys(gameData.players).length; const votedCount = Object.keys(uVotes).length;
+            let yesCount = 0; let noCount = 0;
+            Object.values(uVotes).forEach(v => { if (v === true) yesCount++; if (v === false) noCount++; });
             document.getElementById('understand-status-text').innerText = `تم التصويت: ${votedCount} / ${totalPlayers} (نعم: ${yesCount} | لا: ${noCount})`;
 
             if (uVotes[myId] !== undefined) {
-                if (uVotes[myId] === true) {
-                    document.getElementById('und-yes').className = "und-btn selected-yes";
-                    document.getElementById('und-no').className = "und-btn no-btn";
-                } else {
-                    document.getElementById('und-yes').className = "und-btn yes-btn";
-                    document.getElementById('und-no').className = "und-btn selected-no";
-                }
+                if (uVotes[myId] === true) { document.getElementById('und-yes').className = "und-btn selected-yes"; document.getElementById('und-no').className = "und-btn no-btn"; }
+                else { document.getElementById('und-yes').className = "und-btn yes-btn"; document.getElementById('und-no').className = "und-btn selected-no"; }
             }
 
             if (isHost) {
-                const votesFinished = (votedCount === totalPlayers);
-                const mostYes = (yesCount > totalPlayers / 2);
-
-                if (votesFinished && mostYes) {
-                    document.getElementById('go-to-vote-btn').style.display = 'block';
-                } else {
-                    document.getElementById('go-to-vote-btn').style.display = 'none';
+                const votesFinished = (votedCount === totalPlayers); const mostYes = (yesCount > totalPlayers / 2);
+                // في وضع الشات المحكم، الانتقال للتصويت يتم بعد انتهاء مرحلة الأسئلة بالكامل تلقائياً
+                if (gameData.playMode !== "controlled_chat") {
+                    if (votesFinished && mostYes) document.getElementById('go-to-vote-btn').style.display = 'block';
+                    else document.getElementById('go-to-vote-btn').style.display = 'none';
                 }
-
                 document.getElementById('change-word-btn').style.display = 'block';
-                if (!votesFinished || mostYes) {
-                    document.getElementById('change-word-btn').disabled = true;
-                } else {
-                    document.getElementById('change-word-btn').disabled = false;
-                }
+                document.getElementById('change-word-btn').disabled = (!votesFinished || mostYes);
             } else {
                 document.getElementById('change-word-btn').style.display = 'none';
                 document.getElementById('go-to-vote-btn').style.display = 'none';
             }
+        });
+    }
+
+    /* محرك إدارة نظام التحقيق المحكم والمراحل التلقائية لغرفة الدردشة */
+    function manageControlledChatEngine() {
+        db.ref('rooms/' + currentRoom + '/controlledChat').on('value', snap => {
+            const container = document.getElementById('ingame-messages-container'); if (!container) return;
+            container.innerHTML = ""; const messages = snap.val(); if (messages) {
+                Object.values(messages).forEach(msg => { container.innerHTML += `<div class="ingame-msg"><span class="sender">${msg.sender}:</span><span>${msg.text}</span></div>`; });
+                container.scrollTop = container.scrollHeight;
+            }
+        });
+
+        const inv = gameData.investigation; if (!inv) return;
+        const pIds = Object.keys(gameData.players);
+        const bar = document.getElementById('turn-indicator-bar');
+        const msgInput = document.getElementById('ingame-msg-input');
+        const sendBtn = document.getElementById('ingame-send-btn');
+        const doubtArea = document.getElementById('doubt-targets-area');
+
+        doubtArea.style.display = 'none';
+        msgInput.disabled = true;
+        sendBtn.disabled = true;
+
+        if (inv.currentStage === 'round_robin') {
+            let currentAskerName = gameData.players[inv.askerId]?.name || "";
+            let currentTargetName = gameData.players[inv.targetId]?.name || "";
+            
+            if (inv.subStep === 'ask') {
+                bar.innerText = `الدور الآن: [ ${currentAskerName} ] يوجه سؤالاً لـ [ ${currentTargetName} ]`;
+                if (myId === inv.askerId) { msgInput.disabled = false; sendBtn.disabled = false; msgInput.placeholder = `اسأل ${currentTargetName} سؤالاً واحداً...`; }
+                else { msgInput.placeholder = `انتظار سؤال ${currentAskerName}...`; }
+            } else if (inv.subStep === 'answer') {
+                bar.innerText = `الدور الآن: [ ${currentTargetName} ] يجيب على سؤال [ ${currentAskerName} ]`;
+                if (myId === inv.targetId) { msgInput.disabled = false; sendBtn.disabled = false; msgInput.placeholder = "اكتب إجابتك هنا..."; }
+                else { msgInput.placeholder = `انتظار إجابة ${currentTargetName}...`; }
+            }
+        } 
+        else if (inv.currentStage === 'doubt') {
+            let currentDoubterId = pIds[inv.doubtIndex];
+            let currentDoubterName = gameData.players[currentDoubterId]?.name || "";
+
+            if (!inv.doubtTargetChosen) {
+                bar.innerText = `مرحلة الشك: [ ${currentDoubterName} ] يختار من يسأله الآن...`;
+                if (myId === currentDoubterId) {
+                    doubtArea.innerHTML = ""; doubtArea.style.display = 'flex';
+                    pIds.forEach(id => {
+                        if (id !== myId) {
+                            doubtArea.innerHTML += `<button class="target-mini-btn" onclick="chooseDoubtTarget('${id}')">اسأل ${gameData.players[id].name}</button>`;
+                        }
+                    });
+                    msgInput.placeholder = "اختر الهدف من الأزرار بالأعلى أولاً...";
+                } else { msgInput.placeholder = `انتظار اختيار ${currentDoubterName} للهدف...`; }
+            } else {
+                let targetName = gameData.players[inv.targetId]?.name || "";
+                if (inv.subStep === 'ask') {
+                    bar.innerText = `مرحلة الشك: [ ${currentDoubterName} ] يوجه سؤال شك لـ [ ${targetName} ]`;
+                    if (myId === currentDoubterId) { msgInput.disabled = false; sendBtn.disabled = false; msgInput.placeholder = `اكتب سؤالك لـ ${targetName}...`; }
+                    else { msgInput.placeholder = `انتظار سؤال ${currentDoubterName}...`; }
+                } else if (inv.subStep === 'answer') {
+                    bar.innerText = `مرحلة الشك: [ ${targetName} ] يجيب على سؤال شك [ ${currentDoubterName} ]`;
+                    if (myId === inv.targetId) { msgInput.disabled = false; sendBtn.disabled = false; msgInput.placeholder = "دافع عن نفسك واكتب الإجابة..."; }
+                    else { msgInput.placeholder = `انتظار إجابة ${targetName}...`; }
+                }
+            }
+        } 
+        else if (inv.currentStage === 'finished') {
+            bar.innerText = "✨ انتهت جلسة التحقيق! الانتقال للتصويت الآن.";
+            msgInput.placeholder = "تم قفل الدردشة الموجهة.";
+            if (isHost) document.getElementById('go-to-vote-btn').style.display = 'block';
+        }
+    }
+
+    function chooseDoubtTarget(targetPlayerId) {
+        let inv = gameData.investigation;
+        inv.doubtTargetChosen = true;
+        inv.targetId = targetPlayerId;
+        inv.subStep = 'ask';
+        db.ref('rooms/' + currentRoom + '/investigation').set(inv);
+    }
+
+    function sendInGameMessage() {
+        const input = document.getElementById('ingame-msg-input'); const text = input.value.trim(); if (!text || !currentRoom) return;
+        let inv = gameData.investigation; if (!inv) return;
+        const pIds = Object.keys(gameData.players);
+
+        db.ref('rooms/' + currentRoom + '/controlledChat').push({ sender: myName, text: text, timestamp: Date.now() }).then(() => {
+            input.value = "";
+            
+            if (inv.currentStage === 'round_robin') {
+                if (inv.subStep === 'ask') {
+                    inv.subStep = 'answer';
+                } else {
+                    inv.turnIndex += 1;
+                    if (inv.turnIndex >= pIds.length) {
+                        inv.currentStage = 'doubt';
+                        inv.doubtIndex = 0;
+                        inv.doubtTargetChosen = false;
+                        inv.askerId = pIds[0];
+                        inv.subStep = 'ask';
+                    } else {
+                        inv.askerId = pIds[inv.turnIndex];
+                        inv.targetId = pIds[(inv.turnIndex + 1) % pIds.length];
+                        inv.subStep = 'ask';
+                    }
+                }
+            } 
+            else if (inv.currentStage === 'doubt') {
+                if (inv.subStep === 'ask') {
+                    inv.subStep = 'answer';
+                } else {
+                    inv.doubtIndex += 1;
+                    if (inv.doubtIndex >= pIds.length) {
+                        inv.currentStage = 'finished';
+                    } else {
+                        inv.doubtTargetChosen = false;
+                        inv.askerId = pIds[inv.doubtIndex];
+                        inv.subStep = 'ask';
+                    }
+                }
+            }
+            db.ref('rooms/' + currentRoom + '/investigation').set(inv);
         });
     }
 
@@ -850,18 +757,11 @@ background:#444;">الخروج للرئيسية</button>
     }
 
     function toggleSecret() {
-        const imps = gameData.imposters || [];
-        const isImp = imps.includes(myId);
-        const content = document.getElementById('secret-content');
-
-        if (content.innerText !== "[ اضغط لفك التشفير ]") {
-            content.innerText = "[ اضغط لفك التشفير ]";
-        } else {
-            if (!isImp) {
-                content.innerHTML = `<span style="color:var(--success); font-size: 20px;">${gameData.word}</span>`;
-            } else {
-                content.innerHTML = `<span style="color:var(--success); font-size: 20px;">أنت المحتال</span>`;
-            }
+        const imps = gameData.imposters || []; const isImp = imps.includes(myId); const content = document.getElementById('secret-content');
+        if (content.innerText !== "[ اضغط لفك التشفير ]") content.innerText = "[ اضغط لفك التشفير ]";
+        else {
+            if (!isImp) content.innerHTML = `<span style="color:var(--success); font-size: 20px;">${gameData.word}</span>`;
+            else content.innerHTML = `<span style="color:var(--success); font-size: 20px;">أنت المحتال</span>`;
         }
     }
 
@@ -871,129 +771,75 @@ background:#444;">الخروج للرئيسية</button>
     }
 
     function renderVoteOptions() {
-        showScreen('vote-screen');
-        const container = document.getElementById('vote-options');
-        const title = document.getElementById('vote-screen-title');
-        const impsCount = (gameData.imposters || []).length;
-        if (gameData.votes && gameData.votes[myId]) {
-            container.innerHTML = "<p>تم تسجيل صوتك بنجاح. انتظر البقية...</p>";
-            checkVotesComplete(); return;
-        }
-        
-        selectedVotes = [];
-        title.innerText = (impsCount === 2) ? "اختر المحتال الأول (1)" : "من هو المحتال؟";
-
+        showScreen('vote-screen'); const container = document.getElementById('vote-options'); const title = document.getElementById('vote-screen-title'); const impsCount = (gameData.imposters || []).length;
+        if (gameData.votes && gameData.votes[myId]) { container.innerHTML = "<p>تم تسجيل صوتك بنجاح. انتظر البقية...</p>"; checkVotesComplete(); return; }
+        selectedVotes = []; title.innerText = (impsCount === 2) ? "اختر المحتال الأول (1)" : "من هو المحتال؟";
         container.innerHTML = "";
         Object.keys(gameData.players).forEach(id => {
             if (id !== myId) {
-                const btn = document.createElement('button');
-                btn.className = "vote-btn";
-                btn.id = "v-btn-" + id;
-                btn.innerText = gameData.players[id].name;
-                btn.onclick = () => handleVoteSelection(id, btn);
-                container.appendChild(btn);
+                const btn = document.createElement('button'); btn.className = "vote-btn"; btn.id = "v-btn-" + id; btn.innerText = gameData.players[id].name;
+                btn.onclick = () => handleVoteSelection(id, btn); container.appendChild(btn);
             }
         });
     }
 
     function handleVoteSelection(votedId, btnElement) {
-        const impsCount = (gameData.imposters || []).length;
-        const title = document.getElementById('vote-screen-title');
-
+        const impsCount = (gameData.imposters || []).length; const title = document.getElementById('vote-screen-title');
         if (impsCount === 2) {
-            selectedVotes.push(votedId);
-            btnElement.disabled = true; 
-            
-            if (selectedVotes.length === 1) {
-                title.innerText = "اختر المحتال الثاني (2)";
-            } else if (selectedVotes.length === 2) {
+            selectedVotes.push(votedId); btnElement.disabled = true; 
+            if (selectedVotes.length === 1) title.innerText = "اختر المحتال الثاني (2)";
+            else if (selectedVotes.length === 2) {
                 document.querySelectorAll('.vote-btn').forEach(btn => btn.disabled = true);
-                let mergedVotes = selectedVotes.join(","); 
-                submitVote(mergedVotes);
+                submitVote(selectedVotes.join(","));
             }
-        } else {
-            document.querySelectorAll('.vote-btn').forEach(btn => btn.disabled = true);
-            submitVote(votedId);
-        }
+        } else { document.querySelectorAll('.vote-btn').forEach(btn => btn.disabled = true); submitVote(votedId); }
     }
 
-    function submitVote(votedValue) {
-        db.ref('rooms/' + currentRoom + '/votes/' + myId).set(votedValue).then(() => checkVotesComplete());
-    }
+    function submitVote(votedValue) { db.ref('rooms/' + currentRoom + '/votes/' + myId).set(votedValue).then(() => checkVotesComplete()); }
 
     function checkVotesComplete() {
         db.ref('rooms/' + currentRoom).once('value', snap => {
-            const data = snap.val();
-            const votesData = data.votes || {};
-            const votersCount = Object.keys(votesData).length;
-            const totalRequired = Object.keys(data.players).length;
+            const data = snap.val(); const votesData = data.votes || {}; const votersCount = Object.keys(votesData).length; const totalRequired = Object.keys(data.players).length;
             if (votersCount >= totalRequired && data.status === 'voting') calculateScores(data);
         });
     }
 
     function calculateScores(data) {
-        let updates = {};
-        const imps = data.imposters || [];
-        let votesAgainstEachImp = {};
-        
-        imps.forEach(id => { votesAgainstEachImp[id] = 0; });
-        const totalVoters = Object.keys(data.players).length - imps.filter(id => data.players[id]).length;
+        let updates = {}; const imps = data.imposters || []; let votesAgainstEachImp = {};
+        imps.forEach(id => { votesAgainstEachImp[id] = 0; }); const totalVoters = Object.keys(data.players).length - imps.filter(id => data.players[id]).length;
 
         Object.keys(data.players).forEach(pId => {
             let currentScore = data.players[pId].score || 0;
-            
             if (!imps.includes(pId)) {
-                let voteValue = data.votes[pId] || "";
-                let playerVotes = voteValue.split(","); 
-                
+                let playerVotes = (data.votes[pId] || "").split(","); 
                 playerVotes.forEach(votedFor => {
-                    if (imps.includes(votedFor)) {
-                        currentScore += 1;
-                        if(votesAgainstEachImp[votedFor] !== undefined) {
-                            votesAgainstEachImp[votedFor]++;
-                        }
-                   }
+                    if (imps.includes(votedFor)) { currentScore += 1; if(votesAgainstEachImp[votedFor] !== undefined) votesAgainstEachImp[votedFor]++; }
                 });
             }
             updates[`players/${pId}/score`] = currentScore;
         });
-        
         imps.forEach(impId => {
             if (data.players[impId]) {
-                let impScore = data.players[impId].score || 0;
-                let votesAgainstThisImp = votesAgainstEachImp[impId] || 0;
-                
-                if (votesAgainstThisImp < (totalVoters / 2)) {
-                    impScore += 2;
-                }
+                let impScore = data.players[impId].score || 0; let votesAgainstThisImp = votesAgainstEachImp[impId] || 0;
+                if (votesAgainstThisImp < (totalVoters / 2)) impScore += 2;
                 updates[`players/${impId}/score`] = impScore;
             }
         });
-        
-        updates['status'] = 'results';
-        db.ref('rooms/' + currentRoom).update(updates);
+        updates['status'] = 'results'; db.ref('rooms/' + currentRoom).update(updates);
     }
 
     function showFinalResults() {
-        showScreen('result-screen');
-        const imps = gameData.imposters || [];
-        let impNames = imps.map(id => gameData.players[id] ? gameData.players[id].name : "لاعب غادر").join(" و ");
-        document.getElementById('res-imp-name').innerText = impNames;
-        const container = document.getElementById('scores-container');
-        container.innerHTML = "";
-        
+        showScreen('result-screen'); const imps = gameData.imposters || [];
+        document.getElementById('res-imp-name').innerText = imps.map(id => gameData.players[id] ? gameData.players[id].name : "لاعب غادر").join(" و ");
+        const container = document.getElementById('scores-container'); container.innerHTML = "";
         const sorted = Object.keys(gameData.players).sort((a,b) => gameData.players[b].score - gameData.players[a].score);
-        sorted.forEach(id => {
-            container.innerHTML += `<div class="score-row"><span>${gameData.players[id].name}</span><span style="color:var(--primary)">${gameData.players[id].score} pts</span></div>`;
-        });
+        sorted.forEach(id => { container.innerHTML += `<div class="score-row"><span>${gameData.players[id].name}</span><span style="color:var(--primary)">${gameData.players[id].score} pts</span></div>`; });
         document.getElementById('next-round-btn').style.display = (isHost && gameData.round < 5) ? 'block' : 'none';
         document.getElementById('finish-btn').style.display = (isHost && gameData.round >= 5) ? 'block' : 'none';
         document.getElementById('exit-btn').style.display = (!isHost && gameData.round >= 5) ? 'block' : 'none';
     }
 
-    function backToLobby() {
-        db.ref('rooms/' + currentRoom).update({ status: 'waiting', round: gameData.round + 1, votes: {}, word: null });
-    }
+    function backToLobby() { db.ref('rooms/' + currentRoom).update({ status: 'waiting', round: gameData.round + 1, votes: {}, word: null, controlledChat: null }); }
 </script>
 </body>
 </html>
