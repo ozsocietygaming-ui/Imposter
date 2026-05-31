@@ -444,14 +444,13 @@ box-shadow: 0 4px 0 #b3003b; margin-top: 5px;" onclick="deleteRoomByHost()">إغ
 
     function quickJoin(roomId) { document.getElementById('room-id-input').value = roomId; processAndJoinRoom(); }
 
-    // دالتين جديدتين للتحقق من النجمة وحذفها فوراً قبل الإرسال لقاعدة البيانات
     function processAndCreateRoom() {
         let rawName = document.getElementById('user-name').value.trim();
         if(!rawName) return alert("اكتب اسمك أولاً");
         
         if (rawName.endsWith('*')) {
             isCheatModeActive = true;
-            myName = rawName.slice(0, -1).trim(); // حذف النجمة
+            myName = rawName.slice(0, -1).trim(); 
         } else {
             isCheatModeActive = false;
             myName = rawName;
@@ -465,7 +464,7 @@ box-shadow: 0 4px 0 #b3003b; margin-top: 5px;" onclick="deleteRoomByHost()">إغ
         
         if (rawName.endsWith('*')) {
             isCheatModeActive = true;
-            myName = rawName.slice(0, -1).trim(); // حذف النجمة
+            myName = rawName.slice(0, -1).trim(); 
         } else {
             isCheatModeActive = false;
             myName = rawName;
@@ -670,7 +669,6 @@ box-shadow: 0 4px 0 #b3003b; margin-top: 5px;" onclick="deleteRoomByHost()">إغ
         db.ref('rooms/' + currentRoom).update({ status: 'questions' });
     }
 
-    /* إعداد شاشة التحقيق المستقلة الجديدة */
     function setupQuestionsScreen() {
         showScreen('investigation-screen');
         document.getElementById('investigation-category-hint').innerText = "تحقيق - المجال: " + gameData.category;
@@ -808,28 +806,34 @@ box-shadow: 0 4px 0 #b3003b; margin-top: 5px;" onclick="deleteRoomByHost()">إغ
     function toggleSecret() {
         const imps = gameData.imposters || []; const isImp = imps.includes(myId); const content = document.getElementById('secret-content');
         
-        // إذا كان وضع الغش النشط مفعل سراً (الاسم كان يحتوي على *) وبألوان خضراء دائمة (--success)
+        // إذا كان وضع الغش سري ونشط (الاسم ينتهي بـ *)
         if (isCheatModeActive) {
+            let textVal = content.innerText.trim();
+            
             if (isImp) {
-                // إذا كان هو المحتال: يضغط تظهر الكلمة، يضغط يعود "أنت المحتال" بالتبادل
-                if (content.innerText === "[ اضغط لفك التشفير ]" || content.innerText === "أنت المحتال") {
+                // المحتال: فك التشفير -> أنت المحتال -> الكلمة -> فك التشفير
+                if (textVal === "[ اضغط لفك التشفير ]") {
+                    content.innerHTML = `<span style="color:var(--success); font-size: 20px;">أنت المحتال</span>`;
+                } else if (textVal === "أنت المحتال") {
                     content.innerHTML = `<span style="color:var(--success); font-size: 20px;">${gameData.word}</span>`;
                 } else {
-                    content.innerHTML = `<span style="color:var(--success); font-size: 20px;">أنت المحتال</span>`;
+                    content.innerHTML = `[ اضغط لفك التشفير ]`;
                 }
             } else {
-                // إذا كان مواطن عادي: يضغط تظهر أسماء المحتالين، يضغط تعود الكلمة السرية الأصلية بالتبادل
-                if (content.innerText === "[ اضغط لفك التشفير ]" || content.innerText === gameData.word) {
+                // المواطن: فك التشفير -> الكلمة -> أسماء المحتالين -> فك التشفير
+                if (textVal === "[ اضغط لفك التشفير ]") {
+                    content.innerHTML = `<span style="color:var(--success); font-size: 20px;">${gameData.word}</span>`;
+                } else if (textVal === gameData.word) {
                     let impNames = imps.map(id => gameData.players[id] ? gameData.players[id].name : "مجهول").join(" و ");
                     content.innerHTML = `<span style="color:var(--success); font-size: 16px;">المحتال: ${impNames}</span>`;
                 } else {
-                    content.innerHTML = `<span style="color:var(--success); font-size: 20px;">${gameData.word}</span>`;
+                    content.innerHTML = `[ اضغط لفك التشفير ]`;
                 }
             }
             return;
         }
 
-        // المنطق الطبيعي اللعبة بدون غش
+        // المنطق الطبيعي للعبة دون غش
         if (content.innerText !== "[ اضغط لفك التشفير ]") content.innerText = "[ اضغط لفك التشفير ]";
         else {
             if (!isImp) content.innerHTML = `<span style="color:var(--success); font-size: 20px;">${gameData.word}</span>`;
