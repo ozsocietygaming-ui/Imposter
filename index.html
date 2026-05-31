@@ -406,10 +406,6 @@
                 return;
             }
 
-            if(gameData.roomType) {
-                selectedRoomType = gameData.roomType;
-            }
-
             updateLobbyUI();
 
             if(gameData.status === 'waiting') {
@@ -471,7 +467,7 @@
 
         db.ref('rooms/' + currentRoom).update({
             status: 'playing',
-            roomType: selectedRoomType, 
+            roomType: selectedRoomType, // المزامنة الصارمة لنوع الغرفة من المتغير المختار مباشرة
             secretWord: randomWord,
             category: selectedCategory,
             imposters: imposters,
@@ -519,28 +515,29 @@
 
     function handlePlayScreenNextAction() {
         if(!isHost) return;
-        // الإصلاح المباشر هنا: التحقق الصارم من نوع الغرفة المخزن في الـ gameData
-        if(gameData.roomType === 'controlledChat') {
-            const pIds = Object.keys(gameData.players);
-            db.ref('rooms/' + currentRoom).update({
-                status: 'controlledChat',
-                controlledChat: {
-                    phase: 'linear', 
-                    turnIndex: 0,
-                    step: 'asking', 
-                    asker: pIds[0],
-                    target: pIds[1],
-                    history: `<div class="chat-bubble system">بدأت الغرفة المحادثة الخاضعة للرقابة الأمنية.</div>`
-                }
-            });
-        } else {
-            showVoteScreen();
-        }
-    }
+        
+        // جلب البيانات من السيرفر مباشرة لقطع الشك باليقين، وضمان قراءة القيمة الحقيقية المخزنة
+        db.ref('rooms/' + currentRoom).once('value', snap => {
+            const currentRoomData = snap.val();
+            if(!currentRoomData) return;
 
-    function showVoteScreen() {
-        if(!isHost) return;
-        db.ref('rooms/' + currentRoom).update({ status: 'voting' });
+            if(currentRoomData.roomType === 'controlledChat') {
+                const pIds = Object.keys(currentRoomData.players);
+                db.ref('rooms/' + currentRoom).update({
+                    status: 'controlledChat',
+                    controlledChat: {
+                        phase: 'linear', 
+                        turnIndex: 0,
+                        step: 'asking', 
+                        asker: pIds[0],
+                        target: pIds[1],
+                        history: `<div class="chat-bubble system">بدأت الغرفة المحادثة الخاضعة للرقابة الأمنية.</div>`
+                    }
+                });
+            } else {
+                db.ref('rooms/' + currentRoom).update({ status: 'voting' });
+            }
+        });
     }
 
     /* -------------------------------------------------------------
