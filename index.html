@@ -40,7 +40,7 @@
         .room-item { background: #1a1a2e; border: 1px solid var(--secondary); padding: 8px; margin-bottom: 5px; border-radius: 8px; font-size: 11px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
         .room-item:hover { border-color: var(--success); }
 
-        /* الأنماط الإضافية الخاصة بالمحادثة الخاضعة للرقابة */
+        /* أنماط المحادثة المراقبة */
         .chat-area { width: 100%; flex-grow: 1; overflow-y: auto; background: rgba(0,0,0,0.5); border-radius: 12px; padding: 12px; border: 1px solid #222; margin-bottom: 10px; font-size: 13px; }
         .chat-bubble { padding: 8px 12px; border-radius: 10px; margin-bottom: 8px; max-width: 85%; word-wrap: break-word; line-height: 1.5; }
         .chat-bubble.system { background: rgba(0, 242, 255, 0.1); border: 1px dashed var(--primary); color: var(--primary); text-align: center; max-width: 100%; font-size: 11px; }
@@ -110,6 +110,7 @@
         <button class="main-btn" id="go-to-vote-btn" onclick="handlePlayScreenNextAction()">انتقل للخطوة التالية</button>
     </div>
 
+    <!-- واجهة شاشة المحادثة الخاضعة للرقابة -->
     <div id="controlled-chat-screen" class="screen">
         <div class="round-badge" id="chat-round-phase" style="background:var(--secondary)">جولة الأسئلة الخطية</div>
         <h1 id="chat-status-indicator" style="color:var(--primary); margin-bottom:10px;">جاري تحميل نظام الاستجواب...</h1>
@@ -156,7 +157,7 @@
     }
 
     let currentRoom = null, myId = null, myName = "", isHost = false, gameData = {}, selectedCategory = "حيوانات وحشرات", allowedImpostersCount = 1;
-    let selectedRoomType = "normal"; // الخيار الافتراضي لنوع الغرفة
+    let selectedRoomType = "normal"; 
     let selectedVotes = []; 
 
     const megaDatabase = {
@@ -186,7 +187,7 @@
         ],
         'جماد': [
             "هاتف", "حاسوب", "تلفاز", "كاميرا", "ساعة", "نظارة", "مفتاح", "محفظة", "قلم", "كتاب", "ورقة", "مقص", "مظلة", "حقيبة", "حذاء", "قميص", "قبعة", "مرآة", "فرشاة", "منشفة", "وسادة", "سرير", "كرسي", "طاولة", "أريكة", "سجادة", "باب", "نافذة", "مصباح", "ملعقة", "شوكة", "سكين", "صحن", "كوب",
-            "سماعة", "شاحن", "بطارية", "لوحة مفاتيح", "فأرة الحاموب", "شاشة", "طابعة", "ماسح ضوئي", "راوتر", "فلاشة", "قرص صلب", "تكييف", "مروحة", "مدفأة", "ثلاجة", "غسالة", "نشافة", "جلاية الصحون", "فرن", "مايكرويف", "خلاط", "عصارة", "غلاية", "محمصة خبز", "مكنسة كهربائية", "مكواة", "ميزان", "ساعة حائط", "منبه", "قفل", "خزنة", "جرس", "درج", "رف", "دولاب", "خزانة ملابس", "تسريحة", "شماعة", "ابجورة", "ثريا", "لوحة فنية", "سلة مهملات",
+            "سماعة", "شاحن", "بطارية", "لوحة keyboard", "فأرة الحاموب", "شاشة", "طابعة", "ماسح ضوئي", "راوتر", "فلاشة", "قرص صلب", "تكييف", "مروحة", "مدفأة", "ثلاجة", "غسالة", "نشافة", "جلاية الصحون", "فرن", "مايكرويف", "خلاط", "عصارة", "غلاية", "محمصة خبز", "مكنسة كهربائية", "مكواة", "ميزان", "ساعة حائط", "منبه", "قفل", "خزنة", "جرس", "درج", "رف", "دولاب", "خزانة ملابس", "تسريحة", "شماعة", "ابجورة", "ثريا", "لوحة فنية", "سلة مهملات",
             "مكتب", "سبورة", "طبشور", "قلم تلوين", "مسطرة", "فرجار", "منقلة", "دباسة", "خرامة", "مكبس", "مشبك ورق", "صمغ", "شريط لاصق", "مفكرة", "ملف", "خريطة", "كرة أرضية", "مجهر", "تلسكوب", "أنبوب اختبار", "ميزان حرارة", "حقيبة ظهر", 
             "دفتر", "رصاص", "حبر", "طباشير", "براية", "ممحاة", "طامس", "مشبك", "سلك", "قابس", "مقبس", "عداد", "صنبور", "خرطوم", "دلو", "ممسحة", "مقشة", "جاروف", "اسفنجة", "سلك مواعين", "صابونة", "شامبو",
             "سيارة", "دراجة هوائية", "دراجة نارية", "شاحنة", "حافلة", "قطار", "طائرة", "سفينة", "قارب", "يخت", "مروحية", "منطاد", "صاروخ", "قمر صناعي", "رافعة", "جرار", "جرافة", "حاوية", "عربة", "إطار", "مقود", "محرك", "بطارية سيارة", "مصباح أمامي", "لوحة أرقام", "حزام أمان", "مقعد سيارة", "وسادة هوائية", "ممسحة زجاج", "خزان وقود", "رادياتير", "فرامل", "مكابح", "ناقل حركة", "عادم", "هيكل", "مفتاح ربط", "مفك", "مطرقة", "كماشة"
@@ -195,7 +196,7 @@
             "الجزائر", "تونس", "المغرب", "مصر", "السعودية", "الإمارات", "قطر", "فرنسا", "إسبانيا", "إيطاليا", "ألمانيا", "إنجلترا", "البرازيل", "الأرجنتين", "اليابان", "الصين", "روسيا", "أمريكا", "كندا", "أستراليا", "تركيا", "المكسيك", "الهند", "كوريا الجنوبية", "جنوب إفريقيا", "البرتغال", "بلجيكا", "هولندا", "سويسرا", "السويد",
             "ليبيا", "موريتانيا", "السودان", "الصومال", "جيبوتي", "جزر القمر", "فلسطين", "الأردن", "لبنان", "سوريا", "العراق", "الكويت", "البحرين", "عمان", "اليمن", "اليونان", "البرتغال", "أيرلندا", "اسكتلندا", "ويلز", "النمسا", "بلجيكا", "النرويج", "الدنمارك", "فنلندا", "بولندا", "أوكرانيا", "رومانيا", "بلغاريا", "المجر", "التشيك", "سلوفاكيا", "كرواتيا", "صربيا", "سلوفينيا", "البوسنة والهرسك", "ألبانيا", "مقدونيا", "مولدوفا", "بيلاروسيا", 
             "ليتوانيا", "لاتفيا", "إستونيا", "أندورا", "موناكو", "سان مارينو", "الفاتيكان", "مالطا", "قبرص",
-            "باكستان", "أفغانستان", "إيران", "أذربيجان", "أرمينيا", "جورجيا", "كازاخستان", "أوزبكستان", "تركمانستان", "تاجيكستان", "قرغيزستان", "منغوليا", "كوريا الشمالية", "تايوان", "فيتنام", "لاوس", "كمبوديا", "تايلاند", "ميانمار", "ماليزيا", "سنغافورة", "إندونيسيا", "الفلبين", "بروناي", "تيمور الشرقية", "بنغلاديش", "سريلانكا", "جزر المالديف", "نيبال", "بوتان", "نيوزيلندا", "فيجي", "بابوا غينيا الجديدة", "ساموا", "تونغا", "فانواتو", "بالاو", "ميكرونيزيا", "جزر مارشال", "جزر سليمان", "توفالو", "ناورو",
+            "باكستان", "أفغانستان", "إران", "أذربيجان", "أرمينيا", "جورجيا", "كازاخستان", "أوزبكستان", "تركمانستان", "تاجيكستان", "قرغيزستان", "منغوليا", "كوريا الشمالية", "تايوان", "فيتنام", "لاوس", "كمبوديا", "تايلاند", "ميانمار", "ماليزيا", "سنغافورة", "إندونيسيا", "الفلبين", "بروناي", "تيمور الشرقية", "بنغلاديش", "سريلانكا", "جزر المالديف", "نيبال", "بوتان", "نيوزيلندا", "فيجي", "بابوا غينيا الجديدة", "ساموا", "تونغا", "فانواتو", "بالاو", "ميكرونيزيا", "جزر مارشال", "جزر سليمان", "توفالو", "ناورو",
             "نيجيريا", "إثيوبيا", "كينيا", "تنزانيا", "أوغندا", "غانا", "ساحل العاج", "السنغال", "الكاميرون", "أنغولا", "موزمبيق", "مدغشقر", "زيمبابوي", "زامبيا", "ناميبيا", "بوتسوانا", "الغابون", "الكونغو", 
             "النيجر", "مالي", "تشاد", "غينيا", "سيراليون", "ليبيريا", "توغو", "بنين", "بوركينا فاسو", "رواندا", "بوروندي", "كولومبيا", "فنزويلا", "البيرو", "تشيلي", "الأوروغواي", "الباراغواي", "بوليفيا", "الإكوادور", "غيانا", "سورينام", "كوبا", "جامايكا"
         ]
@@ -221,7 +222,6 @@
         btn.classList.add('selected');
     }
 
-    // دالة لتغيير نوع الغرفة المضافة حديثاً
     function selectRoomType(type, btn) {
         selectedRoomType = type;
         document.getElementById('room-normal-btn').classList.remove('selected');
@@ -309,7 +309,7 @@
         db.ref('rooms/' + currentRoom).set({
             host: myId,
             status: 'waiting',
-            roomType: 'normal', // افتراضي
+            roomType: 'normal', 
             round: 1,
             createdAt: Date.now(),
             players: { [myId]: {name: myName, score: 0} }
@@ -406,7 +406,6 @@
                 return;
             }
 
-            // تحديث نوع الغرفة بناءً على اختيار الهوست المستمر
             if(gameData.roomType) {
                 selectedRoomType = gameData.roomType;
             }
@@ -470,15 +469,14 @@
         let shuffled = [...playerIds].sort(() => 0.5 - Math.random());
         let imposters = shuffled.slice(0, allowedImpostersCount);
 
-        // تنظيف بيانات التصويت والمحادثات السابقة للجولة الجديدة
         db.ref('rooms/' + currentRoom).update({
             status: 'playing',
-            roomType: selectedRoomType, // حفظ نوع الغرفة المختار
+            roomType: selectedRoomType, 
             secretWord: randomWord,
             category: selectedCategory,
             imposters: imposters,
             votes: null,
-            controlledChat: null // تصفير المحادثة المراقبة السابقة
+            controlledChat: null 
         });
     }
 
@@ -519,25 +517,23 @@
         db.ref('rooms/' + currentRoom).update({ secretWord: randomWord });
     }
 
-    // التعامل مع ضغطة زر الانتقال للخطوة التالية بناءً على وضع الغرفة
     function handlePlayScreenNextAction() {
         if(!isHost) return;
+        // الإصلاح المباشر هنا: التحقق الصارم من نوع الغرفة المخزن في الـ gameData
         if(gameData.roomType === 'controlledChat') {
-            // تجهيز هيكل بيانات المحادثة الخاضعة للرقابة لأول مرة
             const pIds = Object.keys(gameData.players);
             db.ref('rooms/' + currentRoom).update({
                 status: 'controlledChat',
                 controlledChat: {
-                    phase: 'linear', // يبدأ الطور بالترتيب الدائري الخطي
+                    phase: 'linear', 
                     turnIndex: 0,
-                    step: 'asking', // وضع التوجيه الأولي هو السؤال
+                    step: 'asking', 
                     asker: pIds[0],
                     target: pIds[1],
-                    history: ""
+                    history: `<div class="chat-bubble system">بدأت الغرفة المحادثة الخاضعة للرقابة الأمنية.</div>`
                 }
             });
         } else {
-            // الانتقال العادي للتصويت
             showVoteScreen();
         }
     }
@@ -548,7 +544,7 @@
     }
 
     /* -------------------------------------------------------------
-       جميع الدوال والأنظمة البرمجية الخاصة بالمحادثة المراقبة
+       نظام التحكم بالمحادثة المراقبة
     ------------------------------------------------------------- */
     function setupControlledChatScreen() {
         const chatData = gameData.controlledChat;
@@ -560,7 +556,6 @@
         const targetSelection = document.getElementById('chat-target-selection');
         const phaseBadge = document.getElementById('chat-round-phase');
 
-        // تحديث شارة المرحلة الحالية
         if(chatData.phase === 'linear') {
             phaseBadge.innerText = "جولة الأسئلة الخطية الدائرية";
             phaseBadge.style.background = "var(--secondary)";
@@ -569,14 +564,12 @@
             phaseBadge.style.background = "var(--imposter)";
         }
 
-        // عرض السجل المحدث للمحادثات
         chatBox.innerHTML = chatData.history || `<div class="chat-bubble system">بدأت الغرفة المحادثة الخاضعة للرقابة الأمنية.</div>`;
         chatBox.scrollTop = chatBox.scrollHeight;
 
         const askerName = gameData.players[chatData.asker] ? gameData.players[chatData.asker].name : "لاعب غادر";
         const targetName = gameData.players[chatData.target] ? gameData.players[chatData.target].name : "لاعب غادر";
 
-        // إخفاء الواجهات التفاعلية كوضع افتراضي لكل اللاعبين
         inputContainer.style.display = 'none';
         targetSelection.style.display = 'none';
 
@@ -663,10 +656,8 @@
             updates['history'] = currentHistory;
 
             if(chatData.phase === 'linear') {
-                // حساب من عليه الدور القادم خطياً في المصفوفة الدائرية
                 let nextTurnIndex = chatData.turnIndex + 1;
                 if(nextTurnIndex >= playerIds.length) {
-                    // انتهاء الدائرة الخطية بالكامل والانتقال لجولة الشك (Doubt Page)
                     updates['phase'] = 'doubt';
                     updates['turnIndex'] = 0;
                     updates['step'] = 'selectingTarget';
@@ -675,12 +666,11 @@
                     currentHistory += `<div class="chat-bubble system">📢 انتهت الجولة الخطية! بدأت الآن جولة الشك واختيار الأهداف بحرية.</div>`;
                     updates['history'] = currentHistory;
                 } else {
-                    // الاستمرار خطياً: المجيب الحالي يصبح هو السائل التالي
                     updates['turnIndex'] = nextTurnIndex;
                     updates['step'] = 'asking';
                     updates['asker'] = playerIds[nextTurnIndex];
                     let nextTargetIndex = nextTurnIndex + 1;
-                    if(nextTargetIndex >= playerIds.length) nextTargetIndex = 0; // إغلاق الدائرة
+                    if(nextTargetIndex >= playerIds.length) nextTargetIndex = 0; 
                     updates['target'] = playerIds[nextTargetIndex];
                 }
                 
@@ -690,11 +680,9 @@
             } else if(chatData.phase === 'doubt') {
                 let nextTurnIndex = chatData.turnIndex + 1;
                 if(nextTurnIndex >= playerIds.length) {
-                    // بعد انتهاء جميع اللاعبين من الأسئلة والأجوبة الحرّة، يتم النقل تلقائياً لصفحة التصويت العادية دون تغيير
                     inputField.value = "";
                     db.ref('rooms/' + currentRoom).update({ status: 'voting' });
                 } else {
-                    // انتقال المنصة للاعب التالي ليختار هدفه بنفسه
                     updates['turnIndex'] = nextTurnIndex;
                     updates['step'] = 'selectingTarget';
                     updates['asker'] = playerIds[nextTurnIndex];
@@ -708,7 +696,7 @@
     }
 
     /* -------------------------------------------------------------
-       تكملة بقية الأكواد والوظائف العادية للعبة دون تغيير أي شيء آخر
+       بقية وظائف اللعبة الأساسية
     ------------------------------------------------------------- */
     function setupVoteScreenUI() {
         document.getElementById('vote-screen-title').innerText = "من هو المحتال؟";
@@ -844,7 +832,7 @@
             status: 'waiting',
             round: nextRound,
             votes: null,
-            controlledChat: null // تصفير شامل مع الانتقال لجولة جديدة
+            controlledChat: null 
         });
     }
 </script>
