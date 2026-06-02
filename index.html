@@ -1427,18 +1427,32 @@ box-shadow: 0 4px 0 #b3003b; margin-top: 5px;" onclick="deleteRoomByHost()">إغ
     }
 
     function createNewRoom() {
-        let roomPass = "";
-        if (roomPrivacySetting === "private") {
-            roomPass = document.getElementById('custom-password-input').value.trim();
-            if (roomPass.length !== 4 || isNaN(roomPass)) return alert("الرجاء إدخل رمز سري مكون من 4 أرقام بالضبط!");
-        }
-        disableHomeButtons(); currentRoom = Math.floor(1000 + Math.random() * 9000).toString(); isHost = true; myId = "u_" + Date.now();
-        saveSessionLocally();
-        db.ref('rooms/' + currentRoom).set({ 
-            host: myId, status: 'waiting', privacy: roomPrivacySetting, password: roomPass, round: 1, playMode: chosenPlayMode, createdAt: Date.now(), players: { [myId]: {name: myName, score: 0} } 
-        }).then(() => listenToRoom()).catch(() => enableHomeButtons());
-        document.getElementById('host-controls').style.display = 'block'; document.getElementById('delete-room-btn').style.display = 'block';
+    let roomPass = "";
+    if (roomPrivacySetting === "private") {
+        roomPass = document.getElementById('custom-password-input').value.trim();
+        if (roomPass.length !== 4 || isNaN(roomPass)) return alert("الرجاء إدخل رمز سري مكون من 4 أرقام بالضبط!");
     }
+    disableHomeButtons();
+    currentRoom = Math.floor(1000 + Math.random() * 9000).toString();
+    isHost = true;
+    myId = "u_" + Date.now();
+    saveSessionLocally();
+
+    // هنا تم إضافة || "normal" للتأكد من عدم إرسال قيمة undefined لـ Firebase
+    db.ref('rooms/' + currentRoom).set({
+        host: myId,
+        status: 'waiting',
+        privacy: roomPrivacySetting,
+        password: roomPass,
+        round: 1,
+        playMode: chosenPlayMode || "normal", 
+        createdAt: Date.now(),
+        players: { [myId]: {name: myName, score: 0} }
+    }).then(() => listenToRoom()).catch(() => enableHomeButtons());
+
+    document.getElementById('host-controls').style.display = 'block';
+    document.getElementById('delete-room-btn').style.display = 'block';
+}
 
     function joinExistingRoom() {
         let inputId = document.getElementById('room-id-input').value.trim(); if(!inputId) return alert("اكمل البيانات");
