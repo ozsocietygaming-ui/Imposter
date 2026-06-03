@@ -8,171 +8,77 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     <style>
-        :root { --bg: #0a0a12;
---primary: #00f2ff; --secondary: #7000ff; --imposter: #ff0055; --card-bg: #161625; --text: #e0e0ff; --success: #00ff9d;
-}
-        html, body { overflow: hidden; overscroll-behavior-y: contain; position: fixed; width: 100%;
-height: 100%; margin: 0; padding: 0; }
-        body { background: var(--bg); color: var(--text);
-font-family: 'Cairo', sans-serif; display: flex; align-items: center; justify-content: center; }
-        .app-viewport { width: 95%;
-max-width: 400px; height: 620px; background: var(--card-bg); border: 2px solid var(--primary); border-radius: 20px; position: relative; overflow: hidden;
-box-shadow: 0 0 30px rgba(0,242,255,0.2); }
-        .screen { position: absolute; width: 100%;
-height: 100%; padding: 25px; display: none; flex-direction: column; align-items: center; box-sizing: border-box;
-}
-        .active { display: flex; animation: fadeIn 0.3s;
-}
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1;
-} }
-        h1 { font-family: 'Press Start 2P'; font-size: 11px; color: var(--primary);
-margin-bottom: 20px; text-align: center; }
-        .main-btn { width: 100%; padding: 14px; border-radius: 12px;
-border: none; background: var(--secondary); color: white; font-weight: bold; cursor: pointer; margin-top: 8px; box-shadow: 0 4px 0 #4a00aa;
-}
-        .main-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 #4a00aa;
-}
-        .main-btn:disabled { background: #444 !important; box-shadow: none !important; color: #aaa; cursor: not-allowed;
-}
-        input { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #333;
-background: #000; color: #fff; text-align: center; margin-bottom: 10px; }
-        .player-list { width: 100%;
-flex-grow: 1; overflow-y: auto; background: rgba(0,0,0,0.3); border-radius: 10px; padding: 10px; margin-bottom: 10px; border: 1px solid #222;
-}
-        .player-tag { background: #252535; padding: 6px 12px; margin: 3px; border-radius: 20px;
-display: inline-flex; align-items: center; gap: 8px; font-size: 11px; border: 1px solid var(--primary);
-}
-        .kick-btn { background: none; border: none; color: var(--imposter); font-weight: bold; cursor: pointer;
-padding: 0; font-size: 12px; }
-        .round-badge { background: var(--imposter); color: white;
-padding: 4px 15px; border-radius: 20px; font-size: 11px; font-weight: bold; margin-bottom: 15px;
-}
-        .cat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%;
-margin-bottom: 10px; }
-        .cat-btn { background: #1a1a2e; color: #aaa; border: 1px solid #333;
-padding: 10px; border-radius: 8px; font-size: 12px; cursor: pointer; }
-        .cat-btn.selected { background: var(--primary);
-color: #000; border-color: var(--primary); }
-        .secret-card { width: 100%; height: 110px; background: #05050a;
-border: 2px dashed var(--secondary); border-radius: 15px; display: flex; align-items: center; justify-content: center; margin: 10px 0; cursor: pointer; text-align: center;
-}
-        .vote-btn { background: #2d2d44; color: white; border: 1px solid var(--primary); padding: 10px;
-margin: 5px 0; width: 100%; border-radius: 8px; cursor: pointer; text-align: center;
-}
-        .vote-btn:disabled { opacity: 0.4; cursor: not-allowed; border-color: #333;
-}
-        .score-row { display: flex; justify-content: space-between; width: 100%; padding: 8px 10px;
-border-bottom: 1px solid #333; font-size: 14px; }
-        .config-row { font-size: 11px; color: var(--primary);
-margin: 5px 0; width: 100%; text-align: right; }
-        .config-scroll-area { width: 100%;
-max-height: 120px; overflow-y: auto; background: rgba(0,0,0,0.2); padding: 5px; border-radius: 10px; box-sizing: border-box; margin-bottom: 10px; border: 1px solid #222;
-}
-        .config-row { font-size: 11px; color: var(--primary); margin: 5px 0; width: 100%;
-text-align: right; }
-        .config-scroll-area { width: 100%; max-height: 120px; overflow-y: auto; background: rgba(0,0,0,0.2);
-padding: 5px; border-radius: 10px; box-sizing: border-box; margin-bottom: 10px; border: 1px solid #222;
-}
-        .imp-toggle-grid { display: grid;
-grid-template-columns: 1fr 1fr; gap: 8px; width: 100%;
-margin-bottom: 15px; }
-        .imp-toggle-btn { background: #1a1a2e;
-color: #aaa; border: 1px solid #333;
-padding: 8px; border-radius: 8px; font-size: 11px; cursor: pointer; font-family: 'Cairo';
-}
-        .imp-toggle-btn.selected { background: var(--imposter); color: #fff; border-color: var(--imposter);
-box-shadow: 0 0 10px var(--imposter); }
+        :root { --bg: #0a0a12; --primary: #00f2ff; --secondary: #7000ff; --imposter: #ff0055; --card-bg: #161625; --text: #e0e0ff; --success: #00ff9d; }
+        html, body { overflow: hidden; overscroll-behavior-y: contain; position: fixed; width: 100%; height: 100%; margin: 0; padding: 0; }
+        body { background: var(--bg); color: var(--text); font-family: 'Cairo', sans-serif; display: flex; align-items: center; justify-content: center; }
+        .app-viewport { width: 95%; max-width: 400px; height: 620px; background: var(--card-bg); border: 2px solid var(--primary); border-radius: 20px; position: relative; overflow: hidden; box-shadow: 0 0 30px rgba(0,242,255,0.2); }
+        .screen { position: absolute; width: 100%; height: 100%; padding: 25px; display: none; flex-direction: column; align-items: center; box-sizing: border-box; }
+        .active { display: flex; animation: fadeIn 0.3s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        h1 { font-family: 'Press Start 2P'; font-size: 11px; color: var(--primary); margin-bottom: 20px; text-align: center; }
+        .main-btn { width: 100%; padding: 14px; border-radius: 12px; border: none; background: var(--secondary); color: white; font-weight: bold; cursor: pointer; margin-top: 8px; box-shadow: 0 4px 0 #4a00aa; }
+        .main-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 #4a00aa; }
+        .main-btn:disabled { background: #444 !important; box-shadow: none !important; color: #aaa; cursor: not-allowed; }
+        input { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #333; background: #000; color: #fff; text-align: center; margin-bottom: 10px; }
+        .player-list { width: 100%; flex-grow: 1; overflow-y: auto; background: rgba(0,0,0,0.3); border-radius: 10px; padding: 10px; margin-bottom: 10px; border: 1px solid #222; }
+        .player-tag { background: #252535; padding: 6px 12px; margin: 3px; border-radius: 20px; display: inline-flex; align-items: center; gap: 8px; font-size: 11px; border: 1px solid var(--primary); }
+        .kick-btn { background: none; border: none; color: var(--imposter); font-weight: bold; cursor: pointer; padding: 0; font-size: 12px; }
+        .round-badge { background: var(--imposter); color: white; padding: 4px 15px; border-radius: 20px; font-size: 11px; font-weight: bold; margin-bottom: 15px; }
+        .cat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; margin-bottom: 10px; }
+        .cat-btn { background: #1a1a2e; color: #aaa; border: 1px solid #333; padding: 10px; border-radius: 8px; font-size: 12px; cursor: pointer; }
+        .cat-btn.selected { background: var(--primary); color: #000; border-color: var(--primary); }
+        .secret-card { width: 100%; height: 110px; background: #05050a; border: 2px dashed var(--secondary); border-radius: 15px; display: flex; align-items: center; justify-content: center; margin: 10px 0; cursor: pointer; text-align: center; }
+        .vote-btn { background: #2d2d44; color: white; border: 1px solid var(--primary); padding: 10px; margin: 5px 0; width: 100%; border-radius: 8px; cursor: pointer; text-align: center; }
+        .vote-btn:disabled { opacity: 0.4; cursor: not-allowed; border-color: #333; }
+        .score-row { display: flex; justify-content: space-between; width: 100%; padding: 8px 10px; border-bottom: 1px solid #333; font-size: 14px; }
         
-        .rooms-radar { width: 100%;
-background: rgba(0,0,0,0.4); border: 1px dashed #333; border-radius: 12px; padding: 10px; margin-top: 10px; max-height: 110px; overflow-y: auto; box-sizing: border-box;
-}
-        .radar-title { font-size: 10px; color: var(--primary); text-align: center; margin-bottom: 6px; letter-spacing: 1px;
-}
-        .room-item { background: #1a1a2e; border: 1px solid var(--secondary); padding: 8px; margin-bottom: 5px;
-border-radius: 8px; font-size: 11px; display: flex; justify-content: space-between; align-items: center; cursor: pointer;
-}
-        .room-item:hover { border-color: var(--success);
-}
-
-        .understand-section { width: 100%; display: flex; flex-direction: column; align-items: center; margin-bottom: 10px;
-background: rgba(255,255,255,0.03); padding: 8px; border-radius: 10px; border: 1px solid #222; box-sizing: border-box;
-}
-        .understand-title { font-size: 12px; color: var(--text); margin-bottom: 6px; font-weight: bold;
-}
-        .understand-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%;
-}
-        .und-btn { padding: 8px; border: 1px solid #444; background: #111; color: #fff;
-border-radius: 8px; font-weight: bold; cursor: pointer; font-family: 'Cairo'; font-size: 12px;
-}
-        .und-btn.yes-btn:hover { background: var(--success); color: #000; border-color: var(--success);
-}
-        .und-btn.no-btn:hover { background: var(--imposter); color: #fff; border-color: var(--imposter);
-}
-        .und-btn.selected-yes { background: var(--success); color: #000; border-color: var(--success);
-box-shadow: 0 0 8px var(--success); }
-        .und-btn.selected-no { background: var(--imposter); color: #fff;
-border-color: var(--imposter); box-shadow: 0 0 8px var(--imposter); }
-        .understand-status { font-size: 11px;
-color: #aaa; margin-top: 4px; text-align: center; }
-
-        .lobby-chat-box { width: 100%; display: flex;
-flex-direction: column; background: rgba(0,0,0,0.4); border: 1px solid #222; border-radius: 12px; margin-bottom: 10px; height: 110px; overflow: hidden; box-sizing: border-box;
-}
-        .chat-messages { flex-grow: 1; overflow-y: auto; padding: 6px 10px; font-size: 11px;
-display: flex; flex-direction: column; gap: 4px; text-align: right; }
-        .chat-msg { background: rgba(255,255,255,0.03);
-padding: 4px 8px; border-radius: 6px; border-right: 2px solid var(--secondary); word-break: break-all;
-}
-        .chat-msg .sender { color: var(--primary); font-weight: bold; margin-left: 5px;
-}
-        .chat-input-area { display: flex; border-top: 1px solid #222; background: #000;
-}
-        .chat-input-area input { flex-grow: 1; border: none; padding: 6px 10px; font-size: 11px;
-background: transparent; color: #fff; margin: 0; text-align: right; }
-        .chat-input-area button { background: var(--secondary);
-color: white; border: none; padding: 0 15px; font-size: 11px; font-weight: bold; cursor: pointer; font-family: 'Cairo';
-}
+        .config-row { font-size: 11px; color: var(--primary); margin: 5px 0; width: 100%; text-align: right; }
+        .config-scroll-area { width: 100%; max-height: 120px; overflow-y: auto; background: rgba(0,0,0,0.2); padding: 5px; border-radius: 10px; box-sizing: border-box; margin-bottom: 10px; border: 1px solid #222; }
         
-        .leave-game-btn { background: #33101a;
-border: 1px dashed var(--imposter); color: var(--imposter); font-size: 11px; padding: 4px 12px; border-radius: 6px; cursor: pointer; font-family: 'Cairo'; position: absolute;
-top: 10px; left: 10px; z-index: 100; display: none; font-weight: bold;
-}
-        .leave-game-btn:hover { background: var(--imposter); color: #fff;
-}
+        .imp-toggle-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; margin-bottom: 15px; }
+        .imp-toggle-btn { background: #1a1a2e; color: #aaa; border: 1px solid #333; padding: 8px; border-radius: 8px; font-size: 11px; cursor: pointer; font-family: 'Cairo'; }
+        .imp-toggle-btn.selected { background: var(--imposter); color: #fff; border-color: var(--imposter); box-shadow: 0 0 10px var(--imposter); }
+        
+        .rooms-radar { width: 100%; background: rgba(0,0,0,0.4); border: 1px dashed #333; border-radius: 12px; padding: 10px; margin-top: 10px; max-height: 110px; overflow-y: auto; box-sizing: border-box; }
+        .radar-title { font-size: 10px; color: var(--primary); text-align: center; margin-bottom: 6px; letter-spacing: 1px; }
+        .room-item { background: #1a1a2e; border: 1px solid var(--secondary); padding: 8px; margin-bottom: 5px; border-radius: 8px; font-size: 11px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+        .room-item:hover { border-color: var(--success); }
 
-        .room-type-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%;
-margin-bottom: 8px; }
-        .type-btn { background: #1a1a2e; color: #aaa; border: 1px solid #333;
-padding: 10px; border-radius: 8px; font-size: 12px; cursor: pointer; font-family: 'Cairo'; font-weight: bold;
-}
-        .type-btn.selected { background: var(--secondary); color: #fff; border-color: var(--secondary);
-}
+        .understand-section { width: 100%; display: flex; flex-direction: column; align-items: center; margin-bottom: 10px; background: rgba(255,255,255,0.03); padding: 8px; border-radius: 10px; border: 1px solid #222; box-sizing: border-box; }
+        .understand-title { font-size: 12px; color: var(--text); margin-bottom: 6px; font-weight: bold; }
+        .understand-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; }
+        .und-btn { padding: 8px; border: 1px solid #444; background: #111; color: #fff; border-radius: 8px; font-weight: bold; cursor: pointer; font-family: 'Cairo'; font-size: 12px; }
+        .und-btn.yes-btn:hover { background: var(--success); color: #000; border-color: var(--success); }
+        .und-btn.no-btn:hover { background: var(--imposter); color: #fff; border-color: var(--imposter); }
+        .und-btn.selected-yes { background: var(--success); color: #000; border-color: var(--success); box-shadow: 0 0 8px var(--success); }
+        .und-btn.selected-no { background: var(--imposter); color: #fff; border-color: var(--imposter); box-shadow: 0 0 8px var(--imposter); }
+        .understand-status { font-size: 11px; color: #aaa; margin-top: 4px; text-align: center; }
 
-        /* تنسيقات قسم التحقيق المنظم والجديد */
-        .ingame-chat-box { width: 100%;
-display: flex; flex-direction: column; background: rgba(0,0,0,0.5); border: 1px solid var(--primary); border-radius: 12px; margin-top: 5px; flex-grow: 1; overflow: hidden; box-sizing: border-box;
-}
-        .ingame-messages { flex-grow: 1; overflow-y: auto; padding: 10px; font-size: 12px; display: flex;
-flex-direction: column; gap: 6px; text-align: right; }
-        .ingame-msg { background: rgba(0,242,255,0.03);
-padding: 6px 10px; border-radius: 6px; border-right: 2px solid var(--primary); word-break: break-all;
-}
-        .ingame-msg .sender { color: var(--success); font-weight: bold; margin-left: 5px;
-}
-        .control-turn-bar { background: #221a35; padding: 8px; font-size: 12px; color: var(--primary); text-align: center;
-border-bottom: 1px solid #333; font-weight: bold; }
-        .ingame-input-area { display: flex;
-border-top: 1px solid #222; background: #000; }
-        .ingame-input-area input { flex-grow: 1;
-border: none; padding: 12px; font-size: 12px; background: transparent; color: #fff; margin: 0; text-align: right;
-}
-        .ingame-input-area button { background: var(--primary); color: black; border: none; padding: 0 20px;
-font-size: 12px; font-weight: bold; cursor: pointer; font-family: 'Cairo'; }
-        .target-selector-area { display: flex;
-gap: 4px; background: #111; padding: 6px; justify-content: center; width: 100%; box-sizing: border-box; border-top: 1px solid #222; flex-wrap: wrap;
-}
-        .target-mini-btn { background: #222; color: #fff; border: 1px solid var(--primary); font-size: 11px;
-padding: 4px 10px; border-radius: 4px; cursor: pointer; font-family: 'Cairo'; }
+        .lobby-chat-box { width: 100%; display: flex; flex-direction: column; background: rgba(0,0,0,0.4); border: 1px solid #222; border-radius: 12px; margin-bottom: 10px; height: 110px; overflow: hidden; box-sizing: border-box; }
+        .chat-messages { flex-grow: 1; overflow-y: auto; padding: 6px 10px; font-size: 11px; display: flex; flex-direction: column; gap: 4px; text-align: right; }
+        .chat-msg { background: rgba(255,255,255,0.03); padding: 4px 8px; border-radius: 6px; border-right: 2px solid var(--secondary); word-break: break-all; }
+        .chat-msg .sender { color: var(--primary); font-weight: bold; margin-left: 5px; }
+        .chat-input-area { display: flex; border-top: 1px solid #222; background: #000; }
+        .chat-input-area input { flex-grow: 1; border: none; padding: 6px 10px; font-size: 11px; background: transparent; color: #fff; margin: 0; text-align: right; }
+        .chat-input-area button { background: var(--secondary); color: white; border: none; padding: 0 15px; font-size: 11px; font-weight: bold; cursor: pointer; font-family: 'Cairo'; }
+        
+        .leave-game-btn { background: #33101a; border: 1px dashed var(--imposter); color: var(--imposter); font-size: 11px; padding: 4px 12px; border-radius: 6px; cursor: pointer; font-family: 'Cairo'; position: absolute; top: 10px; left: 10px; z-index: 100; display: none; font-weight: bold; }
+        .leave-game-btn:hover { background: var(--imposter); color: #fff; }
+
+        .room-type-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; margin-bottom: 8px; }
+        .type-btn { background: #1a1a2e; color: #aaa; border: 1px solid #333; padding: 10px; border-radius: 8px; font-size: 12px; cursor: pointer; font-family: 'Cairo'; font-weight: bold; }
+        .type-btn.selected { background: var(--secondary); color: #fff; border-color: var(--secondary); }
+
+        .ingame-chat-box { width: 100%; display: flex; flex-direction: column; background: rgba(0,0,0,0.5); border: 1px solid var(--primary); border-radius: 12px; margin-top: 5px; flex-grow: 1; overflow: hidden; box-sizing: border-box; }
+        .ingame-messages { flex-grow: 1; overflow-y: auto; padding: 10px; font-size: 12px; display: flex; flex-direction: column; gap: 6px; text-align: right; }
+        .ingame-msg { background: rgba(0,242,255,0.03); padding: 6px 10px; border-radius: 6px; border-right: 2px solid var(--primary); word-break: break-all; }
+        .ingame-msg .sender { color: var(--success); font-weight: bold; margin-left: 5px; }
+        .control-turn-bar { background: #221a35; padding: 8px; font-size: 12px; color: var(--primary); text-align: center; border-bottom: 1px solid #333; font-weight: bold; }
+        .ingame-input-area { display: flex; border-top: 1px solid #222; background: #000; }
+        .ingame-input-area input { flex-grow: 1; border: none; padding: 12px; font-size: 12px; background: transparent; color: #fff; margin: 0; text-align: right; }
+        .ingame-input-area button { background: var(--primary); color: black; border: none; padding: 0 20px; font-size: 12px; font-weight: bold; cursor: pointer; font-family: 'Cairo'; }
+        .target-selector-area { display: flex; gap: 4px; background: #111; padding: 6px; justify-content: center; width: 100%; box-sizing: border-box; border-top: 1px solid #222; flex-wrap: wrap; }
+        .target-mini-btn { background: #222; color: #fff; border: 1px solid var(--primary); font-size: 11px; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-family: 'Cairo'; }
     </style>
 </head>
 <body>
@@ -186,25 +92,21 @@ padding: 4px 10px; border-radius: 4px; cursor: pointer; font-family: 'Cairo'; }
         
         <div class="room-type-grid">
             <button id="type-public-btn" class="type-btn selected" onclick="setRoomPrivacy('public')">🔓 غرفة عامة</button>
-            
-<button id="type-private-btn" class="type-btn" onclick="setRoomPrivacy('private')">🔒 غرفة برمز سري</button>
+            <button id="type-private-btn" class="type-btn" onclick="setRoomPrivacy('private')">🔒 غرفة برمز سري</button>
         </div>
-        <input type="number" id="custom-password-input" placeholder="أدخل رمز سري (4 أرقام)" style="display:none;"
-oninput="if(this.value.length > 4) this.value = this.value.slice(0,4)">
+        <input type="number" id="custom-password-input" placeholder="أدخل رمز سري (4 أرقام)" style="display:none;" oninput="if(this.value.length > 4) this.value = this.value.slice(0,4)">
 
         <button id="create-btn" class="main-btn" onclick="processAndCreateRoom()">إنشاء غرفة جديدة</button>
         <div style="margin: 5px 0; font-size: 10px; color: #444;">— أو انضم لصديق —</div>
         <input type="text" id="room-id-input" placeholder="أدخل كود الغرفة">
-        <button id="join-btn" class="main-btn" style="background:#333; box-shadow: 0 4px 0 #111;"
-onclick="processAndJoinRoom()">انضمام للغرفة</button>
+        <button id="join-btn" class="main-btn" style="background:#333; box-shadow: 0 4px 0 #111;" onclick="processAndJoinRoom()">انضمام للغرفة</button>
         
         <div class="rooms-radar">
             <div class="radar-title">📡 الرادارات النشطة (غرف متاحة)</div>
             <div id="available-rooms-container" style="color:#666; font-size:10px; text-align:center; padding-top:10px;">جاري البحث عن إشارات...</div>
         </div>
         
-        <p id="reconnect-hint" style="display:none; font-size: 10px; color: var(--success); margin-top: 10px; cursor:pointer;"
-onclick="checkAutoReconnect()">قطع الاتصال؟ اضغط للاستعادة</p>
+        <p id="reconnect-hint" style="display:none; font-size: 10px; color: var(--success); margin-top: 10px; cursor:pointer;" onclick="checkAutoReconnect()">قطع الاتصال؟ اضغط للاستعادة</p>
     </div>
 
     <div id="lobby-screen" class="screen">
@@ -214,54 +116,45 @@ onclick="checkAutoReconnect()">قطع الاتصال؟ اضغط للاستعاد
         <div id="host-controls" style="display:none; width: 100%;">
             <div class="config-row">وضع اللعب للدردشة:</div>
             <div class="imp-toggle-grid" style="margin-bottom:8px;">
-         
-       <button id="mode-normal-btn" class="imp-toggle-btn selected" onclick="selectPlayMode('normal', this)">الوضع العادي (القديم)</button>
+                <button id="mode-normal-btn" class="imp-toggle-btn selected" onclick="selectPlayMode('normal', this)">الوضع العادي (القديم)</button>
                 <button id="mode-chat-btn" class="imp-toggle-btn" onclick="selectPlayMode('controlled_chat', this)">وضع التحقيق المحكم</button>
             </div>
 
             <div class="config-row">اختر الفئة:</div>
             <div class="config-scroll-area">
                 <div class="cat-grid">
-        
-            <button class="cat-btn selected" onclick="selectCat('حيوانات وحشرات', this)">حيوانات وحشرات</button>
+                    <button class="cat-btn selected" onclick="selectCat('حيوانات وحشرات', this)">حيوانات وحشرات</button>
                     <button class="cat-btn" onclick="selectCat('طعام', this)">طعام</button>
                     <button class="cat-btn" onclick="selectCat('أماكن', this)">أماكن</button>
                     <button class="cat-btn" onclick="selectCat('جماد', this)">جماد</button>
-             
-       <button class="cat-btn" onclick="selectCat('دول', this)">دول</button>
+                    <button class="cat-btn" onclick="selectCat('دول', this)">دول</button>
                     <button class="cat-btn" onclick="selectCat('شخصيات مشهورة', this)">شخصيات مشهورة</button>
                 </div>
             </div>
         
             <div class="config-row">عدد المحتالين في الجولة:</div>
-            <div 
-class="imp-toggle-grid">
+            <div class="imp-toggle-grid">
                 <button class="imp-toggle-btn selected" onclick="selectImpCount(1, this)">محتال واحد (1)</button>
                 <button class="imp-toggle-btn" onclick="selectImpCount(2, this)">محتالين اثنين (2)</button>
             </div>
         </div>
- 
+
         <div class="player-list" id="player-list-container"></div>
 
         <div class="lobby-chat-box">
             <div class="chat-messages" id="chat-messages-container"></div>
-   
-         <div class="chat-input-area">
+            <div class="chat-input-area">
                 <input type="text" id="chat-msg-input" placeholder="اكتب رسالة للاعبين..." onkeypress="if(event.key === 'Enter') sendLobbyMessage()">
                 <button onclick="sendLobbyMessage()">إرسال</button>
             </div>
         </div>
 
-        <button id="start-game-btn" class="main-btn" style="display:none;
-background: var(--success); color:#000;" onclick="triggerStart()">بدء العملية</button>
-        <button id="delete-room-btn" class="main-btn" style="display:none; background: var(--imposter);
-box-shadow: 0 4px 0 #b3003b; margin-top: 5px;" onclick="deleteRoomByHost()">إغلاق وحذف الغرفة نهائياً 🗑️</button>
+        <button id="start-game-btn" class="main-btn" style="display:none; background: var(--success); color:#000;" onclick="triggerStart()">بدء العملية</button>
+        <button id="delete-room-btn" class="main-btn" style="display:none; background: var(--imposter); box-shadow: 0 4px 0 #b3003b; margin-top: 5px;" onclick="deleteRoomByHost()">إغلاق وحذف الغرفة نهائياً 🗑️</button>
     </div>
 
     <div id="play-screen" class="screen">
-        <div id="category-hint" style="background: rgba(0,242,255,0.1);
-padding: 5px 20px; border-radius: 20px; color: var(--primary); border: 1px solid var(--primary);
-margin-bottom: 5px;"></div>
+        <div id="category-hint" style="background: rgba(0,242,255,0.1); padding: 5px 20px; border-radius: 20px; color: var(--primary); border: 1px solid var(--primary); margin-bottom: 5px;"></div>
         
         <div class="secret-card" onclick="toggleSecret()">
             <div id="secret-content" style="color: #555;">[ اضغط لفك التشفير ]</div>
@@ -270,26 +163,20 @@ margin-bottom: 5px;"></div>
         <div class="understand-section">
             <div class="understand-title">هل فهمت الكلمة?</div>
             <div class="understand-grid">
-                <button 
-id="und-yes" class="und-btn yes-btn" onclick="submitUnderstanding(true)">نعم 👍</button>
+                <button id="und-yes" class="und-btn yes-btn" onclick="submitUnderstanding(true)">نعم 👍</button>
                 <button id="und-no" class="und-btn no-btn" onclick="submitUnderstanding(false)">لا 👎</button>
             </div>
             <div id="understand-status-text" class="understand-status">انتظار تصويت اللاعبين...</div>
         </div>
 
-        <button class="main-btn" id="change-word-btn" onclick="changeCurrentWord()" style="display:none;
-background: #d97706; box-shadow: 0 4px 0 #92400e; margin-bottom: 5px; margin-top: 5px;">تغيير الكلمة الحالية 🔄</button>
+        <button class="main-btn" id="change-word-btn" onclick="changeCurrentWord()" style="display:none; background: #d97706; box-shadow: 0 4px 0 #92400e; margin-bottom: 5px; margin-top: 5px;">تغيير الكلمة الحالية 🔄</button>
         
-        <button class="main-btn" id="go-to-questions-btn" onclick="switchToQuestionsStage()" style="display:none;
-margin-top: 5px; background:var(--secondary);">الانتقال لجلسة الأسئلة ❯</button>
-        <button class="main-btn" id="go-to-vote-btn" onclick="showVoteScreen()" style="display:none;
-margin-top: 5px;">انتقل للتصويت</button>
+        <button class="main-btn" id="go-to-questions-btn" onclick="switchToQuestionsStage()" style="display:none; margin-top: 5px; background:var(--secondary);">الانتقال لجلسة الأسئلة ❯</button>
+        <button class="main-btn" id="go-to-vote-btn" onclick="showVoteScreen()" style="display:none; margin-top: 5px;">انتقل للتصويت</button>
     </div>
 
     <div id="investigation-screen" class="screen">
-        <div id="investigation-category-hint" style="background: rgba(112,0,255,0.1);
-padding: 5px 20px; border-radius: 20px; color: var(--primary); border: 1px solid var(--secondary); margin-bottom: 5px;
-font-size:12px;"></div>
+        <div id="investigation-category-hint" style="background: rgba(112,0,255,0.1); padding: 5px 20px; border-radius: 20px; color: var(--primary); border: 1px solid var(--secondary); margin-bottom: 5px; font-size:12px;"></div>
         
         <div class="ingame-chat-box">
             <div id="turn-indicator-bar" class="control-turn-bar">جاري التجهيز للتحقيق...</div>
@@ -297,15 +184,13 @@ font-size:12px;"></div>
             
             <div id="doubt-targets-area" class="target-selector-area" style="display:none;"></div>
 
-       
-     <div class="ingame-input-area">
+            <div class="ingame-input-area">
                 <input type="text" id="ingame-msg-input" placeholder="اكتب هنا عندما يحين دورك..." onkeypress="if(event.key === 'Enter') sendInGameMessage()">
                 <button id="ingame-send-btn" onclick="sendInGameMessage()">إرسال</button>
             </div>
         </div>
 
-        <button class="main-btn" id="host-trigger-vote-btn" onclick="showVoteScreen()" style="display:none;
-background: var(--success); color:#000; margin-top: 10px;">انتقل للتصويت ⚖️</button>
+        <button class="main-btn" id="host-trigger-vote-btn" onclick="showVoteScreen()" style="display:none; background: var(--success); color:#000; margin-top: 10px;">انتقل للتصويت ⚖️</button>
     </div>
 
     <div id="vote-screen" class="screen">
@@ -315,15 +200,11 @@ background: var(--success); color:#000; margin-top: 10px;">انتقل للتصو
 
     <div id="result-screen" class="screen">
         <h1 style="color:var(--primary)">نتائج التحقيق</h1>
-        <div style="font-size:14px;
-margin-bottom:10px;">المحتالون كانوا: <span id="res-imp-name" style="color:var(--imposter); font-weight:bold;"></span></div>
-        <div id="scores-container" style="width:100%; background:rgba(0,0,0,0.4); border-radius:10px;
-padding:10px;"></div>
+        <div style="font-size:14px; margin-bottom:10px;">المحتالون كانوا: <span id="res-imp-name" style="color:var(--imposter); font-weight:bold;"></span></div>
+        <div id="scores-container" style="width:100%; background:rgba(0,0,0,0.4); border-radius:10px; padding:10px;"></div>
         <button id="next-round-btn" class="main-btn" onclick="backToLobby()" style="display:none;">الجولة القادمة ❯</button>
-        <button id="finish-btn" class="main-btn" onclick="clearAndReload()" style="display:none;
-background:var(--imposter);">تتويج البطل 🏆</button>
-        <button id="exit-btn" class="main-btn" onclick="clearAndReload()" style="display:none;
-background:#444;">الخروج للرئيسية</button>
+        <button id="finish-btn" class="main-btn" onclick="clearAndReload()" style="display:none; background:var(--imposter);">تتويج البطل 🏆</button>
+        <button id="exit-btn" class="main-btn" onclick="clearAndReload()" style="display:none; background:#444;">الخروج للرئيسية</button>
     </div>
 </div>
 
@@ -342,8 +223,7 @@ background:#444;">الخروج للرئيسية</button>
     const db = firebase.database();
 
     document.getElementById('user-name').value = localStorage.getItem('savedName') || "";
- 
- 
+
     if(localStorage.getItem('lastRoom')) {
         document.getElementById('reconnect-hint').style.display = "block";
         setTimeout(checkAutoReconnect, 500);
@@ -356,42 +236,109 @@ background:#444;">الخروج للرئيسية</button>
 
     const megaDatabase = {
         'حيوانات وحشرات': [
-            { word: "أسد", desc: "حيوان ثديي مفترس من الفصيلة السنورية ويُلقب بملك الغابة."
-},
-            { word: "نمر", desc: "آكل لحوم ضخم ومفترس يتميز بفرائه البرتقالي المخطط بخطوط سوداء."
-},
-            { word: "فهد", desc: "حيوان مفترس من الفصيلة السنورية ويعد أسرع الحيوانات البرية على الإطلاق."
-},
-            { word: "ذئب", desc: "حيوان بري ذكي من فصيلة الكلبيات يعيش ويصطاد ضمن مجموعات منظمة."
-},
-            { word: "ثعلب", desc: "حيوان أصغر من الذئب يشتهر بالذكاء والمكر وله ذيل كثيف."
-},
-            { word: "دب قطبي", desc: "حيوان ثديي ضخم يعيش في البيئات الجليدية ويمتاز بفراء أبيض سميك."
-},
-            { word: "كنغر", desc: "حيوان أسترالي يشتهر بالقفز وحمل صغاره في كيس خاص ببطنه."
-},
-            { word: "بطريق", desc: "طائر بحري غير قادر على الطيران يعيش في النصف الجنوبي من الأرض."
-},
-            { word: "قرش", desc: "سمكة مفترسة تعيش في البحار والمحيطات وتمتلك هيكلاً غضروفياً وحاسة شم قوية."
-},
-            { word: "دلفين", desc: "حيوان ثديي بحري ذكي جداً معروف بحبه للعب ومصادقة الإنسان."
-},
-            { word: "حوت", desc: "أكبر الكائنات الحية الثديية التي تعيش في المحيطات وبعض أنواعها ضخمة جداً."
-},
-            { word: "أخطبوط", desc: "كائن بحري رخوي ذكي يمتلك ثماني أذرع وثلاثة قلوب ويفرز الحبر."
-},
-            { word: "نسر", desc: "طائر جارح ضخم يتميز ببصره الحاد ويتغذى غالباً على الجيف."
-},
-            { word: "صقر", desc: "طائر صياد ماهر وسريع جداً، يرمز للقوة والحدة ويُستخدم في القنص."
-},
-            { word: "بومة", desc: "طائر ليلي مفترس يشتهر برأسه المرن وعينيه الكبيرتين الحادتين."
-},
-            { word: "تمساح", desc: "زاحف برمائي ضخم ومفترس يمتلك فكاً قوياً جداً وجلداً حراشفياً سميكاً."
-},
-            { word: "سلحفاة", desc: "زاحف من ذوات الدم البارد يشتهر ببطء حركته ووجود درع صلب يحميه."
-},
-            { word: "جمل", desc: "حيوان أليف يلقب بسفينة الصحراء لقدرته العالية على تحمل العطش والجوع."
-}
+            { word: "أسد", desc: "حيوان ثديي مفترس من الفصيلة السنورية ويُلقب بملك الغابة." },
+            { word: "نمر", desc: "آكل لحوم ضخم ومفترس يتميز بفرائه البرتقالي المخطط بخطوط سوداء." },
+            { word: "فهد", desc: "حيوان مفترس من الفصيلة السنورية ويعد أسرع الحيوانات البرية على الإطلاق." },
+            { word: "ذئب", desc: "حيوان بري ذكي من فصيلة الكلبيات يعيش ويصطاد ضمن مجموعات منظمة." },
+            { word: "ثعلب", desc: "حيوان أصغر من الذئب يشتهر بالذكاء والمكر وله ذيل كثيف." },
+            { word: "دب قطبي", desc: "حيوان ثديي ضخم يعيش في البيئات الجليدية ويمتاز بفراء أبيض سميك." },
+            { word: "كنغر", desc: "حيوان أسترالي يشتهر بالقفز وحمل صغاره في كيس خاص ببطنه." },
+            { word: "بطريق", desc: "طائر بحري غير قادر على الطيران يعيش في النصف الجنوبي من الأرض." },
+            { word: "قرش", desc: "سمكة مفترسة تعيش في البحار والمحيطات وتمتلك هيكلاً غضروفياً وحاسة شم قوية." },
+            { word: "دلفين", desc: "حيوان ثديي بحري ذكي جداً معروف بحبه للعب ومصادقة الإنسان." },
+            { word: "حوت", desc: "أكبر الكائنات الحية الثديية التي تعيش في المحيطات وبعض أنواعها ضخمة جداً." },
+            { word: "أخطبوط", desc: "كائن بحري رخوي ذكي يمتلك ثماني أذرع وثلاثة قلوب ويفرز الحبر." },
+            { word: "نسر", desc: "طائر جارح ضخم يتميز ببصره الحاد ويتغذى غالباً على الجيف." },
+            { word: "صقر", desc: "طائر صياد ماهر وسريع جداً، يرمز للقوة والحدة ويُستخدم في القنص." },
+            { word: "بومة", desc: "طائر ليلي مفترس يشتهر برأسه المرن وعينيه الكبيرتين الحادتين." },
+            { word: "تمساح", desc: "زاحف برمائي ضخم ومفترس يمتلك فكاً قوياً جداً وجلداً حراشفياً سميكاً." },
+            { word: "سلحفاة", desc: "زاحف من ذوات الدم البارد يشتهر ببطء حركته ووجود درع صلب يحميه." },
+            { word: "جمل", desc: "حيوان أليف يلقب بسفينة الصحراء لقدرته العالية على تحمل العطش والجوع." }
+        ],
+        'طعام': [
+            { word: "بيتزا", desc: "قرص عجين مستدير يعلوه صلصة طماطم وجبن ومكونات أخرى ويُخبز في الفرن." },
+            { word: "برجر", desc: "شطيرة تتكون من قرص من اللحم المفروم المشوي يوضع داخل رغيف خبز مستدير." },
+            { word: "شاورما", desc: "لحم مشوي بطريقة عمودية خاصة يُقشر ويوضع في خبز مع إضافات." },
+            { word: "سوشي", desc: "طعام ياباني شهير يتكون من أرز مطبوخ بالخل مع مأكولات بحرية وورق طحالب." },
+            { word: "باستا", desc: "عجائن إيطالية تصنع من القمح والماء وتُطهى وتُقدم مع صلصات متنوعة." },
+            { word: "شيكولاتة", desc: "حلوى تصنع أساساً من حبوب الكاكاو المحمصة والمطحونة وتعد شعبية جداً." },
+            { word: "آيس كريم", desc: "حلوى مجمدة تصنع عادة من الحليب والقشطة والسكر وتأتي بنكهات مختلفة." },
+            { word: "فلافل", desc: "أقراص مقلية مصنوعة من الحمص أو الفول المفروم مع التوابل والخضروات." },
+            { word: "كبسة", desc: "وجبة خليجية تقليدية تتكون أساساً من الأرز طويل الحبة مع اللحم أو الدجاج والبهارات." },
+            { word: "كسكسي", desc: "طعام مغاربي تقليدي يصنع من طحين القمح على شكل حبيبات صغيرة ويطهى بالبخار." },
+            { word: "تفاح", desc: "فاكهة مقرمشة وصحية تنمو على الأشجار وتأتي بألوان أحمر وأخضر وأصفر." },
+            { word: "موز", desc: "فاكهة استوائية ذات قشرة صفراء ناعمة ولب طري غني بالبوتاسيوم." },
+            { word: "فراولة", desc: "فاكهة حمراء صغيرة الحجم حلوة المذاق منقطة بالبذور وتنمو قريباً من الأرض." },
+            { word: "مانجو", desc: "فاكهة استوائية ذات قشرة ملساء ولب برتقالي حلو وعصيري وبداخلها نواة كبيرة." },
+            { word: "بطيخ", desc: "فاكهة صيفية ضخمة دائرية ذات قشرة خضراء سميكة ولب أحمر عصيري مليء بالماء." }
+        ],
+        'أماكن': [
+            { word: "مستشفى", desc: "مؤسسة صحية مخصصة لعلاج المرضى وتقديم الرعاية الطبية وإجراء العمليات." },
+            { word: "مدرسة", desc: "مؤسسة تعليمية يتعلم فيها الطلاب العلوم المختلفة في مراحل مبكرة." },
+            { word: "مطار", desc: "مكان مخصص لإقلاع وهبوط الطائرات ويحتوي على مبانٍ للمسافرين والشحن." },
+            { word: "فندق", desc: "منشأة تقدم خدمات الإقامة المؤقتة والطعام للمسافرين والسياح مقابل أجر." },
+            { word: "مطعم", desc: "محل تجاري يُعَد فيه الطعام والشراب ويُقَدّم للزبائن لتناوله." },
+            { word: "متحف", desc: "مكان تُجمع وتُحفظ وتُعرض فيه الآثار والتحف الفنية والأشياء التاريخية." },
+            { word: "حديقة حيوان", desc: "مرفق عام تُجمع فيه حيوانات حية مختلفة داخل أقفاص أو مساحات ليتفرج عليها الناس." },
+            { word: "محطة قطار", desc: "مكان مخصص لتوقف القطارات بصورة منتظمة لصعود ونزول الركاب أو شحن البضائع." },
+            { word: "شاطئ", desc: "المنطقة الرملية أو الحصوية المحاذية لساحل البحر أو المحيط وتُستخدم للاستجمام." },
+            { word: "مكتبة", desc: "مكان تُجمع وتحفظ فيه الكتب والمراجع لغرض القراءة أو الاستعارة أو الدراسة." },
+            { word: "جامعة", desc: "مؤسسة للتعليم العالي والبحث العلمي تمنح شهادات أكاديمية عليا كالبروفيسور." },
+            { word: "سوبرماركت", desc: "متجر كبير للخدمة الذاتية يبيع أنواعاً متعددة من الأطعمة والسلع المنزلية." },
+            { word: "صيدلية", desc: "مكان مرخص لتركيب وصرف الأدوية وبيع المستلزمات الطبية والصحية." },
+            { word: "بنك", desc: "مؤسسة مالية تتعامل بالنقود والائتمان وتقدم خدمات حفظ الأموال والقروض." },
+            { word: "صالة جيم", desc: "مكان مجهز بالأجهزة الرياضية والأوزان لممارسة التمارين وبناء العضلات." }
+        ],
+        'جماد': [
+            { word: "قلم", desc: "أداة يدوية تُستخدم للكتابة أو الرسم بواسطة الحبر أو الرصاص." },
+            { word: "كتاب", desc: "مجموعة من الأوراق المطبوعة أو المخطوطة والمثبتة معاً داخل غلاف." },
+            { word: "هاتف ذكي", desc: "جهاز محمول متطور يدمج بين الاتصال الهاتفي وتصفح الإنترنت والتطبيقات." },
+            { word: "حاسوب محمول", desc: "جهاز كمبيوتر شخصي صغير الحجم وخفيف الوزن يمكن حمله وتشغيله بالبطارية." },
+            { word: "ساعة يد", desc: "أداة صغيرة تُلبس حول المعصم لمعرفة الوقت وتحديد الساعات والدقائق." },
+            { word: "نظارة", desc: "إطار يحمل عدسات زجاجية يوضع أمام العينين لتصحيح النظر أو الحماية." },
+            { word: "مفتاح", desc: "أداة معدنية صغيرة تُستخدم لفتح أو قفل الأبواب والأقفال والسيارات." },
+            { word: "كرسي", desc: "قطعة أثاث مخصصة للجلوس تتكون عادة من مقعد وظهر وأربع أرجل." },
+            { word: "طاولة", desc: "قطعة أثاث ذات سطح مستوٍ مرفوع عن الأرض تُستخدم لوضع الأشياء أو تناول الطعام." },
+            { word: "سيارة", desc: "مركبة آلية ذات أربع عجلات تسير على الطرق وتُستخدم لنقل الركاب." },
+            { word: "دراجة هوائية", desc: "مركبة ذات عجلتين تعتمد في حركتها على قوة دفع أرجل الراكب عبر الدواسات." },
+            { word: "تلفاز", desc: "جهاز إلكتروني يقوم باستقبال وبث الصور المتحركة المصحوبة بالصوت عن بعد." },
+            { word: "ثلاجة", desc: "جهاز منزلي كهربائي يُستخدم لحفظ الأطعمة والمشروبات باردة لمنع تلفها." },
+            { word: "مصباح", desc: "أداة تُصدر الضوء الاصطناعي بواسطة الكهرباء أو الوقود لإنارة المكان." },
+            { word: "حقيبة", desc: "وعاء مصنوع من الجلد أو القماش يُستخدم لحمل الأمتعة أو الكتب أو المستلزمات الشخصية." }
+        ],
+        'دول': [
+            { word: "الجزائر", desc: "أكبر دولة أفريقية وعربية من حيث المساحة، تقع في شمال أفريقيا وعاصمتها الجزائر." },
+            { word: "مصر", desc: "دولة عربية تقع في شمال شرق أفريقيا، تشتهر بالحضارة الفرعونية القديمة ونهر النيل." },
+            { word: "المملكة العربية السعودية", desc: "أكبر دولة في الشرق الأوسط، تقع في شبه الجزيرة العربية وبها الحرمين الشريفين." },
+            { word: "فلسطين", desc: "دولة عربية إسلامية في قلب الشرق الأوسط، تضم المسجد الأقصى والقدس الشريف." },
+            { word: "تونس", desc: "دولة عربية تقع في شمال أفريقيا على البحر المتوسط بين الجزائر وليبيا." },
+            { word: "المغرب", desc: "دولة عربية تقع في أقصى شمال غرب أفريقيا، عاصمتها الرباط وتطل على المحيط الأطلسي." },
+            { word: "اليابان", desc: "دولة جزيرية تقع في شرق آسيا، وتُعرف باسم كوكب اليابان لتقدمها التكنولوجي." },
+            { word: "فرنسا", desc: "دولة تقع في غرب أوروبا، عاصمتها باريس وتشتهر ببرج إيفل والمعالم الثقافية." },
+            { word: "الولايات المتحدة الأمريكية", desc: "جمهورية اتحادية تقع في أمريكا الشمالية وتعد القوة الاقتصادية والعسكرية الأكبر عالمياً." },
+            { word: "برازيل", desc: "أكبر دولة في أمريكا الجنوبية، تشتهر بكرة القدم وغابات الأمازون الكثيفة." },
+            { word: "إيطاليا", desc: "دولة أوروبية تشبه شكل الحذاء في البحر المتوسط، عاصمتها روما ومنبع البيتزا والباستا." },
+            { word: "ألمانيا", desc: "دولة في وسط أوروبا تعد من القوى الصناعية الكبرى في العالم وتشتهر بصناعة السيارات الفاخرة." },
+            { word: "تركيا", desc: "دولة عابرة للقارات تقع بين آسيا وأوروبا، عاصمتها أنقرة وتاريخها مرتبط بالدولة العثمانية." },
+            { word: "روسيا", desc: "أكبر دولة في العالم من حيث المساحة، تمتد عبر شمال آسيا وأوروبا وعاصمتها موسكو." },
+            { word: "كندا", desc: "ثاني أكبر دولة في العالم مساحة، تقع في أمريكا الشمالية وتشتهر بالطبيعة الباردة وشجرة القيقب." }
+        ],
+        'شخصيات مشهورة': [
+            { word: "ابن سينا", desc: "عالم وطبيب مسلم شهير، لُقب بشيخ الرئيس وألف كتاب القانون في الطب." },
+            { word: "كريستيانو رونالدو", desc: "لاعب كرة قدم برتغالي أسطوري، يعد من أفضل الهدافين في التاريخ ولعب لعدة أندية عالمية." },
+            { word: "ليونيل ميسي", desc: "لاعب كرة قدم أرجنتيني عبقري، يشتهر بمهاراته الفردية العالية وحطم أرقاماً قياسية عديدة." },
+            { word: "ألبرت أينشتاين", desc: "عالم فيزياء ألماني شهير صاغ النظرية النسبية التي غيرت مفاهيم الفيزياء الحديثة." },
+            { word: "إسحاق نيوتن", desc: "عالم إنجليزي شهير اكتشف قانون الجاذبية الأرضية وقوانين الحركة الأساسية." },
+            { word: "محمد علي كلاي", desc: "ملاكم أمريكي أسطوري في الوزن الثقيل، عُرف بمهارته ومواقفه الإنسانية الرائدة." },
+            { word: "توم كروز", desc: "ممثل ومنتج أمريكي شهير، بطل سلسلة أفلام المهمة المستحيلة والمعروف بأداء حركاته الخطيرة بنفسه." },
+            { word: "بيل غيتس", desc: "رجل أعمال ومبرمج أمريكي شارك في تأسيس شركة مايكروسوفت العملاقة للبرمجيات." },
+            { word: "إيلون ماسك", desc: "مهندس ورجل أعمال ومخترع يمتلك شركتي تيسلا وسبيس إكس وموقع إكس التواصلي." },
+            { word: "ليوناردو دا فينشي", desc: "فنان ومخترع إيطالي عبقري من عصر النهضة، رسم لوحة الموناليزا الشهيرة." },
+            { word: "ويليام شكسبير", desc: "شاعر وكاتب مسرحي إنجليزي بارز جداً، من أشهر أعماله مسرحية روميو وجولييت." },
+            { word: "ستيف جوبز", desc: "مخترع ورائد أعمال أمريكي شارك في تأسيس شركة آبل وكان العقل المدبر وراء هاتف آيفون." },
+            { word: "نيقولا تسلا", desc: "مخترع وعالم فيزياء صربي أمريكي، يرجع له الفضل في تطوير نظام التيار الكهربائي المتردد." },
+            { word: "تشارلي تشابلن", desc: "ممثل ومخرج صامت بريطاني شهير، يعد من أيقونات السينما الكوميدية العالمية القديمة." },
+            { word: "كريستوفر كولومبوس", desc: "رحالة ومستكشف إيطالي شهير، نُسب إليه تاريخياً اكتشاف القارة الأمريكية." }
         ]
     };
 
