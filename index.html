@@ -8,77 +8,171 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     <style>
-        :root { --bg: #0a0a12; --primary: #00f2ff; --secondary: #7000ff; --imposter: #ff0055; --card-bg: #161625; --text: #e0e0ff; --success: #00ff9d; }
-        html, body { overflow: hidden; overscroll-behavior-y: contain; position: fixed; width: 100%; height: 100%; margin: 0; padding: 0; }
-        body { background: var(--bg); color: var(--text); font-family: 'Cairo', sans-serif; display: flex; align-items: center; justify-content: center; }
-        .app-viewport { width: 95%; max-width: 400px; height: 620px; background: var(--card-bg); border: 2px solid var(--primary); border-radius: 20px; position: relative; overflow: hidden; box-shadow: 0 0 30px rgba(0,242,255,0.2); }
-        .screen { position: absolute; width: 100%; height: 100%; padding: 25px; display: none; flex-direction: column; align-items: center; box-sizing: border-box; }
-        .active { display: flex; animation: fadeIn 0.3s; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        h1 { font-family: 'Press Start 2P'; font-size: 11px; color: var(--primary); margin-bottom: 20px; text-align: center; }
-        .main-btn { width: 100%; padding: 14px; border-radius: 12px; border: none; background: var(--secondary); color: white; font-weight: bold; cursor: pointer; margin-top: 8px; box-shadow: 0 4px 0 #4a00aa; }
-        .main-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 #4a00aa; }
-        .main-btn:disabled { background: #444 !important; box-shadow: none !important; color: #aaa; cursor: not-allowed; }
-        input { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #333; background: #000; color: #fff; text-align: center; margin-bottom: 10px; }
-        .player-list { width: 100%; flex-grow: 1; overflow-y: auto; background: rgba(0,0,0,0.3); border-radius: 10px; padding: 10px; margin-bottom: 10px; border: 1px solid #222; }
-        .player-tag { background: #252535; padding: 6px 12px; margin: 3px; border-radius: 20px; display: inline-flex; align-items: center; gap: 8px; font-size: 11px; border: 1px solid var(--primary); }
-        .kick-btn { background: none; border: none; color: var(--imposter); font-weight: bold; cursor: pointer; padding: 0; font-size: 12px; }
-        .round-badge { background: var(--imposter); color: white; padding: 4px 15px; border-radius: 20px; font-size: 11px; font-weight: bold; margin-bottom: 15px; }
-        .cat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; margin-bottom: 10px; }
-        .cat-btn { background: #1a1a2e; color: #aaa; border: 1px solid #333; padding: 10px; border-radius: 8px; font-size: 12px; cursor: pointer; }
-        .cat-btn.selected { background: var(--primary); color: #000; border-color: var(--primary); }
-        .secret-card { width: 100%; height: 110px; background: #05050a; border: 2px dashed var(--secondary); border-radius: 15px; display: flex; align-items: center; justify-content: center; margin: 10px 0; cursor: pointer; text-align: center; }
-        .vote-btn { background: #2d2d44; color: white; border: 1px solid var(--primary); padding: 10px; margin: 5px 0; width: 100%; border-radius: 8px; cursor: pointer; text-align: center; }
-        .vote-btn:disabled { opacity: 0.4; cursor: not-allowed; border-color: #333; }
-        .score-row { display: flex; justify-content: space-between; width: 100%; padding: 8px 10px; border-bottom: 1px solid #333; font-size: 14px; }
+        :root { --bg: #0a0a12;
+--primary: #00f2ff; --secondary: #7000ff; --imposter: #ff0055; --card-bg: #161625; --text: #e0e0ff; --success: #00ff9d;
+}
+        html, body { overflow: hidden; overscroll-behavior-y: contain; position: fixed; width: 100%;
+height: 100%; margin: 0; padding: 0; }
+        body { background: var(--bg); color: var(--text);
+font-family: 'Cairo', sans-serif; display: flex; align-items: center; justify-content: center; }
+        .app-viewport { width: 95%;
+max-width: 400px; height: 620px; background: var(--card-bg); border: 2px solid var(--primary); border-radius: 20px; position: relative; overflow: hidden;
+box-shadow: 0 0 30px rgba(0,242,255,0.2); }
+        .screen { position: absolute; width: 100%;
+height: 100%; padding: 25px; display: none; flex-direction: column; align-items: center; box-sizing: border-box;
+}
+        .active { display: flex; animation: fadeIn 0.3s;
+}
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1;
+} }
+        h1 { font-family: 'Press Start 2P'; font-size: 11px; color: var(--primary);
+margin-bottom: 20px; text-align: center; }
+        .main-btn { width: 100%; padding: 14px; border-radius: 12px;
+border: none; background: var(--secondary); color: white; font-weight: bold; cursor: pointer; margin-top: 8px; box-shadow: 0 4px 0 #4a00aa;
+}
+        .main-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 #4a00aa;
+}
+        .main-btn:disabled { background: #444 !important; box-shadow: none !important; color: #aaa; cursor: not-allowed;
+}
+        input { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #333;
+background: #000; color: #fff; text-align: center; margin-bottom: 10px; }
+        .player-list { width: 100%;
+flex-grow: 1; overflow-y: auto; background: rgba(0,0,0,0.3); border-radius: 10px; padding: 10px; margin-bottom: 10px; border: 1px solid #222;
+}
+        .player-tag { background: #252535; padding: 6px 12px; margin: 3px; border-radius: 20px;
+display: inline-flex; align-items: center; gap: 8px; font-size: 11px; border: 1px solid var(--primary);
+}
+        .kick-btn { background: none; border: none; color: var(--imposter); font-weight: bold; cursor: pointer;
+padding: 0; font-size: 12px; }
+        .round-badge { background: var(--imposter); color: white;
+padding: 4px 15px; border-radius: 20px; font-size: 11px; font-weight: bold; margin-bottom: 15px;
+}
+        .cat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%;
+margin-bottom: 10px; }
+        .cat-btn { background: #1a1a2e; color: #aaa; border: 1px solid #333;
+padding: 10px; border-radius: 8px; font-size: 12px; cursor: pointer; }
+        .cat-btn.selected { background: var(--primary);
+color: #000; border-color: var(--primary); }
+        .secret-card { width: 100%; height: 110px; background: #05050a;
+border: 2px dashed var(--secondary); border-radius: 15px; display: flex; align-items: center; justify-content: center; margin: 10px 0; cursor: pointer; text-align: center;
+}
+        .vote-btn { background: #2d2d44; color: white; border: 1px solid var(--primary); padding: 10px;
+margin: 5px 0; width: 100%; border-radius: 8px; cursor: pointer; text-align: center;
+}
+        .vote-btn:disabled { opacity: 0.4; cursor: not-allowed; border-color: #333;
+}
+        .score-row { display: flex; justify-content: space-between; width: 100%; padding: 8px 10px;
+border-bottom: 1px solid #333; font-size: 14px; }
+        .config-row { font-size: 11px; color: var(--primary);
+margin: 5px 0; width: 100%; text-align: right; }
+        .config-scroll-area { width: 100%;
+max-height: 120px; overflow-y: auto; background: rgba(0,0,0,0.2); padding: 5px; border-radius: 10px; box-sizing: border-box; margin-bottom: 10px; border: 1px solid #222;
+}
+        .config-row { font-size: 11px; color: var(--primary); margin: 5px 0; width: 100%;
+text-align: right; }
+        .config-scroll-area { width: 100%; max-height: 120px; overflow-y: auto; background: rgba(0,0,0,0.2);
+padding: 5px; border-radius: 10px; box-sizing: border-box; margin-bottom: 10px; border: 1px solid #222;
+}
+        .imp-toggle-grid { display: grid;
+grid-template-columns: 1fr 1fr; gap: 8px; width: 100%;
+margin-bottom: 15px; }
+        .imp-toggle-btn { background: #1a1a2e;
+color: #aaa; border: 1px solid #333;
+padding: 8px; border-radius: 8px; font-size: 11px; cursor: pointer; font-family: 'Cairo';
+}
+        .imp-toggle-btn.selected { background: var(--imposter); color: #fff; border-color: var(--imposter);
+box-shadow: 0 0 10px var(--imposter); }
         
-        .config-row { font-size: 11px; color: var(--primary); margin: 5px 0; width: 100%; text-align: right; }
-        .config-scroll-area { width: 100%; max-height: 120px; overflow-y: auto; background: rgba(0,0,0,0.2); padding: 5px; border-radius: 10px; box-sizing: border-box; margin-bottom: 10px; border: 1px solid #222; }
+        .rooms-radar { width: 100%;
+background: rgba(0,0,0,0.4); border: 1px dashed #333; border-radius: 12px; padding: 10px; margin-top: 10px; max-height: 110px; overflow-y: auto; box-sizing: border-box;
+}
+        .radar-title { font-size: 10px; color: var(--primary); text-align: center; margin-bottom: 6px; letter-spacing: 1px;
+}
+        .room-item { background: #1a1a2e; border: 1px solid var(--secondary); padding: 8px; margin-bottom: 5px;
+border-radius: 8px; font-size: 11px; display: flex; justify-content: space-between; align-items: center; cursor: pointer;
+}
+        .room-item:hover { border-color: var(--success);
+}
+
+        .understand-section { width: 100%; display: flex; flex-direction: column; align-items: center; margin-bottom: 10px;
+background: rgba(255,255,255,0.03); padding: 8px; border-radius: 10px; border: 1px solid #222; box-sizing: border-box;
+}
+        .understand-title { font-size: 12px; color: var(--text); margin-bottom: 6px; font-weight: bold;
+}
+        .understand-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%;
+}
+        .und-btn { padding: 8px; border: 1px solid #444; background: #111; color: #fff;
+border-radius: 8px; font-weight: bold; cursor: pointer; font-family: 'Cairo'; font-size: 12px;
+}
+        .und-btn.yes-btn:hover { background: var(--success); color: #000; border-color: var(--success);
+}
+        .und-btn.no-btn:hover { background: var(--imposter); color: #fff; border-color: var(--imposter);
+}
+        .und-btn.selected-yes { background: var(--success); color: #000; border-color: var(--success);
+box-shadow: 0 0 8px var(--success); }
+        .und-btn.selected-no { background: var(--imposter); color: #fff;
+border-color: var(--imposter); box-shadow: 0 0 8px var(--imposter); }
+        .understand-status { font-size: 11px;
+color: #aaa; margin-top: 4px; text-align: center; }
+
+        .lobby-chat-box { width: 100%; display: flex;
+flex-direction: column; background: rgba(0,0,0,0.4); border: 1px solid #222; border-radius: 12px; margin-bottom: 10px; height: 110px; overflow: hidden; box-sizing: border-box;
+}
+        .chat-messages { flex-grow: 1; overflow-y: auto; padding: 6px 10px; font-size: 11px;
+display: flex; flex-direction: column; gap: 4px; text-align: right; }
+        .chat-msg { background: rgba(255,255,255,0.03);
+padding: 4px 8px; border-radius: 6px; border-right: 2px solid var(--secondary); word-break: break-all;
+}
+        .chat-msg .sender { color: var(--primary); font-weight: bold; margin-left: 5px;
+}
+        .chat-input-area { display: flex; border-top: 1px solid #222; background: #000;
+}
+        .chat-input-area input { flex-grow: 1; border: none; padding: 6px 10px; font-size: 11px;
+background: transparent; color: #fff; margin: 0; text-align: right; }
+        .chat-input-area button { background: var(--secondary);
+color: white; border: none; padding: 0 15px; font-size: 11px; font-weight: bold; cursor: pointer; font-family: 'Cairo';
+}
         
-        .imp-toggle-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; margin-bottom: 15px; }
-        .imp-toggle-btn { background: #1a1a2e; color: #aaa; border: 1px solid #333; padding: 8px; border-radius: 8px; font-size: 11px; cursor: pointer; font-family: 'Cairo'; }
-        .imp-toggle-btn.selected { background: var(--imposter); color: #fff; border-color: var(--imposter); box-shadow: 0 0 10px var(--imposter); }
-        
-        .rooms-radar { width: 100%; background: rgba(0,0,0,0.4); border: 1px dashed #333; border-radius: 12px; padding: 10px; margin-top: 10px; max-height: 110px; overflow-y: auto; box-sizing: border-box; }
-        .radar-title { font-size: 10px; color: var(--primary); text-align: center; margin-bottom: 6px; letter-spacing: 1px; }
-        .room-item { background: #1a1a2e; border: 1px solid var(--secondary); padding: 8px; margin-bottom: 5px; border-radius: 8px; font-size: 11px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
-        .room-item:hover { border-color: var(--success); }
+        .leave-game-btn { background: #33101a;
+border: 1px dashed var(--imposter); color: var(--imposter); font-size: 11px; padding: 4px 12px; border-radius: 6px; cursor: pointer; font-family: 'Cairo'; position: absolute;
+top: 10px; left: 10px; z-index: 100; display: none; font-weight: bold;
+}
+        .leave-game-btn:hover { background: var(--imposter); color: #fff;
+}
 
-        .understand-section { width: 100%; display: flex; flex-direction: column; align-items: center; margin-bottom: 10px; background: rgba(255,255,255,0.03); padding: 8px; border-radius: 10px; border: 1px solid #222; box-sizing: border-box; }
-        .understand-title { font-size: 12px; color: var(--text); margin-bottom: 6px; font-weight: bold; }
-        .understand-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; }
-        .und-btn { padding: 8px; border: 1px solid #444; background: #111; color: #fff; border-radius: 8px; font-weight: bold; cursor: pointer; font-family: 'Cairo'; font-size: 12px; }
-        .und-btn.yes-btn:hover { background: var(--success); color: #000; border-color: var(--success); }
-        .und-btn.no-btn:hover { background: var(--imposter); color: #fff; border-color: var(--imposter); }
-        .und-btn.selected-yes { background: var(--success); color: #000; border-color: var(--success); box-shadow: 0 0 8px var(--success); }
-        .und-btn.selected-no { background: var(--imposter); color: #fff; border-color: var(--imposter); box-shadow: 0 0 8px var(--imposter); }
-        .understand-status { font-size: 11px; color: #aaa; margin-top: 4px; text-align: center; }
+        .room-type-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%;
+margin-bottom: 8px; }
+        .type-btn { background: #1a1a2e; color: #aaa; border: 1px solid #333;
+padding: 10px; border-radius: 8px; font-size: 12px; cursor: pointer; font-family: 'Cairo'; font-weight: bold;
+}
+        .type-btn.selected { background: var(--secondary); color: #fff; border-color: var(--secondary);
+}
 
-        .lobby-chat-box { width: 100%; display: flex; flex-direction: column; background: rgba(0,0,0,0.4); border: 1px solid #222; border-radius: 12px; margin-bottom: 10px; height: 110px; overflow: hidden; box-sizing: border-box; }
-        .chat-messages { flex-grow: 1; overflow-y: auto; padding: 6px 10px; font-size: 11px; display: flex; flex-direction: column; gap: 4px; text-align: right; }
-        .chat-msg { background: rgba(255,255,255,0.03); padding: 4px 8px; border-radius: 6px; border-right: 2px solid var(--secondary); word-break: break-all; }
-        .chat-msg .sender { color: var(--primary); font-weight: bold; margin-left: 5px; }
-        .chat-input-area { display: flex; border-top: 1px solid #222; background: #000; }
-        .chat-input-area input { flex-grow: 1; border: none; padding: 6px 10px; font-size: 11px; background: transparent; color: #fff; margin: 0; text-align: right; }
-        .chat-input-area button { background: var(--secondary); color: white; border: none; padding: 0 15px; font-size: 11px; font-weight: bold; cursor: pointer; font-family: 'Cairo'; }
-        
-        .leave-game-btn { background: #33101a; border: 1px dashed var(--imposter); color: var(--imposter); font-size: 11px; padding: 4px 12px; border-radius: 6px; cursor: pointer; font-family: 'Cairo'; position: absolute; top: 10px; left: 10px; z-index: 100; display: none; font-weight: bold; }
-        .leave-game-btn:hover { background: var(--imposter); color: #fff; }
-
-        .room-type-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; margin-bottom: 8px; }
-        .type-btn { background: #1a1a2e; color: #aaa; border: 1px solid #333; padding: 10px; border-radius: 8px; font-size: 12px; cursor: pointer; font-family: 'Cairo'; font-weight: bold; }
-        .type-btn.selected { background: var(--secondary); color: #fff; border-color: var(--secondary); }
-
-        .ingame-chat-box { width: 100%; display: flex; flex-direction: column; background: rgba(0,0,0,0.5); border: 1px solid var(--primary); border-radius: 12px; margin-top: 5px; flex-grow: 1; overflow: hidden; box-sizing: border-box; }
-        .ingame-messages { flex-grow: 1; overflow-y: auto; padding: 10px; font-size: 12px; display: flex; flex-direction: column; gap: 6px; text-align: right; }
-        .ingame-msg { background: rgba(0,242,255,0.03); padding: 6px 10px; border-radius: 6px; border-right: 2px solid var(--primary); word-break: break-all; }
-        .ingame-msg .sender { color: var(--success); font-weight: bold; margin-left: 5px; }
-        .control-turn-bar { background: #221a35; padding: 8px; font-size: 12px; color: var(--primary); text-align: center; border-bottom: 1px solid #333; font-weight: bold; }
-        .ingame-input-area { display: flex; border-top: 1px solid #222; background: #000; }
-        .ingame-input-area input { flex-grow: 1; border: none; padding: 12px; font-size: 12px; background: transparent; color: #fff; margin: 0; text-align: right; }
-        .ingame-input-area button { background: var(--primary); color: black; border: none; padding: 0 20px; font-size: 12px; font-weight: bold; cursor: pointer; font-family: 'Cairo'; }
-        .target-selector-area { display: flex; gap: 4px; background: #111; padding: 6px; justify-content: center; width: 100%; box-sizing: border-box; border-top: 1px solid #222; flex-wrap: wrap; }
-        .target-mini-btn { background: #222; color: #fff; border: 1px solid var(--primary); font-size: 11px; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-family: 'Cairo'; }
+        /* تنسيقات قسم التحقيق المنظم والجديد */
+        .ingame-chat-box { width: 100%;
+display: flex; flex-direction: column; background: rgba(0,0,0,0.5); border: 1px solid var(--primary); border-radius: 12px; margin-top: 5px; flex-grow: 1; overflow: hidden; box-sizing: border-box;
+}
+        .ingame-messages { flex-grow: 1; overflow-y: auto; padding: 10px; font-size: 12px; display: flex;
+flex-direction: column; gap: 6px; text-align: right; }
+        .ingame-msg { background: rgba(0,242,255,0.03);
+padding: 6px 10px; border-radius: 6px; border-right: 2px solid var(--primary); word-break: break-all;
+}
+        .ingame-msg .sender { color: var(--success); font-weight: bold; margin-left: 5px;
+}
+        .control-turn-bar { background: #221a35; padding: 8px; font-size: 12px; color: var(--primary); text-align: center;
+border-bottom: 1px solid #333; font-weight: bold; }
+        .ingame-input-area { display: flex;
+border-top: 1px solid #222; background: #000; }
+        .ingame-input-area input { flex-grow: 1;
+border: none; padding: 12px; font-size: 12px; background: transparent; color: #fff; margin: 0; text-align: right;
+}
+        .ingame-input-area button { background: var(--primary); color: black; border: none; padding: 0 20px;
+font-size: 12px; font-weight: bold; cursor: pointer; font-family: 'Cairo'; }
+        .target-selector-area { display: flex;
+gap: 4px; background: #111; padding: 6px; justify-content: center; width: 100%; box-sizing: border-box; border-top: 1px solid #222; flex-wrap: wrap;
+}
+        .target-mini-btn { background: #222; color: #fff; border: 1px solid var(--primary); font-size: 11px;
+padding: 4px 10px; border-radius: 4px; cursor: pointer; font-family: 'Cairo'; }
     </style>
 </head>
 <body>
@@ -92,21 +186,25 @@
         
         <div class="room-type-grid">
             <button id="type-public-btn" class="type-btn selected" onclick="setRoomPrivacy('public')">🔓 غرفة عامة</button>
-            <button id="type-private-btn" class="type-btn" onclick="setRoomPrivacy('private')">🔒 غرفة برمز سري</button>
+            
+<button id="type-private-btn" class="type-btn" onclick="setRoomPrivacy('private')">🔒 غرفة برمز سري</button>
         </div>
-        <input type="number" id="custom-password-input" placeholder="أدخل رمز سري (4 أرقام)" style="display:none;" oninput="if(this.value.length > 4) this.value = this.value.slice(0,4)">
+        <input type="number" id="custom-password-input" placeholder="أدخل رمز سري (4 أرقام)" style="display:none;"
+oninput="if(this.value.length > 4) this.value = this.value.slice(0,4)">
 
         <button id="create-btn" class="main-btn" onclick="processAndCreateRoom()">إنشاء غرفة جديدة</button>
         <div style="margin: 5px 0; font-size: 10px; color: #444;">— أو انضم لصديق —</div>
         <input type="text" id="room-id-input" placeholder="أدخل كود الغرفة">
-        <button id="join-btn" class="main-btn" style="background:#333; box-shadow: 0 4px 0 #111;" onclick="processAndJoinRoom()">انضمام للغرفة</button>
+        <button id="join-btn" class="main-btn" style="background:#333; box-shadow: 0 4px 0 #111;"
+onclick="processAndJoinRoom()">انضمام للغرفة</button>
         
         <div class="rooms-radar">
             <div class="radar-title">📡 الرادارات النشطة (غرف متاحة)</div>
             <div id="available-rooms-container" style="color:#666; font-size:10px; text-align:center; padding-top:10px;">جاري البحث عن إشارات...</div>
         </div>
         
-        <p id="reconnect-hint" style="display:none; font-size: 10px; color: var(--success); margin-top: 10px; cursor:pointer;" onclick="checkAutoReconnect()">قطع الاتصال؟ اضغط للاستعادة</p>
+        <p id="reconnect-hint" style="display:none; font-size: 10px; color: var(--success); margin-top: 10px; cursor:pointer;"
+onclick="checkAutoReconnect()">قطع الاتصال؟ اضغط للاستعادة</p>
     </div>
 
     <div id="lobby-screen" class="screen">
@@ -116,45 +214,54 @@
         <div id="host-controls" style="display:none; width: 100%;">
             <div class="config-row">وضع اللعب للدردشة:</div>
             <div class="imp-toggle-grid" style="margin-bottom:8px;">
-                <button id="mode-normal-btn" class="imp-toggle-btn selected" onclick="selectPlayMode('normal', this)">الوضع العادي (القديم)</button>
+         
+               <button id="mode-normal-btn" class="imp-toggle-btn selected" onclick="selectPlayMode('normal', this)">الوضع العادي (القديم)</button>
                 <button id="mode-chat-btn" class="imp-toggle-btn" onclick="selectPlayMode('controlled_chat', this)">وضع التحقيق المحكم</button>
             </div>
 
             <div class="config-row">اختر الفئة:</div>
             <div class="config-scroll-area">
                 <div class="cat-grid">
+        
                     <button class="cat-btn selected" onclick="selectCat('حيوانات وحشرات', this)">حيوانات وحشرات</button>
                     <button class="cat-btn" onclick="selectCat('طعام', this)">طعام</button>
                     <button class="cat-btn" onclick="selectCat('أماكن', this)">أماكن</button>
                     <button class="cat-btn" onclick="selectCat('جماد', this)">جماد</button>
-                    <button class="cat-btn" onclick="selectCat('دول', this)">دول</button>
+             
+               <button class="cat-btn" onclick="selectCat('دول', this)">دول</button>
                     <button class="cat-btn" onclick="selectCat('شخصيات مشهورة', this)">شخصيات مشهورة</button>
                 </div>
             </div>
         
             <div class="config-row">عدد المحتالين في الجولة:</div>
-            <div class="imp-toggle-grid">
+            <div 
+class="imp-toggle-grid">
                 <button class="imp-toggle-btn selected" onclick="selectImpCount(1, this)">محتال واحد (1)</button>
                 <button class="imp-toggle-btn" onclick="selectImpCount(2, this)">محتالين اثنين (2)</button>
             </div>
         </div>
-
+ 
         <div class="player-list" id="player-list-container"></div>
 
         <div class="lobby-chat-box">
             <div class="chat-messages" id="chat-messages-container"></div>
-            <div class="chat-input-area">
+   
+                 <div class="chat-input-area">
                 <input type="text" id="chat-msg-input" placeholder="اكتب رسالة للاعبين..." onkeypress="if(event.key === 'Enter') sendLobbyMessage()">
                 <button onclick="sendLobbyMessage()">إرسال</button>
             </div>
         </div>
 
-        <button id="start-game-btn" class="main-btn" style="display:none; background: var(--success); color:#000;" onclick="triggerStart()">بدء العملية</button>
-        <button id="delete-room-btn" class="main-btn" style="display:none; background: var(--imposter); box-shadow: 0 4px 0 #b3003b; margin-top: 5px;" onclick="deleteRoomByHost()">إغلاق وحذف الغرفة نهائياً 🗑️</button>
+        <button id="start-game-btn" class="main-btn" style="display:none;
+background: var(--success); color:#000;" onclick="triggerStart()">بدء العملية</button>
+        <button id="delete-room-btn" class="main-btn" style="display:none; background: var(--imposter);
+box-shadow: 0 4px 0 #b3003b; margin-top: 5px;" onclick="deleteRoomByHost()">إغلاق وحذف الغرفة نهائياً 🗑️</button>
     </div>
 
     <div id="play-screen" class="screen">
-        <div id="category-hint" style="background: rgba(0,242,255,0.1); padding: 5px 20px; border-radius: 20px; color: var(--primary); border: 1px solid var(--primary); margin-bottom: 5px;"></div>
+        <div id="category-hint" style="background: rgba(0,242,255,0.1);
+padding: 5px 20px; border-radius: 20px; color: var(--primary); border: 1px solid var(--primary);
+margin-bottom: 5px;"></div>
         
         <div class="secret-card" onclick="toggleSecret()">
             <div id="secret-content" style="color: #555;">[ اضغط لفك التشفير ]</div>
@@ -163,20 +270,26 @@
         <div class="understand-section">
             <div class="understand-title">هل فهمت الكلمة?</div>
             <div class="understand-grid">
-                <button id="und-yes" class="und-btn yes-btn" onclick="submitUnderstanding(true)">نعم 👍</button>
+                <button 
+id="und-yes" class="und-btn yes-btn" onclick="submitUnderstanding(true)">نعم 👍</button>
                 <button id="und-no" class="und-btn no-btn" onclick="submitUnderstanding(false)">لا 👎</button>
             </div>
             <div id="understand-status-text" class="understand-status">انتظار تصويت اللاعبين...</div>
         </div>
 
-        <button class="main-btn" id="change-word-btn" onclick="changeCurrentWord()" style="display:none; background: #d97706; box-shadow: 0 4px 0 #92400e; margin-bottom: 5px; margin-top: 5px;">تغيير الكلمة الحالية 🔄</button>
+        <button class="main-btn" id="change-word-btn" onclick="changeCurrentWord()" style="display:none;
+background: #d97706; box-shadow: 0 4px 0 #92400e; margin-bottom: 5px; margin-top: 5px;">تغيير الكلمة الحالية 🔄</button>
         
-        <button class="main-btn" id="go-to-questions-btn" onclick="switchToQuestionsStage()" style="display:none; margin-top: 5px; background:var(--secondary);">الانتقال لجلسة الأسئلة ❯</button>
-        <button class="main-btn" id="go-to-vote-btn" onclick="showVoteScreen()" style="display:none; margin-top: 5px;">انتقل للتصويت</button>
+        <button class="main-btn" id="go-to-questions-btn" onclick="switchToQuestionsStage()" style="display:none;
+margin-top: 5px; background:var(--secondary);">الانتقال لجلسة الأسئلة ❯</button>
+        <button class="main-btn" id="go-to-vote-btn" onclick="showVoteScreen()" style="display:none;
+margin-top: 5px;">انتقل للتصويت</button>
     </div>
 
     <div id="investigation-screen" class="screen">
-        <div id="investigation-category-hint" style="background: rgba(112,0,255,0.1); padding: 5px 20px; border-radius: 20px; color: var(--primary); border: 1px solid var(--secondary); margin-bottom: 5px; font-size:12px;"></div>
+        <div id="investigation-category-hint" style="background: rgba(112,0,255,0.1);
+padding: 5px 20px; border-radius: 20px; color: var(--primary); border: 1px solid var(--secondary); margin-bottom: 5px;
+font-size:12px;"></div>
         
         <div class="ingame-chat-box">
             <div id="turn-indicator-bar" class="control-turn-bar">جاري التجهيز للتحقيق...</div>
@@ -184,13 +297,15 @@
             
             <div id="doubt-targets-area" class="target-selector-area" style="display:none;"></div>
 
-            <div class="ingame-input-area">
+       
+             <div class="ingame-input-area">
                 <input type="text" id="ingame-msg-input" placeholder="اكتب هنا عندما يحين دورك..." onkeypress="if(event.key === 'Enter') sendInGameMessage()">
                 <button id="ingame-send-btn" onclick="sendInGameMessage()">إرسال</button>
             </div>
         </div>
 
-        <button class="main-btn" id="host-trigger-vote-btn" onclick="showVoteScreen()" style="display:none; background: var(--success); color:#000; margin-top: 10px;">انتقل للتصويت ⚖️</button>
+        <button class="main-btn" id="host-trigger-vote-btn" onclick="showVoteScreen()" style="display:none;
+background: var(--success); color:#000; margin-top: 10px;">انتقل للتصويت ⚖️</button>
     </div>
 
     <div id="vote-screen" class="screen">
@@ -200,11 +315,15 @@
 
     <div id="result-screen" class="screen">
         <h1 style="color:var(--primary)">نتائج التحقيق</h1>
-        <div style="font-size:14px; margin-bottom:10px;">المحتالون كانوا: <span id="res-imp-name" style="color:var(--imposter); font-weight:bold;"></span></div>
-        <div id="scores-container" style="width:100%; background:rgba(0,0,0,0.4); border-radius:10px; padding:10px;"></div>
+        <div style="font-size:14px;
+margin-bottom:10px;">المحتالون كانوا: <span id="res-imp-name" style="color:var(--imposter); font-weight:bold;"></span></div>
+        <div id="scores-container" style="width:100%; background:rgba(0,0,0,0.4); border-radius:10px;
+padding:10px;"></div>
         <button id="next-round-btn" class="main-btn" onclick="backToLobby()" style="display:none;">الجولة القادمة ❯</button>
-        <button id="finish-btn" class="main-btn" onclick="clearAndReload()" style="display:none; background:var(--imposter);">تتويج البطل 🏆</button>
-        <button id="exit-btn" class="main-btn" onclick="clearAndReload()" style="display:none; background:#444;">الخروج للرئيسية</button>
+        <button id="finish-btn" class="main-btn" onclick="clearAndReload()" style="display:none;
+background:var(--imposter);">تتويج البطل 🏆</button>
+        <button id="exit-btn" class="main-btn" onclick="clearAndReload()" style="display:none;
+background:#444;">الخروج للرئيسية</button>
     </div>
 </div>
 
@@ -223,7 +342,8 @@
     const db = firebase.database();
 
     document.getElementById('user-name').value = localStorage.getItem('savedName') || "";
-
+ 
+ 
     if(localStorage.getItem('lastRoom')) {
         document.getElementById('reconnect-hint').style.display = "block";
         setTimeout(checkAutoReconnect, 500);
@@ -231,794 +351,392 @@
 
     let currentRoom = null, myId = null, myName = "", isHost = false, gameData = {}, selectedCategory = "حيوانات وحشرات", allowedImpostersCount = 1;
     let roomPrivacySetting = "public";
-    let chosenPlayMode = "normal"; 
+ let chosenPlayMode = "normal"; 
     let selectedVotes = []; 
 
-    const megaDatabase = {
+    const gameDatabase = {
         'حيوانات وحشرات': [
-            { word: "أسد", desc: "حيوان ثديي مفترس من الفصيلة السنورية ويُلقب بملك الغابة." },
-            { word: "نمر", desc: "آكل لحوم ضخم ومفترس يتميز بفرائه البرتقالي المخطط بخطوط سوداء." },
-            { word: "فهد", desc: "حيوان مفترس من الفصيلة السنورية ويعد أسرع الحيوانات البرية على الإطلاق." },
-            { word: "ذئب", desc: "حيوان بري ذكي من فصيلة الكلبيات يعيش ويصطاد ضمن مجموعات منظمة." },
-            { word: "ثعلب", desc: "حيوان أصغر من الذئب يشتهر بالذكاء والمكر وله ذيل كثيف." },
-            { word: "دب قطبي", desc: "حيوان ثديي ضخم يعيش في البيئات الجليدية ويمتاز بفراء أبيض سميك." },
-            { word: "كنغر", desc: "حيوان أسترالي يشتهر بالقفز وحمل صغاره في كيس خاص ببطنه." },
-            { word: "بطريق", desc: "طائر بحري غير قادر على الطيران يعيش في النصف الجنوبي من الأرض." },
-            { word: "قرش", desc: "سمكة مفترسة تعيش في البحار والمحيطات وتمتلك هيكلاً غضروفياً وحاسة شم قوية." },
-            { word: "دلفين", desc: "حيوان ثديي بحري ذكي جداً معروف بحبه للعب ومصادقة الإنسان." },
-            { word: "حوت", desc: "أكبر الكائنات الحية الثديية التي تعيش في المحيطات وبعض أنواعها ضخمة جداً." },
-            { word: "أخطبوط", desc: "كائن بحري رخوي ذكي يمتلك ثماني أذرع وثلاثة قلوب ويفرز الحبر." },
-            { word: "نسر", desc: "طائر جارح ضخم يتميز ببصره الحاد ويتغذى غالباً على الجيف." },
-            { word: "صقر", desc: "طائر صياد ماهر وسريع جداً، يرمز للقوة والحدة ويُستخدم في القنص." },
-            { word: "بومة", desc: "طائر ليلي مفترس يشتهر برأسه المرن وعينيه الكبيرتين الحادتين." },
-            { word: "تمساح", desc: "زاحف برمائي ضخم ومفترس يمتلك فكاً قوياً جداً وجلداً حراشفياً سميكاً." },
-            { word: "سلحفاة", desc: "زاحف من ذوات الدم البارد يشتهر ببطء حركته ووجود درع صلب يحميه." },
-            { word: "جمل", desc: "حيوان أليف يلقب بسفينة الصحراء لقدرته العالية على تحمل العطش والجوع." }
+            { word: "أسد", desc: "حيوان مفترس ضخم يُلقب بملك الغابة ويعيش في مجموعات تسمى زمر." },
+            { word: "نمر", desc: "قط كبير مفترس يتميز بجلده المخطط باللونين الأسود والبرتقالي وسرعته العالية." },
+            { word: "فهد", desc: "أسرع حيوان بري على الأرض، يتميز برشاقته وجسده المرقط بالبقع السوداء." },
+            { word: "ذئب", desc: "حيوان بري ذكي يعيش ويصطاد في قطعان ويشتهر بعوائه في الليل." },
+            { word: "ثعلب", desc: "حيوان صغير من فصيلة الكلبيات يشتهر بالمكر والذكاء وله ذيل كثيف." },
+            { word: "دب", desc: "حيوان ضخم ثقيل الوزن يمتلك فرواً سميكاً ويتغذى على اللحوم والنباتات والأسماك." },
+            { word: "زرافة", desc: "أطول حيوان بري يتميز برقبتها الطويلة جداً وأرجلها النحيفة وتتغذى على أوراق الشجر." },
+            { word: "فيل", desc: "أضخم حيوان بري يعيش حالياً، يتميز بخرطومه الطويل وأنيابه العاجية الكبيرة." },
+            { word: "قرد", desc: "حيوان ذكي ونشيط يشتهر بقدرته على التسلق والتقليد ويعيش غالباً في الغابات." },
+            { word: "سنجاب", desc: "حيوان قارض صغير نشيط ذو ذيل كثيف يتغذى على الجوز والبندق ويعيش فوق الأشجار." },
+            { word: "أرنب", desc: "حيوان ثديي صغير يتميز بأذنيه الطويلتين وقدرته العالية على القفز السريع." },
+            { word: "غزال", desc: "حيوان بري رشيق وجميل جداً يشتهر بعينيه الواسعتين وسرعته الفائقة في الجري." },
+            { word: "حمار وحشي", desc: "حيوان يشبه الحصان يعيش في أفريقيا ويتميز بجلده المخطط باللونين الأبيض والأسود." },
+            { word: "وحيد القرن", desc: "حيوان ضخم جداً يمتلك قرناً حاداً أو اثنين في مقدمة أنفه وجلداً سميكاً كالدروع." },
+            { word: "فرس النهر", desc: "حيوان شبه مائي ضخم يقضي معظم وقته في الأنهار والبحيرات الإفريقية." },
+            { word: "تمساح", desc: "زاحف برمائي ضخم ومفترس يمتلك فكاً قوياً جداً وأسناناً حادة وجلداً حراشفياً صلباً." },
+            { word: "ثعبان", desc: "زاحف طويل لادق بدون أرجل يتحرك بالانزلاق وبعض أنواعه سامة وقاتلة." },
+            { word: "سلحفاة", desc: "زاحف بطيء الحركة يشتهر بوجود درع صلب يحمي جسده ويعيش لسنوات طويلة." },
+            { word: "ضفدع", desc: "حيوان برمائي صغير يشتهر بقفزاته وصوته (النقيق) ويتغذى على الحشرات." },
+            { word: "بطريق", desc: "طائر بحري لا يطير يعيش في المناطق الباردة ويمشي بطريقة مضحكة ويجيد السباحة." },
+            { word: "نعامة", desc: "أكبر طائر في العالم، لا تطير ولكنها تمتلك أرجل طويلة وقوية تجعلها سريعة جداً." },
+            { word: "صقر", desc: "طائر جارح قوي يتميز بنظره الحاد جداً وسرعته الهائلة في الانقضاض على الفرائس." },
+            { word: "نسر", desc: "طائر جارح ضخم يتغذى غالباً على الجيف ويمتلك أجنحة واسعة تحلق لمسافات شاهقة." },
+            { word: "بومة", desc: "طائر ليلي يشتهر برأسه الكبير وعينيه الواسعتين وقدرته على الطيران الصامت تماماً." },
+            { word: "غراب", desc: "طائر ذكي جداً يتميز بلونه الأسود الداكن وصوته المرتفع ويشتهر بحبه لجمع الأشياء." },
+            { word: "ببغاء", desc: "طائر جميل ذو ألوان زاهية يشتهر بقدرته العجيبة على تقليد أصوات البشر." },
+            { word: "حمامة", desc: "طائر أليف ينتشر في كل العالم ويعتبر رمزاً عالمياً للمحبة والسلام والحرية." },
+            { word: "دجاجة", desc: "طائر داجن يربيه البشر بكثرة للاستفادة من بيضه ولحمه المغذي." },
+            { word: "بطة", desc: "طائر مائي يعيش قرب البحيرات ويتميز بمنقاره المفلطح وأرجله المهيأة للسباحة." },
+            { word: "نحلة", desc: "حشرة طائرة نشيطة تعيش في خلايا وتنتج العسل الطبيعي وتلقح الأزهار." },
+            { word: "نملة", desc: "حشرة صغيرة جداً تعيش في مستعمرات منظمة تحت الأرض وتشتهر بالعمل الجماعي والقوة." },
+            { word: "فراشة", desc: "حشرة طائرة جميلة جداً ذات أجنحة ملونة رقيقة تتغذى على رحيق الأزهار." },
+            { word: "ناموسة", desc: "حشرة صغيرة مزعجة تمتص دماء الكائنات الحية وتنقل الأمراض وتنشط ليلاً." },
+            { word: "ذبابة", desc: "حشرة طائرة شائعة جداً تنقل الأوساخ والجراثيم وتتحرك بسرعة وبشكل عشوائي." },
+            { word: "عنكبوت", desc: "كائن يمتلك ثماني أرجل ويقوم بغزل خيوط حريرية دائرية لاصطياد الحشرات." },
+            { word: "صرصور", desc: "حشرة ليلية مرنة تعيش في الأماكن المظلمة والرطبة وتتحمل الظروف القاسية جداً." },
+            { word: "جرادة", desc: "حشرة تقفز لمسافات طويلة وتتحرك في أسراب ضخمة وتلتهم المحاصيل الزراعية بسرعة." },
+            { word: "عقرب", desc: "كائن سام يعيش في الصحاري والصخور ويمتلك ذيلاً ينتهي بإبرة يلدغ بها." },
+            { word: "حوت", desc: "أضخم كائن حي على وجه الأرض، يعيش في المحيطات وهو حيوان ثديي يلد ولا يبيض." },
+            { word: "قرش", desc: "أسماك بحرية مفترسة تمتلك حاسة شم قوية جداً للدماء وعدة صفوف من الأسنان الحادة." },
+            { word: "دولفين", desc: "حيوان بحري ذكي جداً وصديق للإنسان، يشتهر بحركاته البهلوانية وإصدار أصوات تواصل." },
+            { word: "أخطبوط", desc: "كائن بحري ذكي يمتلك ثمانية أذرع طويلة مغطاة بماصات ويفرز حبراً للاختفاء." },
+            { word: "قنديل البحر", desc: "كائن بحري هلامي شفاف يمتلك مجسات لاسعة قد تكون سامة ومؤلمة جداً." },
+            { word: "نجم البحر", desc: "كائن بحري يشبه النجمة في شكله، لا يمتلك دماءً أو دماغاً ويعيش في القاع." },
+            { word: "سرطان البحر", desc: "كائن مائي يمتلك درعاً صلباً ومخالب قوية ويمشي بطريقة جانبية مميزة." },
+            { word: "جمبري", desc: "كائن بحري قشري صغير الحجم ولذيذ الطعم يسمى أيضاً بالروبيان." },
+            { word: "قمري", desc: "طائر بري جميل الصوت من فصيلة الحمام ويشتهر بهجرته الموسمية." },
+            { word: "حبار", desc: "كائن بحري رخوي سريع الحركة يمتلك مجسات طويلة ويفرز مادة حبرية للاختفاء." },
+            { word: "أفعى", desc: "زاحف سام طويل بدون أرجل يزحف على بطنه ويمتلك أنياباً لحقن السم." },
+            { word: "حرباء", desc: "زاحف متميز يشتهر بقدرته على تغيير لونه للتخفي وعينيه المستقلتين." },
+            { word: "ضب", desc: "زاحف بري يشبه السحلية الكبيرة يعيش في الصحاري العربية ويتغذى على النبات." },
+            { word: "سحلية", desc: "زاحف صغير ذو أرجل وأسطح حراشفية يشتهر بقدرة بعض أنواعه على قطع ذيلها." },
+            { word: "جرذ", desc: "قارض أكبر حجماً من الفأر العادي يتميز بذكائه وقدرته على العيش في المجاري." },
+            { word: "فأر", desc: "قارض صغير الحجم ينتشر في البيئات السكنية والبرية ويتميز بأسنان قاطعة." },
+            { word: "سوسة النخيل", desc: "آفة زراعية خطيرة جداً تخترق جذوع أشجار النخيل وتتسبب في موتها وتدميرها." }, 
+            { word: "حشرة القشرة", desc: "حشرة صغيرة تلتصق بأوراق وأغصان النباتات وتمتص عصارتها مغطية نفسها بقشرة واقية." }, 
+            { word: "سمك السلمون", desc: "سمك يشتهر بلحمه الوردي ورحلته المذهلة في الهجرة من المحيط إلى النهر للتكاثر." }, 
+            { word: "سمك التونة", desc: "سمك بحري سريع وقوي يعيش في المحيطات ويُستهلك بكثرة كطعام معلب ومطبوخ." }, 
+            { word: "سمك السردين", desc: "سمك صغير يعيش في أسراب ضخمة وغني بأوميغا 3، مشهور جداً في التعليب." }, 
+            { word: "فرس البحر", desc: "سمكة صغيرة مميزة برأس يشبه الحصان وذيل ملتف وتعيش في الشعاب المرجانية." }, 
+            { word: "تنين البحر", desc: "كائن بحري قريب من فرس البحر يمتلك زوائد تشبه أوراق الشجر للتمويه الكامل." }, 
+            { word: "سمك المنشار", desc: "سمكة ضخمة تمتلك امتداداً طويلاً أمام رأسها مليئاً بالأسنان الحادة يشبه المنشار." }
         ],
         'طعام': [
-            { word: "بيتزا", desc: "قرص عجين مستدير يعلوه صلصة طماطم وجبن ومكونات أخرى ويُخبز في الفرن." },
-            { word: "برجر", desc: "شطيرة تتكون من قرص من اللحم المفروم المشوي يوضع داخل رغيف خبز مستدير." },
-            { word: "شاورما", desc: "لحم مشوي بطريقة عمودية خاصة يُقشر ويوضع في خبز مع إضافات." },
-            { word: "سوشي", desc: "طعام ياباني شهير يتكون من أرز مطبوخ بالخل مع مأكولات بحرية وورق طحالب." },
-            { word: "باستا", desc: "عجائن إيطالية تصنع من القمح والماء وتُطهى وتُقدم مع صلصات متنوعة." },
-            { word: "شيكولاتة", desc: "حلوى تصنع أساساً من حبوب الكاكاو المحمصة والمطحونة وتعد شعبية جداً." },
-            { word: "آيس كريم", desc: "حلوى مجمدة تصنع عادة من الحليب والقشطة والسكر وتأتي بنكهات مختلفة." },
-            { word: "فلافل", desc: "أقراص مقلية مصنوعة من الحمص أو الفول المفروم مع التوابل والخضروات." },
-            { word: "كبسة", desc: "وجبة خليجية تقليدية تتكون أساساً من الأرز طويل الحبة مع اللحم أو الدجاج والبهارات." },
-            { word: "كسكسي", desc: "طعام مغاربي تقليدي يصنع من طحين القمح على شكل حبيبات صغيرة ويطهى بالبخار." },
-            { word: "تفاح", desc: "فاكهة مقرمشة وصحية تنمو على الأشجار وتأتي بألوان أحمر وأخضر وأصفر." },
-            { word: "موز", desc: "فاكهة استوائية ذات قشرة صفراء ناعمة ولب طري غني بالبوتاسيوم." },
-            { word: "فراولة", desc: "فاكهة حمراء صغيرة الحجم حلوة المذاق منقطة بالبذور وتنمو قريباً من الأرض." },
-            { word: "مانجو", desc: "فاكهة استوائية ذات قشرة ملساء ولب برتقالي حلو وعصيري وبداخلها نواة كبيرة." },
-            { word: "بطيخ", desc: "فاكهة صيفية ضخمة دائرية ذات قشرة خضراء سميكة ولب أحمر عصيري مليء بالماء." }
+            { word: "تفاح", desc: "فاكهة مقرمشة ومغذية تأتي بالوان حمراء وخضراء وصفراء ومفيدة جداً للصحة." },
+            { word: "موز", desc: "فاكهة استوائية صفراء اللون وطرية، غنية بالبوتاسيوم والطاقة وسهلة التقشير." },
+            { word: "برتقال", desc: "فاكهة حمضية شتوية غنية بفيتامين سي وتُعصر لعمل شراب منعش ومقوٍ." },
+            { word: "بطيخ", desc: "فاكهة صيفية ضخمة خضراء من الخارج وحمراء من الداخل تحتوي على الكثير من الماء." },
+            { word: "فراولة", desc: "فاكهة حمراء صغيرة مخروطية الشكل ذات طعم حامض وحلو وشكل مميز." },
+            { word: "عنب", desc: "فاكهة صغيرة تنمو في عناقيد تأتي بألوان خضراء وحمراء وسوداء ويصنع منها الزبيب." },
+            { word: "مانجو", desc: "فاكهة استوائية حلوة جداً ذات قشرة ناعمة ونواة كبيرة وتسمى ملكة الفواكه." },
+            { word: "أناناس", desc: "فاكهة استوائية ذات قشرة حرشفية قاسية ولب أصفر حلو وحامض المذاق." },
+            { word: "تمر", desc: "ثمرة شجرة النخيل، حلوة ومغذية جداً، تؤكل بكثرة في العالم العربي خاصة في رمضان." },
+            { word: "طماطم", desc: "ثمرة حمراء تُستخدم كخضار أساسي في السلطات والطبخ وصنع الصلصات المختلفة." },
+            { word: "بطاطس", desc: "درنات تنمو تحت الأرض، تُطبخ بأشكال كثيرة وأشهرها القلي (بطاطا مقلية)." },
+            { word: "بصل", desc: "خضار ذو رائحة نفاذة وطعم قوي يُستخدم كقاعدة لمعظم الأكلات ويسبب الدموع عند تقطيعه." },
+            { word: "ثوم", desc: "فصوص صغيرة ذات رائحة قوية جداً وطعم حاد، يُستخدم كمنكه للأكل ومضاد حيوي طبيعي." },
+            { word: "خيار", desc: "خضار أخضر طويل مستطيل يحتوي على نسبة مياه عالية ويؤكل طازجاً في السلطات." },
+            { word: "جزر", desc: "خضار جذري برتقالي اللون مقرمش ومفيد جداً لتقوية النظر ويؤكل نيئاً أو مطبوخاً." },
+            { word: "خس", desc: "أوراق خضراء عريضة وطرية تُستخدم بشكل أساسي في السلطات والسندوتشات." },
+            { word: "خبز", desc: "الغذاء الأساسي للبشر، يُصنع من دقيق القمح والماء والخميرة ويُخبز في الفرن." },
+            { word: "أرز", desc: "حبوب صغيرة بيضاء أو بنية تشكل الوجبة الرئيسية لنصف سكان العالم وتُطبخ بالماء." },
+            { word: "معكرونة", desc: "عجائن جافة بأشكال مختلفة (سباغيتي، لسان عصفور) تُصنع من القمح وتُسلق." },
+            { word: "بيتزا", desc: "أكلة إيطالية شهيرة تتكون من عجين مستدير مغطى بصلصة الطماطم والجبن والمكونات." },
+            { word: "برجر", desc: "شطيرة أمريكية شهيرة تتكون من قطعة لحم دائرية مشوية داخل رغيف خبز مستدير." },
+            { word: "شاورما", desc: "شرائح لحم أو دجاج متبلة ومصفوفة على سيخ عمودي يدور أمام النار وتُلف في خبز." },
+            { word: "كسكسي", desc: "طبق مغاربي تقليدي شهير يُصنع من طحين القمح على شكل حبيبات صغيرة ويطبخ بالبخار." },
+            { word: "كبسة", desc: "طبق خليجي شهير يتكون من الأرز الطويل المطبوخ مع اللحم أو الدجاج والبهارات النفاذة." },
+            { word: "شوكولاتة", desc: "حلوى بنية تُصنع من حبوب الكاكاو والسكر وتأتي بنكهات مختلفة ولها شعبية هائلة." },
+            { word: "آيس كريم", desc: "حلوى مثلجة لذيذة تُصنع من الحليب والسكر وتأتي بنكهات كالفانيليا والشوكولاتة." },
+            { word: "حليب", desc: "سائل أبيض مغذٍ تنتجه الثدييات (كالابقار) وغني بالكالسيوم لبناء العظام." },
+            { word: "قهوة", desc: "مشروب ساخن منبه يُصنع من بذور البن المحمصة والمطحونة وله عشاق في كل العالم." },
+            { word: "شاي", desc: "مشروب ساخن شائع جداً يُصنع من نقع أوراق نبات الشاي في ماء مغلي." },
+            { word: "عسل", desc: "سائل حلو لزج تصنعه النحل من رحيق الأزهار وفيه شفاء وكثير من الفوائد." },
+            { word: "بيض", desc: "منتج حيواني تضعه الطيور، غني بالبروتين ويؤكل مسلوقاً أو مقلياً في الإفطار." },
+            { word: "جبنة", desc: "منتج غذائي يُصنع من تخثير الحليب وتأتي بأنواع لا تحصى كالشيدر والموزاريلا." },
+            { word: "زيت زيتون", desc: "زيت طبيعي ممتاز يُستخرج من عصر ثمار الزيتون ويُستخدم في الطبخ والسلطات." },
+            { word: "ملح", desc: "بلورات بيضاء تُستخرج من البحر أو الأرض وتُستخدم لتعديل طعم الأكل وحفظه." },
+            { word: "سكر", desc: "بلورات بيضاء حلوة الطعم تُستخرج من قصب السكر أو البنجر وتُحلى بها المشروبات." },
+            { word: "فلفل أسود", desc: "بهار مطحون حار قليلاً ذو لون داكن يُرش على معظم الأكلات لإعطائها نكهة مميزة." },
+            { word: "كمون", desc: "بهار ذو رائحة عطرية قوية يُستخدم بكثرة في الطبخ العربي وخاصة مع البقوليات كالحمص." },
+            { word: "زعتر", desc: "نبات عشبي عطري يُجفف ويُخلط مع السمسم والزيت ويؤكل مع الخبز (مناقيش)." },
+            { word: "نعناع", desc: "أوراق خضراء عطرية منعشة تُضاف للشاي أو السلطات وتساعد في تهدئة المعدة." },
+            { word: "مكسرات", desc: "ثمار جافة ذات قشرة قاسية مثل اللوز والجوز والفستق والبندق وغنية بالدهون الصحية." },
+            { word: "عدس", desc: "حبوب صغيرة من البقوليات تُصنع منها شوربة شتوية دافئة ومغذية جداً وغنية بالحديد." },
+            { word: "حمص", desc: "حبوب مستديرة تُسلق وتُطحن مع الطحينة لعمل مقبلات شهيرة أو تؤكل كاملة (بليلة)." },
+            { word: "فول", desc: "طبق إفطار شعبي وعربي أساسي يُدمس لفترات طويلة ويُتبل بالزيت والليمون والكمون." },
+            { word: "سمك مشوي", desc: "لحم بحري يُتبل بالثوم والبهارات ويُطهى فوق الفحم أو في الفرن وهو صحي جداً." },
+            { word: "دجاج محمر", desc: "لحم دجاج يُدهن بالزيت والبهارات ويُشوى في الفرن حتى يكتسب لوناً ذهبياً مقرمشاً." },
+            { word: "لحم مفروم", desc: "لحم بقري أو غنم يُقطع لقطع صغيرة جداً بواسطة آلة ويُستخدم في الكفتة والمعجنات." },
+            { word: "حساء خضار", desc: "مرق ساخن يحتوي على قطع خضار مشكلة كالجز والبطاطس والكوسا وهو مفيد للمرضى." },
+            { word: "سلطة خضراء", desc: "مزيج من الخضار الطازجة المقطعة كالخس والخيار والطماطم مع تتبيلة ليمون وزيت." },
+            { word: "مفتول", desc: "طبق فلسطيني تقليدي يشبه الكسكسي يُصنع من كرات العجين الصغيرة ويطبخ بالبخار." }, 
+            { word: "كبة", desc: "أكلة شامية تتكون من عجينة برغل ولحم مفروم تُشكل على هيئة أقراص محشوة باللحم والمكسرات." }, 
+            { word: "ورق عنب", desc: "أوراق شجرة العنب محشوة بالأرز المتبل والخضار أو اللحم ومطبوخة بالليمون وزيت الزيتون." }, 
+            { word: "ملفوف", desc: "أوراق نبات الكرنب المسلوقة والمحشوة بالأرز واللحم المفروم والمطبوخة." },
+            { word: "طحينة", desc: "عصارة حبوب السمسم المحمصة والمطحونة، تُستخدم كأساس للمقبلات والحلاوة الطحينية." }, 
+            { word: "حلاوة طحينية", desc: "حلوى متماسكة ومفتتة تُصنع من الطحينة والسكر وتؤكل في وجبات الإفطار والعشاء." }, 
+            { word: "غزل البنات", desc: "حلوى قطنية منفوشة تُصنع من غزل السكر المذاب في آلات سريعة الدوران (شعر البنات)." }, 
+            { word: "كورن فليكس", desc: "رقائق الذرة المحمصة المقرمشة تؤكل في وعاء مع الحليب الساخن أو البارد كإفطار سريع." }, 
+            { word: "موس الشوكولاتة", desc: "حلوى فرنسية خفيفة ومليئة بالفقاعات الهوائية تتميز بقوام كريمي ناعم ونكهة شوكولاتة قوية." }, 
+            { word: "سوفليه", desc: "كعكة فرنسية خفيفة ومنفوخة تخبز بالفرن وتتميز بقلب سائل من الشوكولاتة الساخنة." }, 
+            { word: "باوند كيك", desc: "كعكة إنجليزية تقليدية دسمة ومتماسكة تُصنع من كميات متساوية من الزبدة، الدقيق والسكر." }, 
+            { word: "إكلير", desc: "حلوى فرنسية طولية مصنوعة من عجينة الشو محشوة بالكريمة ومغطاة بالشوكولاتة." }, 
+            { word: "سينابون", desc: "لفائف القرفة الشهيرة المخبوزة، تقدم دافئة ومغطاة بصلصة السكر والجبن الكريمي." }, 
+            { word: "بيتي فور", desc: "بسكويت فرنسي صغير وناعم ومزين بالشوكولاتة أو المربى." }
         ],
         'أماكن': [
-            { word: "مستشفى", desc: "مؤسسة صحية مخصصة لعلاج المرضى وتقديم الرعاية الطبية وإجراء العمليات." },
-            { word: "مدرسة", desc: "مؤسسة تعليمية يتعلم فيها الطلاب العلوم المختلفة في مراحل مبكرة." },
-            { word: "مطار", desc: "مكان مخصص لإقلاع وهبوط الطائرات ويحتوي على مبانٍ للمسافرين والشحن." },
-            { word: "فندق", desc: "منشأة تقدم خدمات الإقامة المؤقتة والطعام للمسافرين والسياح مقابل أجر." },
-            { word: "مطعم", desc: "محل تجاري يُعَد فيه الطعام والشراب ويُقَدّم للزبائن لتناوله." },
-            { word: "متحف", desc: "مكان تُجمع وتُحفظ وتُعرض فيه الآثار والتحف الفنية والأشياء التاريخية." },
-            { word: "حديقة حيوان", desc: "مرفق عام تُجمع فيه حيوانات حية مختلفة داخل أقفاص أو مساحات ليتفرج عليها الناس." },
-            { word: "محطة قطار", desc: "مكان مخصص لتوقف القطارات بصورة منتظمة لصعود ونزول الركاب أو شحن البضائع." },
-            { word: "شاطئ", desc: "المنطقة الرملية أو الحصوية المحاذية لساحل البحر أو المحيط وتُستخدم للاستجمام." },
-            { word: "مكتبة", desc: "مكان تُجمع وتحفظ فيه الكتب والمراجع لغرض القراءة أو الاستعارة أو الدراسة." },
-            { word: "جامعة", desc: "مؤسسة للتعليم العالي والبحث العلمي تمنح شهادات أكاديمية عليا كالبروفيسور." },
-            { word: "سوبرماركت", desc: "متجر كبير للخدمة الذاتية يبيع أنواعاً متعددة من الأطعمة والسلع المنزلية." },
-            { word: "صيدلية", desc: "مكان مرخص لتركيب وصرف الأدوية وبيع المستلزمات الطبية والصحية." },
-            { word: "بنك", desc: "مؤسسة مالية تتعامل بالنقود والائتمان وتقدم خدمات حفظ الأموال والقروض." },
-            { word: "صالة جيم", desc: "مكان مجهز بالأجهزة الرياضية والأوزان لممارسة التمارين وبناء العضلات." }
+            { word: "المستشفى", desc: "مكان مخصص لتقديم الرعاية الطبية وعلاج المرضى ويحتوي على أطباء وممرضين." },
+            { word: "المدرسة", desc: "مؤسسة تعليمية يذهب إليها الأطفال والشباب لتلقي العلم واكتساب المعرفة." },
+            { word: "المطار", desc: "مكان مجهز بمدارج لإقلاع وهبوط الطائرات وسفر الركاب دولياً ومحلياً." },
+            { word: "الفندق", desc: "مبنى يقدم خدمات الإقامة والطعام للمسافرين والسياح مقابل أجر مالي." },
+            { word: "المطعم", desc: "منشأة تجارية تقدم الوجبات الغذائية والمشروبات للزبائن لتناولها داخل المكان." },
+            { word: "المكتبة", desc: "مكان مخصص لحفظ وتجميع الكتب والمصادر للقراءة والاستعارة والبحث العلمي." },
+            { word: "المتحف", desc: "مبنى يعرض ويحفظ الآثار والقطع الفنية والتاريخية الثمينة للجمهور." },
+            { word: "الحديقة", desc: "مساحة خضراء عامة مليئة بالأشجار والأزهار يُقصد بها التنزه واللعب والراحة." },
+            { word: "المسرح", desc: "مكان مخصص لعرض المسرحيات والقطع الفنية الحية أمام جمهور يجلس في المدرجات." },
+            { word: "السينما", desc: "قاعة مظلمة مجهزة بشاشة ضخمة ونظام صوتي لعرض الأفلام السينمائية الجديدة." },
+            { word: "المقصف", desc: "محل صغير داخل المدرسة أو الشركة يبيع الوجبات الخفيفة والمشروبات." },
+            { word: "المعمل", desc: "مختبر مجهز بأدوات علمية لإجراء التجارب والأبحاث والاختبارات الكيميائية." },
+            { word: "المكتب", desc: "غرفة مجهزة بطاولة وكرسي وحاسوب لإدارة الأعمال وإنجاز المعاملات الورقية." },
+            { word: "الملعب", desc: "مساحة أرضية مجهزة (بالعشب أو الترتان) لممارسة الألعاب الرياضية ككرة القدم." },
+            { word: "النادي الصحي", desc: "الجيم، صالة مجهزة بأجهزة رياضية وأثقال لتمارين اللياقة وبناء العضلات." },
+            { word: "المجمع التجاري", desc: "المول، مبنى ضخم يحتوي على محلات تجارية متنوعة ومطاعم ومناطق ترفيهية." },
+            { word: "السوبرماركت", desc: "متجر كبير يبيع المواد الغذائية والسلع المنزلية اليومية بشكل لخدمة الذات." },
+            { word: "المخبز", desc: "محل يقوم بصنع وبيع الخبز الطازج والمعجنات والحلويات بأنواعها المختلفة." },
+            { word: "الصيدلية", desc: "متجر طبي مرخص لبيع الأدوية والمستلزمات الصحية تحت إشراف صيدلي متخصص." },
+            { word: "الجامعة", desc: "مؤسسة للتعليم العالي تمنح شهادات البكالوريوس والماجستير والدكتوراه للطلاب." },
+            { word: "المحكمة", desc: "مبنى قانوني يتم فيه النظر في القضايا وتحقيق العدالة وإصدار الأحكام بواسطة القضاة." },
+            { word: "البنك", desc: "مؤسسة مالية لحفظ الأموال، فتح الحسابات، سحب وإيداع النقد، وتقديم القروض." },
+            { word: "المركز الأمني", desc: "مبنى الشرطة المخصص لحفظ الأمن واستقبال شكاوى المواطنين والتحقيق في الجرائم." },
+            { word: "محطة القطار", desc: "مكان مخصص لتوقف القطارات وصعود ونزول الركاب وشراء تذاكر السفر السككي." },
+            { word: "محطة الوقود", desc: "مكان مجهز بمضخات لتزويد السيارات والمركبات بالبنزين أو الديزل." },
+            { word: "الميناء", desc: "منطقة ساحلية مجهزة لاستقبال السفن الكبيرة وشحن وتفريغ البضائع التجارية." },
+            { word: "المصنع", desc: "منشأة صناعية ضخمة تحتوي على آلات لإنتاج السلع بكميات كبيرة (كصناعة السيارات)." },
+            { word: "المزرعة", desc: "مساحة أرضية في الريف تُستخدم لزراعة المحاصيل وتربية المواشي والطيور." },
+            { word: "الغابة", desc: "منطقة طبيعية شاسعة مكتظة بالأشجار الكثيفة والحيوانات البرية المتنوعة." },
+            { word: "الصحراء", desc: "منطقة جافة وقاحلة جداً مغطاة بالرمال وتتميز بقلة الأمطار والحرارة العالية." },
+            { word: "الشاطئ", desc: "المنطقة الرملية أو الحصوية المحاذية للبحر ويقصدها الناس للسباحة والاستجمام." },
+            { word: "الجزيرة", desc: "مساحة من اليابسة محاطة بالمياه من جميع الجهات (مثل جزيرة قبرص)." },
+            { word: "الوادي", desc: "منطقة منخفضة تقع بين الجبال أو التلال وتتدفق فيها المياه عند سقوط الأمطار." },
+            { word: "الكهف", desc: "تجويف طبيعي داخل الصخور أو الجبال ممتد تحت الأرض ويكون مظلماً وبارداً." },
+            { word: "القصر", desc: "مسكن ضخم وفخم جداً يتميز بعمارته الراقية وكان يقطنه الملوك والحكام." },
+            { word: "القلعة", desc: "حصن عسكري قديم مبني من الحجارة الضخمة فوق الجبال لحماية المدينة من الأعداء." },
+            { word: "المسجد", desc: "دار عبادة للمسلمين تُقام فيه الصلوات الخمس وصلاة الجمعة ويتميز بوجود المئذنة." },
+            { word: "الكنيسة", desc: "دار عبادة للمسيحيين تُقام فيها الصلوات والطقوس الدينية الخاصة بهم." },
+            { word: "المقبرة", desc: "المدافن، مساحة أرضية مخصصة لدفن الموتى وتتميز بهدوئها التام ووجود الشواهد." },
+            { word: "السوق الشعبي", desc: "منطقة تجارية مفتوحة تحتوي على دكاكين صغيرة لبيع المنتجات التقليدية والتوابل." },
+            { word: "الحديقة المائية", desc: "مدينة ترفيهية تحتوي على ألعاب ومزلاقات مائية وبرك سباحة عائلية ضخمة." },
+            { word: "المرصد الفلكي", desc: "مبنى مجهز بتلسكوبات ضخمة يقع فوق الجبال لمراقبة النجوم والكواكب والفضاء." },
+            { word: "معسكر كشفي", desc: "مخيم في الطبيعة يُقام في الهواء الطلق لتعليم الشباب الاعتماد على النفس والمهارات." },
+            { word: "منطقة أثرية", desc: "بقايا مدن قديمة (كالبتراء أو الأهرامات) يقصدها السياح لرؤية تاريخ الحضارات." },
+            { word: "محطة الفضاء", desc: "مركبة ضخمة صالحة للسكن تدور في مدار حول الأرض لإجراء أبحاث علمية في الفضاء." },
+            { word: "المستودع", desc: "مخزن ضخم يُستخدم لحفظ وتخزين البضائع بكميات كبيرة قبل توزيعها للأسواق." },
+            { word: "صالون الحلاقة", desc: "محل مجهز بكراسي ومرايا لقص وتصفيف الشعر والعناية بالمظهر الخارجي." },
+            { word: "القرية التراثية", desc: "نموذج لقرية قديمة يعرض حياة الأجداد والصناعات اليدوية والبيوت الطينية التقليدية." },
+            { word: "الحظيرة", desc: "بناء ريفي مسيَّج ومغطى مخصص لإيواء وحفظ المواشي كالخراف والأبقار." }, 
+            { word: "إسطبل", desc: "مبنى مقسم إلى غرف صغيرة مخصص لتربية وإيواء الخيول الأصيلة وحمايتها." }, 
+            { word: "برج المراقبة", desc: "بناء شاهق ومكشوف يُستخدم لرصد ومراقبة الحدود، السجون، أو الطائرات في المطار." }, 
+            { word: "المنارة", desc: "برج شاهق يقع على الساحل يطلق إشارات ضوئية قوية ليلاً لتوجيه وإرشاد السفن في البحر." }
         ],
         'جماد': [
-            { word: "قلم", desc: "أداة يدوية تُستخدم للكتابة أو الرسم بواسطة الحبر أو الرصاص." },
-            { word: "كتاب", desc: "مجموعة من الأوراق المطبوعة أو المخطوطة والمثبتة معاً داخل غلاف." },
-            { word: "هاتف ذكي", desc: "جهاز محمول متطور يدمج بين الاتصال الهاتفي وتصفح الإنترنت والتطبيقات." },
-            { word: "حاسوب محمول", desc: "جهاز كمبيوتر شخصي صغير الحجم وخفيف الوزن يمكن حمله وتشغيله بالبطارية." },
-            { word: "ساعة يد", desc: "أداة صغيرة تُلبس حول المعصم لمعرفة الوقت وتحديد الساعات والدقائق." },
-            { word: "نظارة", desc: "إطار يحمل عدسات زجاجية يوضع أمام العينين لتصحيح النظر أو الحماية." },
-            { word: "مفتاح", desc: "أداة معدنية صغيرة تُستخدم لفتح أو قفل الأبواب والأقفال والسيارات." },
-            { word: "كرسي", desc: "قطعة أثاث مخصصة للجلوس تتكون عادة من مقعد وظهر وأربع أرجل." },
-            { word: "طاولة", desc: "قطعة أثاث ذات سطح مستوٍ مرفوع عن الأرض تُستخدم لوضع الأشياء أو تناول الطعام." },
-            { word: "سيارة", desc: "مركبة آلية ذات أربع عجلات تسير على الطرق وتُستخدم لنقل الركاب." },
-            { word: "دراجة هوائية", desc: "مركبة ذات عجلتين تعتمد في حركتها على قوة دفع أرجل الراكب عبر الدواسات." },
-            { word: "تلفاز", desc: "جهاز إلكتروني يقوم باستقبال وبث الصور المتحركة المصحوبة بالصوت عن بعد." },
-            { word: "ثلاجة", desc: "جهاز منزلي كهربائي يُستخدم لحفظ الأطعمة والمشروبات باردة لمنع تلفها." },
-            { word: "مصباح", desc: "أداة تُصدر الضوء الاصطناعي بواسطة الكهرباء أو الوقود لإنارة المكان." },
-            { word: "حقيبة", desc: "وعاء مصنوع من الجلد أو القماش يُستخدم لحمل الأمتعة أو الكتب أو المستلزمات الشخصية." }
+            { word: "قلم", desc: "أداة كتابة تحتوي على حبر تُستخدم لتدوين الملاحظات والرسم على الورق." },
+            { word: "كتاب", desc: "مجموعة من الأوراق المطبوعة والمجلدة تحتوي على معلومات أو قصة وتُقرأ لمعرفة العلم." },
+            { word: "طاولة", desc: "قطعة أثاث ذات سطح مستوٍ وأرجل تُستخدم لوضع الأشياء عليها أو تناول الطعام." },
+            { word: "كرسي", desc: "قطعة أثاث مخصصة لجلوس شخص واحد وتتكون من مقعد وظهر وأربع أرجل." },
+            { word: "ساعة", desc: "أداة لتحديد ومعرفة الوقت، تُعلق على الجدار أو تُلبس في معصم اليد." },
+            { word: "هاتف", desc: "جهاز إلكتروني محمول يُستخدم لإجراء المكالمات وتصفح الإنترنت والتواصل." },
+            { word: "حاسوب", desc: "جهاز رقمي (كمبيوتر) يقوم بمعالجة البيانات وكتابة الملفات وتصفح الشبكة." },
+            { word: "تلفاز", desc: "جهاز منزلي يعرض البرامج والأفلام والأخبار بالصوت والصورة عبر شاشة." },
+            { word: "مصباح", desc: "أداة كهربائية تُصدر الضوء لإنارة الغرف والأماكن المظلمة." },
+            { word: "مفتاح", desc: "قطعة معدنية صغيرة تُستخدم لفتح أو قفل الأبواب والأقفال والسيارات." },
+            { word: "حقيبة", desc: "وعاء من الجلد أو القماش يُستخدم لحمل الأغراض الشخصية أو الكتب المدرسية." },
+            { word: "نظارة", desc: "عدسات زجاجية في إطار تُوضع أمام العين لتصحيح النظر أو الحماية من الشمس." },
+            { word: "مرآة", desc: "سطح زجاجي عاكس يُظهر صورة الشخص عند النظر إليه لترتيب المظهر." },
+            { word: "نافذة", desc: "فتحة في الجدار مغطاة بالزجاج لإدخال الضوء والهواء النقي إلى الغرفة." },
+            { word: "باب", desc: "لوح متحرك (خشب أو حديد) يُستخدم لإغلاق أو فتح مدخل الغرفة أو المنزل." },
+            { word: "سرير", desc: "قطعة أثاث مجهزة بمرتبة ووسادة مخصصة للنوم والاسترخاء ليلاً." },
+            { word: "وسادة", desc: "مخدة طرية محشوة بالقطن أو الإسفنج تُوضع تحت الرأس أثناء النوم للراحة." },
+            { word: "سجادة", desc: "قطعة قماش سميكة ومزخرفة تُفرش على الأرض لتغطيتها وإعطاء الغرفة دفئاً." },
+            { word: "ستارة", desc: "قماش يُعلق على النوافذ لحجب ضوء الشمس القوي أو لتوفير الخصوصية." },
+            { word: "ثلاجة", desc: "جهاز كهربائي منزلي كبير يحفظ الطعام والمشروبات باردة ويمنعها من التلف." },
+            { word: "غسالة", desc: "جهاز منزلي يقوم بتنظيف الملابس المتسخة بالماء والصابون أوتوماتيكياً." },
+            { word: "مكيف", desc: "جهاز كهربائي يقوم بتبريد هواء الغرفة في الصيف الحار أو تدفئته في الشتاء." },
+            { word: "سيارة", desc: "مركبة ذات أربع عجلات ومحرك تُستخدم للانتقال السريع من مكان لآخر." },
+            { word: "دراجة", desc: "مركبة بسيطة ذات عجلتين تتحرك بقوة دفع أرجل السائق بواسطة البدالات." },
+            { word: "حافلة", desc: "مركبة نقل جماعي كبيرة تتسع لعدد كبير من الركاب وتنقلهم داخل المدينة." },
+            { word: "قطار", desc: "مركبة ضخمة تتكون من عربات متصلة تسير على قضبان حديدية مخصصة." },
+            { word: "طائرة", desc: "وسيلة نقل جوية عملاقة ذات أجنحة ومحركات تطير في السماء لنقل المسافرين." },
+            { word: "سفينة", desc: "وسيلة نقل مائية ضخمة تسير في البحار والمحيطات لحمل البضائع والركاب." },
+            { word: "صندوق", desc: "حاوية مكعبة (كرتون أو خشب) تُستخدم لحفظ الأشياء أو شحن البضائع." },
+            { word: "مظلة", desc: "أداة قماشية تُفتح باليد لحماية الشخص من أشعة الشمس أو قطرات المطر." },
+            { word: "حذاء", desc: "لباس للقدمين يُصنع من الجلد أو البلاستيك لحمايتهما أثناء المشي على الأرض." },
+            { word: "ملعقة", desc: "أداة طعام ذات تجويف صغير تستخدم لتناول الأرز والأطعمة السائلة." },
+            { word: "شوكة", desc: "أداة طعام ذات أسنان مدببة تُستخدم لتثبيت اللحوم أو تناول المعكرونة (الباستا)." },
+            { word: "سكين", desc: "أداة حادة بمقبض تُستخدم في المطبخ لتقطيع الخضار واللحوم أو لتناول الطعام بحذر." },
+            { word: "صحن", desc: "وعاء دائري مسطح أو عميق يُصنع من الخزف أو الزجاج لتقديم الطعام فيه." },
+            { word: "كوب", desc: "وعاء صغير أسطواني بمقبض أو بدونه يُصنع من الزجاج أو البلاستيك لشرب الماء والسوائل." },
+            { word: "سماعة", desc: "جهاز يُوضع على الأذن أو داخلها للاستماع للأصوات والموسيقى بشكل خاص دون إزعاج الآخرين." },
+            { word: "شاحن", desc: "سلك وجهاز يوصل بالكهرباء لإمداد بطاريات الهواتف والحواسب بالطاقة اللازمة للعمل." },
+            { word: "بطارية", desc: "وحدة تخزين طاقة كيميائية تُحمل داخل الأجهزة الإلكترونية لتوفر لها الكهرباء لاسلكياً." },
+            { word: "لوحة مفاتيح", desc: "أداة إدخال للحاسوب تحتوي على حروف وأرقام تُستخدم للكتابة وإعطاء الأوامر." },
+            { word: "فأرة الحاسوب", desc: "الماوس، أداة صغيرة يتم تحريكها باليد للتحكم في المؤشر على شاشة الحاسوب." },
+            { word: "شاشة", desc: "سطح زجاجي رقمي يعرض الصور والبيانات البرمجية والمعلومات المرئية." },
+            { word: "مكابح", desc: "المنظومة الميكانيكية (الفرامل) المسؤولة عن قفل العجلات وإيقاف حركة المركبة بأمان." }, 
+            { word: "ناقل حركة", desc: "القير، عصا أو نظام يقوم بالتحكم في سرعات وعزم محرك السيارة (أتوماتيك أو عادي)." }, 
+            { word: "عادم", desc: "الشكمان، أنبوب يمتد لآخر السيارة لتصريف وفلترة الغازات الناتجة عن احتراق الوقود خارجاً." }, 
+            { word: "هيكل", desc: "الشاسيه، الإطار المعدني الصلب الذي يمثل قاعدة السيارة وتُثبت عليه كافة القطع والغطاء." }, 
+            { word: "مفتاح ربط", desc: "أداة معدنية صلبة تُستخدم لفك أو ربط الصواميل والبراغي السداسية أثناء تصليح الأجهزة." }, 
+            { word: "مفك", desc: "أداة بمقبض بلاستيكي ورأس حديدي (مصلب أو عادي) لفك وربط البراغي الصغيرة." }, 
+            { word: "مطرقة", desc: "الشاكوش، أداة بمقبض خشبي ورأس حديدي ثقيل تُستخدم لدق المسامير داخل الخشب أو الجدران." }, 
+            { word: "كماشة", desc: "الزرادية، أداة معدنية بفكين متقابلين تُستخدم للإمساك بالأسلاك بقوة أو قطعها وثنيها." }
         ],
         'دول': [
-            { word: "الجزائر", desc: "أكبر دولة أفريقية وعربية من حيث المساحة، تقع في شمال أفريقيا وعاصمتها الجزائر." },
-            { word: "مصر", desc: "دولة عربية تقع في شمال شرق أفريقيا، تشتهر بالحضارة الفرعونية القديمة ونهر النيل." },
-            { word: "المملكة العربية السعودية", desc: "أكبر دولة في الشرق الأوسط، تقع في شبه الجزيرة العربية وبها الحرمين الشريفين." },
-            { word: "فلسطين", desc: "دولة عربية إسلامية في قلب الشرق الأوسط، تضم المسجد الأقصى والقدس الشريف." },
-            { word: "تونس", desc: "دولة عربية تقع في شمال أفريقيا على البحر المتوسط بين الجزائر وليبيا." },
-            { word: "المغرب", desc: "دولة عربية تقع في أقصى شمال غرب أفريقيا، عاصمتها الرباط وتطل على المحيط الأطلسي." },
-            { word: "اليابان", desc: "دولة جزيرية تقع في شرق آسيا، وتُعرف باسم كوكب اليابان لتقدمها التكنولوجي." },
-            { word: "فرنسا", desc: "دولة تقع في غرب أوروبا، عاصمتها باريس وتشتهر ببرج إيفل والمعالم الثقافية." },
-            { word: "الولايات المتحدة الأمريكية", desc: "جمهورية اتحادية تقع في أمريكا الشمالية وتعد القوة الاقتصادية والعسكرية الأكبر عالمياً." },
-            { word: "برازيل", desc: "أكبر دولة في أمريكا الجنوبية، تشتهر بكرة القدم وغابات الأمازون الكثيفة." },
-            { word: "إيطاليا", desc: "دولة أوروبية تشبه شكل الحذاء في البحر المتوسط، عاصمتها روما ومنبع البيتزا والباستا." },
-            { word: "ألمانيا", desc: "دولة في وسط أوروبا تعد من القوى الصناعية الكبرى في العالم وتشتهر بصناعة السيارات الفاخرة." },
-            { word: "تركيا", desc: "دولة عابرة للقارات تقع بين آسيا وأوروبا، عاصمتها أنقرة وتاريخها مرتبط بالدولة العثمانية." },
-            { word: "روسيا", desc: "أكبر دولة في العالم من حيث المساحة، تمتد عبر شمال آسيا وأوروبا وعاصمتها موسكو." },
-            { word: "كندا", desc: "ثاني أكبر دولة في العالم مساحة، تقع في أمريكا الشمالية وتشتهر بالطبيعة الباردة وشجرة القيقب." }
+            { word: "الجزائر", desc: "أكبر دولة في أفريقيا مساحةً، تقع في شمال القارة وعاصمتها الجزائر العاصمة." },
+            { word: "تونس", desc: "دولة عربية تقع في شمال أفريقيا تتميز بتاريخها القرطاجي وعاصمتها تونس." },
+            { word: "المغرب", desc: "دولة عربية تقع في أقصى شمال غرب أفريقيا، عاصمتها الرباط وتشتهر بمدنها التاريخية." },
+            { word: "مصر", desc: "دولة عربية تقع في شمال شرق أفريقيا، تشتهر بوجود نهر النيل والأهرامات القديمة وعاصمتها القاهرة." },
+            { word: "السعودية", desc: "المملكة العربية السعودية، دولة تقع في شبه الجزيرة العربية وتضم الحرمين الشريفين وعاصمتها الرياض." },
+            { word: "الإمارات", desc: "دولة خليجية عربية تتكون من سبع إمارات متحدة وعاصمتها أبوظبي وتشتهر بالتطور العمراني." },
+            { word: "قطر", desc: "دولة شبه جزيرة تقع في الخليج العربي، تتميز باقتصادها القوي وعاصمتها الدوحة." },
+            { word: "فرنسا", desc: "دولة أوروبية كبرى تقع في غرب أوروبا وعاصمتها باريس وتشتهر ببرج إيفل والثقافة." },
+            { word: "إسبانيا", desc: "دولة تقع في شبه الجزيرة الإيبيرية جنوب أوروبا، عاصمتها مدريد وتشتهر بكرة القدم والمعالم الأندلسية." },
+            { word: "إيطاليا", desc: "دولة أوروبية تشبه شكل الحذاء في الخريطة، عاصمتها روما وتشتهر بالبيتزا والباستا والآثار الرومانية." },
+            { word: "ألمانيا", desc: "قوة اقتصادية وصناعية كبرى في وسط أوروبا، عاصمتها برلين وتشتهر بصناعة السيارات الفاخرة." },
+            { word: "إنجلترا", desc: "جزء من بريطانيا العظمى يقع في قارة أوروبا، عاصمتها لندن وتشتهر بساعة بيغ بن والدوري الإنجليزي." },
+            { word: "البرازيل", desc: "أكبر دولة في أمريكا الجنوبية، تشتهر بغابات الأمازون ولعب كرة القدم وفازت بكأس العالم 5 مرات." },
+            { word: "الأرجنتين", desc: "دولة في أمريكا الجنوبية عاصمتها بوينس آيرس، وتشتهر برقصة التانغو ولاعبي كرة القدم الأساطير." },
+            { word: "اليابان", desc: "دولة جزرية تقع في شرق آسيا، تشتهر بالتطور التكنولوجي الهائل والأنمي وعاصمتها طوكيو." },
+            { word: "الصين", desc: "دولة ضخمة في شرق آسيا تتميز بسورها العظيم واقتصادها الصناعي العملاق وعاصمتها بكين." },
+            { word: "روسيا", desc: "أكبر دولة في العالم من حيث المساحة الجغرافية، تمتد بين قارتي آسيا وأوروبا وعاصمتها موسكو." },
+            { word: "أمريكا", desc: "الولايات المتحدة الأمريكية، قوة عالمية كبرى تقع في أمريكا الشمالية وعاصمتها واشنطن دي سي." },
+            { word: "كندا", desc: "ثاني أكبر دولة في العالم مساحةً، تقع شمال قارة أمريكا الشمالية وتشتهر بورقة شجر القيقب وعاصمتها أوتاوا." },
+            { word: "أستراليا", desc: "دولة وقارة في نفس الوقت تقع في النصف الجنوبي من الكرة الأرضية وتشتهر بحيوان الكنغر وعاصمتها كانبيرا." },
+            { word: "تركيا", desc: "دولة عابرة للقارات تقع بين آسيا وأوروبا، عاصمتها أنقرة وتشتهر بالسياحة ومدينة إسطنبول التاريخية." },
+            { word: "المكسيك", desc: "دولة تقع في أمريكا الشمالية جنوب الولايات المتحدة، تشتهر بطعام التاكو والحضارات القديمة كالمايا." },
+            { word: "الهند", desc: "جمهورية ضخمة في جنوب آسيا تتميز بتنوعها الثقافي الهائل وضريح تاج محل وعاصمتها نيودلهي." },
+            { word: "كوريا الجنوبية", desc: "دولة في شرق آسيا عاصمتها سيول، تشتهر بشركات التكنولوجيا العملاقة وموسيقى الكيبوب والمسلسلات." },
+            { word: "جنوب إفريقيا", desc: "دولة تقع في أقصى جنوب قارة أفريقيا تميزت بنظام مناهضة الفصل العنصري (مانديلا) وعاصمتها بريتوريا." },
+            { word: "البرتغال", desc: "دولة أوروبية تقع على الساحل الغربي لشبه الجزيرة الإيبيرية وعاصمتها لشبونة وتشتهر بكرة القدم." },
+            { word: "بلجيكا", desc: "دولة أوروبية صغيرة تضم مقر الاتحاد الأوروبي وعاصمتها بروكسل وتشتهر بالشوكولاتة الفاخرة." },
+            { word: "هولندا", desc: "دولة في شمال غرب أوروبا عاصمتها أمستردام وتشتهر بطواحين الهواء وزراعة زهور التوليب." },
+            { word: "سويسرا", desc: "دولة أوروبية جبلية تقع في جبال الألب، تشتهر بالبنوك والساعات الفاخرة والحياد السياسي وعاصمتها برن." },
+            { word: "السويد", desc: "دولة إسكتندنافية في شمال أوروبا عاصمتها ستوكهولم وتشتهر بنظامها الاجتماعي المتقدم وجائزة نوبل." },
+            { word: "ليبيا", desc: "دولة عربية في شمال أفريقيا تمتلك ساحلاً طويلاً على البحر المتوسط وعاصمتها طرابلس والغنية بالنفط." },
+            { word: "موريتانيا", desc: "دولة عربية تقع في غرب أفريقيا عاصمتها نواكشوط وتُعرف ببلد المليون شاعر ولغتها العربية الفصحى." },
+            { word: "السودان", desc: "دولة عربية أفريقية يمر بها نهر النيل ويلتقي فيها النيل الأزرق بالأبيض وعاصمتها الخرطوم." },
+            { word: "الصومال", desc: "دولة عربية تقع في القرن الأفريقي وتمتلك أطول ساحل في قارة أفريقيا وعاصمتها مقديشو." },
+            { word: "جيبوتي", desc: "دولة عربية أفريقية صغيرة المساحة تقع في موقع استراتيجي على مضيق باب المندب." }
         ],
         'شخصيات مشهورة': [
-            { word: "ابن سينا", desc: "عالم وطبيب مسلم شهير، لُقب بشيخ الرئيس وألف كتاب القانون في الطب." },
-            { word: "كريستيانو رونالدو", desc: "لاعب كرة قدم برتغالي أسطوري، يعد من أفضل الهدافين في التاريخ ولعب لعدة أندية عالمية." },
-            { word: "ليونيل ميسي", desc: "لاعب كرة قدم أرجنتيني عبقري، يشتهر بمهاراته الفردية العالية وحطم أرقاماً قياسية عديدة." },
-            { word: "ألبرت أينشتاين", desc: "عالم فيزياء ألماني شهير صاغ النظرية النسبية التي غيرت مفاهيم الفيزياء الحديثة." },
-            { word: "إسحاق نيوتن", desc: "عالم إنجليزي شهير اكتشف قانون الجاذبية الأرضية وقوانين الحركة الأساسية." },
-            { word: "محمد علي كلاي", desc: "ملاكم أمريكي أسطوري في الوزن الثقيل، عُرف بمهارته ومواقفه الإنسانية الرائدة." },
-            { word: "توم كروز", desc: "ممثل ومنتج أمريكي شهير، بطل سلسلة أفلام المهمة المستحيلة والمعروف بأداء حركاته الخطيرة بنفسه." },
-            { word: "بيل غيتس", desc: "رجل أعمال ومبرمج أمريكي شارك في تأسيس شركة مايكروسوفت العملاقة للبرمجيات." },
-            { word: "إيلون ماسك", desc: "مهندس ورجل أعمال ومخترع يمتلك شركتي تيسلا وسبيس إكس وموقع إكس التواصلي." },
-            { word: "ليوناردو دا فينشي", desc: "فنان ومخترع إيطالي عبقري من عصر النهضة، رسم لوحة الموناليزا الشهيرة." },
-            { word: "ويليام شكسبير", desc: "شاعر وكاتب مسرحي إنجليزي بارز جداً، من أشهر أعماله مسرحية روميو وجولييت." },
-            { word: "ستيف جوبز", desc: "مخترع ورائد أعمال أمريكي شارك في تأسيس شركة آبل وكان العقل المدبر وراء هاتف آيفون." },
-            { word: "نيقولا تسلا", desc: "مخترع وعالم فيزياء صربي أمريكي، يرجع له الفضل في تطوير نظام التيار الكهربائي المتردد." },
-            { word: "تشارلي تشابلن", desc: "ممثل ومخرج صامت بريطاني شهير، يعد من أيقونات السينما الكوميدية العالمية القديمة." },
-            { word: "كريستوفر كولومبوس", desc: "رحالة ومستكشف إيطالي شهير، نُسب إليه تاريخياً اكتشاف القارة الأمريكية." }
+            { word: "كريستيانو رونالدو", desc: "صاروخ ماديرا، أسطورة كرة القدم البرتغالي الهداف التاريخي للعبة وصاحب الأرقام القياسية الجبارة." },
+            { word: "ليونيل ميسي", desc: "البرغوث الأرجنتيني الساحر، أحد أعظم لاعبي كرة القدم التاريخيين وحاصد الكرات الذهبية الثمانية." },
+            { word: "محمد صلاح", desc: "الملك المصري ونجم نادي ليفربول الإنجليزي، أحد أفضل الأجنحة في العالم وحطم الأرقام القياسية." },
+            { word: "زين الدين زيدان", desc: "المايسترو الفرنسي ذو الأصول الجزائرية، فاز بكأس العالم كلاعب ودوري الأبطال ثلاث مرات كمجاز كمضيف." },
+            { word: "مارادونا", desc: "الأسطورة الأرجنتيني الراحل، قاد بلاده للفوز بكأس العالم 1986 واشتهر بمهاراته الفردية الإعجازية." },
+            { word: "بيليه", desc: "الجوهرة السوداء البرازيلية، اللاعب الوحيد في التاريخ الفائز بثلاث بطولات كأس عالم ويعتبر رمز اللعبة." },
+            { word: "مايكل جوردان", desc: "أسطورة كرة السلة الأمريكي التاريخي، قاد شيكاغو بولز لهيمنة كاملة وصاحب علامة الأحذية الشهيرة." },
+            { word: "محمد علي كلاي", desc: "أعظم ملاكم في تاريخ الوزن الثقيل، اشتهر بقوته الخارقة ومواقفه الإنسانية والسياسية الشجاعة." },
+            { word: "ألبرت أينشتاين", desc: "العالم الفيزيائي العبقري صاحب النظرية النسبية التي غيرت مفهومنا عن الكون والزمان والطاقة." },
+            { word: "إسحاق نيوتن", desc: "عالم الفيزياء والرياضيات الإنجليزي العظيم مكتشف قانون الجاذبية الأرضية وقوانين الحركة الأساسية." },
+            { word: "ستيف جوبز", desc: "المبتكر الأمريكي العبقري ومؤسس شركة آبل، أحدث ثورة في عالم الهواتف الذكية بابتكار الآيفون." },
+            { word: "بيل جيتس", desc: "مؤسس شركة مايكروسوفت العملاقة ومطور نظام ويندوز، وأحد أكبر فاعلي الخير في العالم." },
+            { word: "إيلون ماسك", desc: "الملياردير العبقري مؤسس تسلا للسيارات الكهربائية وسبيس إكس للفضاء ومالك منصة إكس الحالية." },
+            { word: "بتهوفن", desc: "الموسيقار الألماني العبقري صاحب السيمفونيات الخالدة، والذي ألّف أعظم مقطوعاته بعد إصابته بالصمم." },
+            { word: "موزارت", desc: "أعجوبة الموسيقى الكلاسيكية النمساوي، بدأ التأليف في سن الخامسة وترك مئات المقطوعات العبقرية." },
+            { word: "ويليام شكسبير", desc: "شاعر وكاتب مسرحي إنجليزي شهير جداً، صاحب مسرحية روميو وجوليت وهاملت ويعتبر رائد الأدب." },
+            { word: "ابن سينا", desc: "الشيخ الرئيس، العالم والطب المسلم العظيم صاحب كتاب القانون في الطب الذي درّس في أوروبا لقرون." },
+            { word: "ابن خلدون", desc: "العالم والمؤرخ المسلم العبقري مؤسس علم الاجتماع وصاحب المقدمة الشهيرة في فلسفة التاريخ." },
+            { word: "الخوارزمي", desc: "عالم الرياضيات المسلم العبقري مؤسس علم الجبر ومبتكر الأرقام العربية والصيغ الخوارزمية الرقمية." },
+            { word: "عباس بن فرناس", desc: "العالم الموسوعي الأندلسي العبقري المخترع الطيار وصاحب أول محاولة طيران حقيقية ناجحة في التاريخ." },
+            { word: "الجزري", desc: "المهندس والمخترع المسلم العظيم الملقب بأبي الروبوتات وصاحب الساعات والآلات الهيدروليكية المذهلة." },
+            { word: "الكندي", desc: "فيلسوف العرب الموسوعي الذي برع في الفلك، الرياضيات، والموسيقى وترجم الفلسفة اليونانية." },
+            { word: "الفارابي", desc: "المعلم الثاني، الفيلسوف والمسلم الكبير الذي كتب في الموسيقى والسياسة والمنطق الفكري." },
+            { word: "ثابت بن قره", desc: "عالم رياضيات وفلك ومترجم متميز، برع في حساب التفاضل والتكامل والهندسة التجميعية." },
+            { word: "عمر الخيام", desc: "العالم والشاعر الفارسي وصاحب الرباعيات الشهيرة وبرع في الرياضيات وحل معادلات الدرجة الثالثة." },
+            { word: "سيرينا ويليامز", desc: "أسطورة التنس النسائي الأمريكية القوية جداً التي هيمنت على البطولات وحصدت 23 لقباً كبيراً." },
+            { word: "تايجر وودز", desc: "أعظم وأشهر لاعب غولف في التاريخ، نقل اللعبة لمستويات عالمية وهيمن على تصنيفها لسنوات طويلة." },
+            { word: "لويس هاميلتون", desc: "بطل سباقات الفورمولا 1 البريطاني الأسطوري الفائز بـ 7 ألقاب عالمية وصاحب أكبر عدد انتصارات." },
+            { word: "مايكل شوماخر", desc: "البارون الأحمر الألماني، أسطورة سباقات الفورمولا 1 التاريخي لنادي فيراري الفائز بـ 7 بطولات عالم." },
+            { word: "كيليان جورنيت", desc: "الرياضي الإسباني الأسطوري في ركض الجبال والماراثونات فائقة الطول وتسلق القمم بسرعة إعجازية." },
+            { word: "حبيب نورماغوميدوف", desc: "البطل الداغستاني الأسطوري للفنون القتالية المختلطة UFC، اعتزل بسجل مثالي خالٍ من الهزائم 29-0." },
+            { word: "إسلام ماخاشيف", desc: "البطل الداغستاني الحالي للفنون القتالية المختلطة UFC وتلميذ حبيب، ويتميز بقوته في المصارعة." },
+            { word: "كونور ماكغريغور", desc: "المقاتل الإيرلندي الشهير في الـ UFC، أول من حمل حزامين بوزنين مختلفين واشتهر بأسلوبه الاستعراضي الصاخب." },
+            { word: "الإسكندر الأكبر", desc: "القائد العسكري اليوناني الفذ الذي أسس واحدة من أكبر الإمبراطوريات في التاريخ القديم ولم يهزم قط." },
+            { word: "يوليوس قيصر", desc: "القائد السياسي والعسكري الروماني العظيم الذي قاد التوسع الروماني وانتهت حياته بالاغتيال الشهير." },
+            { word: "حنبعل", desc: "القائد العسكري القرطاجي العبقري الذي عبر جبال الألب بالأفيال وهدد الإمبراطورية الرومانية في عقر دارها." },
+            { word: "سبارتاكوس", desc: "المصارع الروماني القديم وقائد ثورة العبيد الشهيرة ضد الطغيان الروماني دفاعاً عن الحرية." },
+            { word: "نابليون بونابرت", desc: "الإمبراطور والقائد العسكري الفرنسي العبقري الذي اجتاح أوروبا ووضع القانون النابليوني التنظيمي." },
+            { word: "ابن عربي", desc: "الفيلسوف والشاعر الصوفي الأندلسي الكبير وصاحب المؤلفات العميقة كـ الفتوحات المكية." },
+            { word: "جلال الدين الرومي", desc: "الشاعر والمتصوف الفذ صاحب كتاب المثنوي ومؤسس رقصة الدراويش المولويَّة وقصائده العشقية الإنسانية." },
+            { word: "تشارلي تشابلن", desc: "أسطورة السينما الصامتة الكوميدي البريطاني الساخر بشخصية الصعلوك المتجول وصاحب الرسائل الإنسانية العميقة." },
+            { word: "والت ديزني", desc: "المنتج والمبتكر الأمريكي العظيم مؤسس شركة ديزني وصانع شخصية ميكي ماوس وعالم الرسوم المتحركة." },
+            { word: "ألفرد نوبل", desc: "العالم الكيميائي السويدي مخترع الديناميت، الذي خصص ثروته الطائلة لتمويل جوائز نوبل العالمية للسلام والعلوم." },
+            { word: "لوتشيانو بافاروتي", desc: "مغني الأوبرا الإيطالي الأسطوري (التينور)، صاحب أقوى وأجمل صوت أوبرالي كلاسيكي عرفه العالم الحديث." },
+            { word: "أم كلثوم", desc: "كوكب الشرق وسيدة الغناء العربي، المطربة المصرية الأسطورية التي وحدت العرب بصوتها وأغانيها الخالدة." },
+            { word: "فيروز", desc: "أرزة لبنان جارة القمر، المطربة اللبنانية الأيقونية صاحبة الصوت الملائكي الصباحي اللطيف." },
+            { word: "عبد الحليم حافظ", desc: "العندليب الأسمر، مطرب الرومانسية والإحساس المصري الراحل وأحد عمالقة الفن الموسيقي العربي." },
+            { word: "فريد الأطرش", desc: "ملك العود، المطرب والموسيقار العبقري ذو الأصول الدرزية المتميز بألحانه العميقة وصوته الشجي الحزين." },
+            { word: "ميكل أنجلو", desc: "الفنان والنحات الإيطالي العبقري في عصر النهضة صاحب منحوتة داود وسقف كنيسة سيستينا المذهل." },
+            { word: "ليوناردو دا فينشي", desc: "العبقري الشامل في عصر النهضة، رسام لوحة الموناليزا والعشاء الأخير ومخترع وضع مخططات الطائرات." },
+            { word: "بابلو بيكاسو", desc: "الرسام الإسباني العبقري والمؤسس المشارك للمدرسة التكعيبية في الفن وتعد لوحاته الأغلى في العالم." },
+            { word: "فان غوخ", desc: "الرسام الهولندي الشهير ذو الأسلوب التأثيري اللامع (لوحة ليلة النجوم) وعاش حياة نفسية قاسية وضجر." },
+            { word: "إدغار آلان بو", desc: "الكاتب والشاعر الأمريكي العبقري، رائد أدب الرعب والغموض والقصص البوليسية القصيرة المظلمة." },
+            { word: "أجاثا كريستي", desc: "ملكة الجريمة والغموض، الكاتبة البريطانية الأكثر مبيعاً في التاريخ مؤلفة روايات التحقيق (بوارو وماربل)." },
+            { word: "sلفادور دالي", desc: "الرسام الإسباني العبقري رائد المدرسة السريالية (الخيالية غير الواقعية) وصاحب لوحة الساعات الذائبة الشهيرة." }
         ]
     };
 
-    listenToAvailableRooms(); 
-    cleanOldRooms(); 
-
-    function showScreen(id) { 
-        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); 
-        document.getElementById(id).classList.add('active'); 
-        if(id === 'home-screen') document.getElementById('global-leave-btn').style.display = 'none'; 
-        else document.getElementById('global-leave-btn').style.display = 'block';
-    } 
-
-    function setRoomPrivacy(privacy) { 
-        roomPrivacySetting = privacy; 
-        document.getElementById('type-public-btn').className = "type-btn"; 
-        document.getElementById('type-private-btn').className = "type-btn";
-        if (privacy === 'public') { 
-            document.getElementById('type-public-btn').className = "type-btn selected"; 
-            document.getElementById('custom-password-input').style.display = "none"; 
-        } else { 
-            document.getElementById('type-private-btn').className = "type-btn selected";
-            document.getElementById('custom-password-input').style.display = "block"; 
-        } 
-    } 
-
-    function selectPlayMode(mode, btn) { 
-        chosenPlayMode = mode; 
-        document.getElementById('mode-normal-btn').classList.remove('selected'); 
-        document.getElementById('mode-chat-btn').classList.remove('selected'); 
-        btn.classList.add('selected');
-    } 
-
-    function playerDisconnectAction() { 
-        if(!currentRoom || !myId) return; 
-        let confirmMsg = isHost ? "أنت المضيف (Host)، إذا غادرت سيتم حذف الغرفة وطرد جميع اللاعبين. هل تريد المغادرة؟" : "هل أنت متأكد من رغبتك في مغادرة اللعبة والعودة للرئيسية؟"; 
-        if(confirm(confirmMsg)) { 
-            if(isHost) { 
-                db.ref('rooms/' + currentRoom).remove().then(() => clearAndReload());
-            } else { 
-                db.ref('rooms/' + currentRoom + '/players/' + myId).remove(); 
-                db.ref('rooms/' + currentRoom + '/understandVotes/' + myId).remove();
-                db.ref('rooms/' + currentRoom + '/votes/' + myId).remove(); 
-                db.ref('rooms/' + currentRoom).off(); 
-                db.ref('rooms/' + currentRoom + '/lobbyChat').off(); 
-                db.ref('rooms/' + currentRoom + '/controlledChat').off();
-                currentRoom = null; 
-                myId = null; 
-                clearAndReload(); 
-            } 
-        } 
-    } 
-
-    function selectCat(cat, btn) { 
-        selectedCategory = cat; 
-        document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('selected'));
-        btn.classList.add('selected'); 
-    } 
-
-    function selectImpCount(count, btn) { 
-        allowedImpostersCount = count; 
-        document.querySelectorAll('.imp-toggle-btn').forEach(b => b.classList.remove('selected')); 
-        btn.classList.add('selected'); 
-    } 
-
-    function disableHomeButtons() { 
-        document.getElementById('create-btn').disabled = true;
-        document.getElementById('create-btn').innerText = "جاري الاتصال..."; 
-        document.getElementById('join-btn').disabled = true; 
-        document.getElementById('join-btn').innerText = "جاري الاتصال..."; 
-    } 
-
-    function enableHomeButtons() { 
-        document.getElementById('create-btn').disabled = false;
-        document.getElementById('create-btn').innerText = "إنشاء غرفة جديدة"; 
-        document.getElementById('join-btn').disabled = false; 
-        document.getElementById('join-btn').innerText = "انضمام للغرفة";
-    } 
-
-    function cleanOldRooms() { 
-        db.ref('rooms').once('value', snap => { 
-            const rooms = snap.val(); 
-            if (!rooms) return; 
-            const now = Date.now(); 
-            const sixHours = 6 * 60 * 60 * 1000; 
-            Object.keys(rooms).forEach(roomId => { 
-                const room = rooms[roomId]; 
-                if (!room.createdAt) db.ref('rooms/' + roomId).update({ createdAt: now }); 
-                else if (now - room.createdAt > sixHours || !room.players) db.ref('rooms/' + roomId).remove(); 
-            }); 
-        });
-    } 
-
-    function listenToAvailableRooms() { 
-        db.ref('rooms').on('value', snap => { 
-            const container = document.getElementById('available-rooms-container'); 
-            if(!container) return; 
-            const roomsData = snap.val(); 
-            if(!roomsData) { 
-                container.innerHTML = "لا توجد غرف نشطة حالياً"; 
-                return; 
-            } 
-            container.innerHTML = ""; 
-            let hasRooms = false; 
-            Object.keys(roomsData).forEach(id => { 
-                const room = roomsData[id]; 
-                if(room.privacy === 'public' && room.status === 'lobby' && room.players) { 
-                    hasRooms = true; 
-                    const count = Object.keys(room.players).length; 
-                    container.innerHTML += `<div class="room-item" onclick="directJoinRoom('${id}')"><span>🏠 غرفة: ${id}</span><span style="color:var(--success)">${count} لاعبين</span></div>`; 
-                } 
-            }); 
-            if(!hasRooms) container.innerHTML = "لا توجد غرف عامة متاحة حالياً"; 
-        }); 
-    }
-
-    function directJoinRoom(id) { 
-        document.getElementById('room-id-input').value = id; 
-        processAndJoinRoom(); 
-    }
-
-    function processAndCreateRoom() { 
-        const nameInput = document.getElementById('user-name').value.trim(); 
-        if(!nameInput) { alert("من فضلك أدخل اسمك أولاً!"); return; } 
-        myName = nameInput; 
-        localStorage.setItem('savedName', myName); 
-        disableHomeButtons(); 
-        const passInput = document.getElementById('custom-password-input').value.trim(); 
-        if(roomPrivacySetting === 'private' && passInput.length < 4) { 
-            alert("الرمز السري للغرفة الخاصة يجب أن يتكون من 4 أرقام!"); 
-            enableHomeButtons(); 
-            return; 
-        } 
-        const randId = Math.floor(1000 + Math.random() * 9000).toString(); 
-        const generatedKey = "RM" + randId; 
-        db.ref('rooms/' + generatedKey).once('value', snap => { 
-            if(snap.exists()) { 
-                processAndCreateRoom(); 
-            } else { 
-                myId = "PL" + Date.now(); 
-                isHost = true; 
-                const roomObj = { 
-                    status: 'lobby', 
-                    hostId: myId, 
-                    category: selectedCategory, 
-                    impostersCount: allowedImpostersCount, 
-                    privacy: roomPrivacySetting, 
-                    password: roomPrivacySetting === 'private' ? passInput : "", 
-                    round: 1, 
-                    createdAt: Date.now(), 
-                    players: {} 
-                }; 
-                roomObj.players[myId] = { name: myName, score: 0, isHost: true }; 
-                db.ref('rooms/' + generatedKey).set(roomObj).then(() => { 
-                    currentRoom = generatedKey; 
-                    localStorage.setItem('lastRoom', currentRoom); 
-                    localStorage.setItem('lastMyId', myId); 
-                    setupRoomListeners(); 
-                }).catch(err => { 
-                    alert("خطأ في إنشاء الغرفة: " + err.message); 
-                    enableHomeButtons(); 
-                }); 
-            } 
-        }); 
-    }
-
-    function processAndJoinRoom() { 
-        const nameInput = document.getElementById('user-name').value.trim(); 
-        if(!nameInput) { alert("من فضلك أدخل اسمك أولاً!"); return; } 
-        myName = nameInput; 
-        localStorage.setItem('savedName', myName); 
-        let targetRoom = document.getElementById('room-id-input').value.trim().toUpperCase(); 
-        if(!targetRoom) { alert("من فضلك أدخل كود الغرفة المكون من 4 أرقام أو الرمز بالكامل!"); return; } 
-        if(!targetRoom.startsWith("RM")) targetRoom = "RM" + targetRoom; 
-        disableHomeButtons(); 
-        db.ref('rooms/' + targetRoom).once('value', snap => { 
-            const room = snap.val(); 
-            if(!snap.exists() || !room) { 
-                alert("هذه الغرفة غير موجودة أو تم إغلاقها!"); 
-                enableHomeButtons(); 
-                return; 
-            } 
-            if(room.status !== 'lobby') { 
-                alert("لا يمكنك الانضمام للغرفة، اللعبة بدأت بالفعل أو انتهت!"); 
-                enableHomeButtons(); 
-                return; 
-            } 
-            if(room.players && Object.keys(room.players).length >= 8) { 
-                alert("الغرفة ممتلئة تماماً باللاعبين (الحد الأقصى 8)!"); 
-                enableHomeButtons(); 
-                return; 
-            } 
-            if(room.privacy === 'private') { 
-                const userPass = prompt("هذه الغرفة محمية برمز سري، أدخل الرمز المكون من 4 أرقام للدخول:"); 
-                if(userPass !== room.password) { 
-                    alert("الرمز السري غير صحيح! تم رفض الدخول."); 
-                    enableHomeButtons(); 
-                    return; 
-                } 
-            } 
-            myId = "PL" + Date.now(); 
-            isHost = false; 
-            db.ref('rooms/' + targetRoom + '/players/' + myId).set({ name: myName, score: 0, isHost: false }).then(() => { 
-                currentRoom = targetRoom; 
-                localStorage.setItem('lastRoom', currentRoom); 
-                localStorage.setItem('lastMyId', myId); 
-                setupRoomListeners(); 
-            }); 
-        }); 
-    }
-
-    function checkAutoReconnect() { 
-        const r = localStorage.getItem('lastRoom'); 
-        const m = localStorage.getItem('lastMyId'); 
-        const n = localStorage.getItem('savedName'); 
-        if(r && m && n) { 
-            db.ref('rooms/' + r).once('value', snap => { 
-                const room = snap.val(); 
-                if(snap.exists() && room && room.players && room.players[m]) { 
-                    currentRoom = r; 
-                    myId = m; 
-                    myName = n; 
-                    isHost = room.hostId === myId; 
-                    setupRoomListeners(); 
-                } else { 
-                    localStorage.removeItem('lastRoom'); 
-                    localStorage.removeItem('lastMyId'); 
-                    document.getElementById('reconnect-hint').style.display = "none"; 
-                } 
-            }); 
-        } 
-    }
-
-    function setupRoomListeners() { 
-        enableHomeButtons(); 
-        showScreen('lobby-screen'); 
-        document.getElementById('display-room-id').innerText = currentRoom.replace("RM",""); 
-        
-        db.ref('rooms/' + currentRoom).on('value', snap => { 
-            gameData = snap.val(); 
-            if(!gameData) { 
-                alert("تم حذف الغرفة أو إغلاقها من قبل المضيف!"); 
-                db.ref('rooms/' + currentRoom).off(); 
-                currentRoom = null; 
-                myId = null; 
-                clearAndReload(); 
-                return; 
-            } 
-            isHost = gameData.hostId === myId; 
-            document.getElementById('host-controls').style.display = isHost ? "block" : "none"; 
-            document.getElementById('start-game-btn').style.display = (isHost && gameData.status === 'lobby') ? 'block' : 'none'; 
-            document.getElementById('delete-room-btn').style.display = isHost ? 'block' : 'none'; 
-            document.getElementById('change-word-btn').style.display = (isHost && gameData.status === 'playing') ? 'block' : 'none'; 
-            document.getElementById('display-room-privacy').innerText = gameData.privacy === 'private' ? "🔒 خاصة" : "🔓 عامة"; 
-            document.getElementById('round-display').innerText = `الجولة: ${gameData.round || 1} / 5`; 
-            
-            updatePlayerListUI(); 
-            
-            if(gameData.status === 'lobby') { 
-                showScreen('lobby-screen'); 
-            } else if(gameData.status === 'playing') { 
-                setupPlayScreenUI(); 
-            } else if(gameData.status === 'controlled_chat_stage') { 
-                setupControlledChatUI(); 
-            } else if(gameData.status === 'voting') { 
-                setupVoteScreenUI(); 
-            } else if(gameData.status === 'results') { 
-                showFinalResults(); 
-            } 
-        }); 
-
-        db.ref('rooms/' + currentRoom + '/lobbyChat').on('child_added', snap => { 
-            const msg = snap.val(); 
-            const box = document.getElementById('chat-messages-container'); 
-            if(box && msg) { 
-                box.innerHTML += `<div class="chat-msg"><span class="sender">${msg.sender}:</span>${msg.text}</div>`; 
-                box.scrollTop = box.scrollHeight; 
-            } 
-        }); 
-
-        db.ref('rooms/' + currentRoom + '/controlledChat/messages').on('child_added', snap => { 
-            const msg = snap.val(); 
-            const box = document.getElementById('ingame-messages-container'); 
-            if(box && msg) { 
-                box.innerHTML += `<div class="ingame-msg"><span class="sender">${msg.sender}:</span>${msg.text}</div>`; 
-                box.scrollTop = box.scrollHeight; 
-            } 
-        }); 
-    }
-
-    function updatePlayerListUI() { 
-        const container = document.getElementById('player-list-container'); 
-        if(!container || !gameData.players) return; 
-        container.innerHTML = ""; 
-        Object.keys(gameData.players).forEach(pId => { 
-            const p = gameData.players[pId]; 
-            const isMe = pId === myId ? " (أنت)" : ""; 
-            const hostBadge = p.isHost ? " 👑" : ""; 
-            let kickBtn = ""; 
-            if(isHost && pId !== myId) { 
-                kickBtn = `<button class="kick-btn" onclick="kickPlayerAction('${pId}')">❌ طرد</button>`; 
-            } 
-            container.innerHTML += `<div class="player-tag"><span>${p.name}${isMe}${hostBadge}</span> <span style="color:var(--success)">${p.score || 0} pts</span> ${kickBtn}</div>`; 
-        }); 
-    }
-
-    function kickPlayerAction(pId) { 
-        if(confirm("هل أنت متأكد من طرد هذا اللاعب نهائياً من الغرفة؟")) { 
-            db.ref(`rooms/${currentRoom}/players/${pId}`).remove(); 
-            db.ref(`rooms/${currentRoom}/understandVotes/${pId}`).remove(); 
-            db.ref(`rooms/${currentRoom}/votes/${pId}`).remove(); 
-        } 
-    }
-
-    function sendLobbyMessage() { 
-        const inp = document.getElementById('chat-msg-input'); 
-        const txt = inp.value.trim(); 
-        if(!txt) return; 
-        db.ref('rooms/' + currentRoom + '/lobbyChat').push({ sender: myName, text: txt }); 
-        inp.value = ""; 
-    }
-
-    function deleteRoomByHost() { 
-        if(confirm("تحذير! سيتم طرد جميع اللاعبين وحذف الغرفة نهائياً من سيرفر الفايربيس. هل أنت متأكد؟")) { 
-            db.ref('rooms/' + currentRoom).remove().then(() => clearAndReload()); 
-        } 
-    }
-
-    function triggerStart() { 
-        const pIds = Object.keys(gameData.players || {}); 
-        if(pIds.length < 3) { alert("عذراً، يجب وجود 3 لاعبين على الأقل لبدء العملية الأمنية!"); return; } 
-        const countSetting = gameData.impostersCount || 1; 
-        if(pIds.length <= 3 && countSetting > 1) { 
-            alert("عدد اللاعبين قليل جداً (3 لاعبين)، لا يمكن اختيار محتالين اثنين! يرجى تغيير الإعداد لمحتال واحد."); 
-            return; 
-        } 
-        
-        let shuffled = [...pIds].sort(() => Math.random() - 0.5); 
-        let imposters = []; 
-        for(let i=0; i<countSetting; i++) { imposters.push(shuffled[i]); } 
-        
-        const cat = gameData.category || "حيوانات وحشرات"; 
-        const wordsArr = megaDatabase[cat] || megaDatabase['حيوانات وحشرات']; 
-        const randItem = wordsArr[Math.floor(Math.random() * wordsArr.length)]; 
-        
-        db.ref('rooms/' + currentRoom + '/lobbyChat').remove(); 
-        document.getElementById('chat-messages-container').innerHTML = ""; 
-        
-        const updates = { 
-            status: 'playing', 
-            currentWord: randItem.word, 
-            currentDesc: randItem.desc, 
-            imposters: imposters, 
-            understandVotes: {}, 
-            votes: {}, 
-            controlledChat: {} 
-        }; 
-        db.ref('rooms/' + currentRoom).update(updates); 
-    }
-
-    function changeCurrentWord() { 
-        if(!isHost) return; 
-        const cat = gameData.category || "حيوانات وحشرات"; 
-        const wordsArr = megaDatabase[cat] || megaDatabase['حيوانات وحشرات']; 
-        const randItem = wordsArr[Math.floor(Math.random() * wordsArr.length)]; 
-        db.ref('rooms/' + currentRoom).update({ 
-            currentWord: randItem.word, 
-            currentDesc: randItem.desc, 
-            understandVotes: {} 
-        }); 
-    }
-
-    function setupPlayScreenUI() { 
-        showScreen('play-screen'); 
-        document.getElementById('category-hint').innerText = "الفئة المخترقة: " + (gameData.category || "---"); 
-        document.getElementById('secret-content').innerText = "[ اضغط لفك التشفير ]"; 
-        document.getElementById('secret-content').style.color = "#555"; 
-        
-        const votes = gameData.understandVotes || {}; 
-        const total = Object.keys(gameData.players || {}).length; 
-        const votedCount = Object.keys(votes).length; 
-        document.getElementById('understand-status-text').innerText = `تم تأكيد الفهم: ${votedCount} / ${total}`; 
-        
-        document.getElementById('und-yes').className = "und-btn yes-btn"; 
-        document.getElementById('und-no').className = "und-btn no-btn"; 
-        if(votes[myId] === true) document.getElementById('und-yes').className = "und-btn yes-btn selected-yes"; 
-        if(votes[myId] === false) document.getElementById('und-no').className = "und-btn no-btn selected-no"; 
-        
-        const mode = gameData.playMode || 'normal'; 
-        if(isHost) { 
-            if(mode === 'controlled_chat') { 
-                document.getElementById('go-to-questions-btn').style.display = 'block'; 
-                document.getElementById('go-to-vote-btn').style.display = 'none'; 
-            } else { 
-                document.getElementById('go-to-questions-btn').style.display = 'none'; 
-                document.getElementById('go-to-vote-btn').style.display = 'block'; 
-            } 
-        } else { 
-            document.getElementById('go-to-questions-btn').style.display = 'none'; 
-            document.getElementById('go-to-vote-btn').style.display = 'none'; 
-        } 
-    }
-
-    function toggleSecret() { 
-        const content = document.getElementById('secret-content'); 
-        const imps = gameData.imposters || []; 
-        const isImp = imps.includes(myId); 
-        if(content.innerText.includes("اضغط لفك التشفير")) { 
-            if(isImp) { 
-                content.innerText = "⚠️ أنت المحتال (Imposter)!\nمهمتك: الاختباء والتمويه العالي والذكي دون كشفك!"; 
-                content.style.color = "var(--imposter)"; 
-            } else { 
-                content.innerText = `الكلمة السرية النظيفة:\n[ ${gameData.currentWord} ]\n\nالوصف المرجعي السري:\n(${gameData.currentDesc || ""})`; 
-                content.style.color = "var(--success)"; 
-            } 
-        } else { 
-            content.innerText = "[ اضغط لفك التشفير ]"; 
-            content.style.color = "#555"; 
-        } 
-    }
-
-    function submitUnderstanding(status) { 
-        db.ref(`rooms/${currentRoom}/understandVotes/${myId}`).set(status); 
-    }
-
-    function switchToQuestionsStage() { 
-        if(!isHost) return; 
-        const pIds = Object.keys(gameData.players || {}); 
-        const randomTurns = [...pIds].sort(() => Math.random() - 0.5); 
-        const chatObj = { 
-            status: 'question_asking', 
-            turnsOrder: randomTurns, 
-            currentIndex: 0, 
-            phase: 'asking', 
-            messages: {} 
-        }; 
-        db.ref('rooms/' + currentRoom + '/controlledChat').set(chatObj); 
-        db.ref('rooms/' + currentRoom).update({ status: 'controlled_chat_stage' }); 
-    }
-
-    function setupControlledChatUI() { 
-        showScreen('investigation-screen'); 
-        document.getElementById('investigation-category-hint').innerText = "فئة التحقيق: " + (gameData.category || "---"); 
-        document.getElementById('host-trigger-vote-btn').style.display = isHost ? 'block' : 'none'; 
-        
-        const cc = gameData.controlledChat || {}; 
-        const order = cc.turnsOrder || []; 
-        const idx = cc.currentIndex || 0; 
-        const activePlayerId = order[idx]; 
-        const phase = cc.phase || 'asking'; 
-        const targetId = cc.currentTargetPlayerId || ""; 
-        
-        const activeName = gameData.players[activePlayerId] ? gameData.players[activePlayerId].name : "لاعب غائب"; 
-        const targetName = gameData.players[targetId] ? gameData.players[targetId].name : ""; 
-        
-        const bar = document.getElementById('turn-indicator-bar'); 
-        const inp = document.getElementById('ingame-msg-input'); 
-        const btn = document.getElementById('ingame-send-btn'); 
-        const doubtArea = document.getElementById('doubt-targets-area'); 
-        
-        inp.style.display = "block"; 
-        btn.style.display = "block"; 
-        doubtArea.style.display = "none"; 
-        
-        if(cc.status === 'question_asking') { 
-            if(phase === 'asking') { 
-                bar.innerText = `دور [ ${activeName} ] لطرح سؤال واستجواب أي لاعب..`; 
-                if(activePlayerId === myId) { 
-                    inp.placeholder = "اكتب سؤالك الموجه لأحد اللاعبين هنا..."; 
-                    inp.disabled = false; btn.disabled = false; 
-                    buildDoubtTargetsUI(activePlayerId, 'question_target'); 
-                    doubtArea.style.display = "flex"; 
-                } else { 
-                    inp.placeholder = "انتظر حتى يطرح المستجوب سؤاله..."; 
-                    inp.disabled = true; btn.disabled = true; 
-                } 
-            } else if(phase === 'answering') { 
-                bar.innerText = `[ ${activeName} ] سأل [ ${targetName} ]. انتظار الإجابة...`; 
-                if(targetId === myId) { 
-                    inp.placeholder = "أجب على السؤال بدقة وذكاء لحماية موقفك الأمني هنا..."; 
-                    inp.disabled = false; btn.disabled = false; 
-                } else { 
-                    inp.placeholder = "انتظر إجابة اللاعب المستجوب..."; 
-                    inp.disabled = true; btn.disabled = true; 
-                } 
-            } 
-        } else if(cc.status === 'doubt_phase') { 
-            bar.innerText = `🚨 مرحلة الشك الفوري الخاطف! دور [ ${activeName} ] لتحديد مشتبه به بحرية..`; 
-            if(activePlayerId === myId) { 
-                inp.placeholder = "اكتب مبررات شكك القوي في هذا اللاعب..."; 
-                inp.disabled = false; btn.disabled = false; 
-                buildDoubtTargetsUI(activePlayerId, 'doubt_target'); 
-                doubtArea.style.display = "flex"; 
-            } else { 
-                inp.placeholder = "انتظر حتى ينهي المشتبه تحليله الأمني..."; 
-                inp.disabled = true; btn.disabled = true; 
-            } 
-        } 
-    }
-
-    function buildDoubtTargetsUI(excludepId, type) { 
-        const area = document.getElementById('doubt-targets-area'); 
-        area.innerHTML = ""; 
-        Object.keys(gameData.players || {}).forEach(pId => { 
-            if(pId !== excludepId) { 
-                const name = gameData.players[pId].name; 
-                area.innerHTML += `<button class="target-mini-btn" onclick="selectInGameTarget('${pId}','${type}')">${name}</button>`; 
-            } 
-        }); 
-    }
-
-    let localSelectedTargetId = null; 
-    function selectInGameTarget(tId, type) { 
-        localSelectedTargetId = tId; 
-        const name = gameData.players[tId].name; 
-        const buttons = document.querySelectorAll('.target-mini-btn'); 
-        buttons.forEach(b => { 
-            if(b.innerText === name) b.style.background = "var(--success)", b.style.color = "#000"; 
-            else b.style.background = "#222", b.style.color = "#fff"; 
-        }); 
-    }
-
-    function sendInGameMessage() { 
-        const inp = document.getElementById('ingame-msg-input'); 
-        const txt = inp.value.trim(); 
-        if(!txt) return; 
-        
-        const cc = gameData.controlledChat || {}; 
-        const order = cc.turnsOrder || []; 
-        const idx = cc.currentIndex || 0; 
-        const activePlayerId = order[idx]; 
-        const phase = cc.phase || 'asking'; 
-        
-        if(cc.status === 'question_asking') { 
-            if(phase === 'asking') { 
-                if(!localSelectedTargetId) { alert("يجب عليك تحديد اللاعب المستهدف بالضغط على اسمه أولاً!"); return; } 
-                const tName = gameData.players[localSelectedTargetId].name; 
-                db.ref('rooms/' + currentRoom + '/controlledChat/messages').push({ sender: myName, text: `❓ (سؤال إلى ${tName}): ${txt}` }); 
-                db.ref('rooms/' + currentRoom + '/controlledChat').update({ phase: 'answering', currentTargetPlayerId: localSelectedTargetId }); 
-                localSelectedTargetId = null; 
-            } else if(phase === 'answering') { 
-                db.ref('rooms/' + currentRoom + '/controlledChat/messages').push({ sender: myName, text: `📢 (الإجابة): ${txt}` }); 
-                advanceControlledChatTurn(); 
-            } 
-        } else if(cc.status === 'doubt_phase') { 
-            if(!localSelectedTargetId) { alert("يجب اختيار مشتبه به بالضغط على اسمه!"); return; } 
-            const tName = gameData.players[localSelectedTargetId].name; 
-            db.ref('rooms/' + currentRoom + '/controlledChat/messages').push({ sender: myName, text: `🔍 أشك بقوة في [ ${tName} ] والسبب: ${txt}` }); 
-            localSelectedTargetId = null; 
-            advanceControlledChatTurn(); 
-        } 
-        inp.value = ""; 
-    }
-
-    function advanceControlledChatTurn() { 
-        const cc = gameData.controlledChat || {}; 
-        let idx = cc.currentIndex || 0; 
-        const order = cc.turnsOrder || []; 
-        idx++; 
-        if(idx >= order.length) { 
-            if(cc.status === 'question_asking') { 
-                db.ref('rooms/' + currentRoom + '/controlledChat').update({ status: 'doubt_phase', currentIndex: 0, phase: 'asking', currentTargetPlayerId: "" }); 
-            } else { 
-                showVoteScreen(); 
-            } 
-        } else { 
-            db.ref('rooms/' + currentRoom + '/controlledChat').update({ currentIndex: idx, phase: 'asking', currentTargetPlayerId: "" }); 
-        } 
-    }
-
-    function showVoteScreen() { 
-        db.ref('rooms/' + currentRoom).update({ status: 'voting' }); 
-    }
-
-    function setupVoteScreenUI() { 
-        showScreen('vote-screen'); 
-        const optionsContainer = document.getElementById('vote-options'); 
-        optionsContainer.innerHTML = ""; 
-        const votes = gameData.votes || {}; 
-        
-        let hasVoted = (votes[myId] !== undefined); 
-        
-        Object.keys(gameData.players || {}).forEach(pId => { 
-            const name = gameData.players[pId].name; 
-            const totalVoters = Object.keys(gameData.players).length; 
-            let countForThis = 0; 
-            Object.values(votes).forEach(v => { if(v === pId) countForThis++; }); 
-            
-            const btn = document.createElement('button'); 
-            btn.className = 'vote-btn'; 
-            btn.innerText = `${name} (الأصوات المتلقاة: ${countForThis} / ${totalVoters})`; 
-            if(hasVoted) btn.disabled = true; 
-            if(votes[myId] === pId) btn.style.borderColor = "var(--success)", btn.style.background = "rgba(0,255,157,0.1)"; 
-            
-            btn.onclick = () => { submitVoteAction(pId); }; 
-            optionsContainer.appendChild(btn); 
-        }); 
-        
-        if(isHost) { 
-            const totalPlayers = Object.keys(gameData.players).length; 
-            const activeVotesCount = Object.keys(votes).length; 
-            if(activeVotesCount >= totalPlayers) { 
-                processVotesAndCalculateScores(); 
-            } 
-        } 
-    }
-
-    function submitVoteAction(targetId) { 
-        db.ref(`rooms/${currentRoom}/votes/${myId}`).set(targetId); 
-    }
-
-    function processVotesAndCalculateScores() { 
-        if(!isHost) return; 
-        const votes = gameData.votes || {}; 
-        const imps = gameData.imposters || []; 
-        const totalVoters = Object.keys(gameData.players).length; 
-        let updates = {}; 
-        
-        Object.keys(gameData.players).forEach(pId => { 
-            let currentScore = gameData.players[pId].score || 0; 
-            if(!imps.includes(pId)) { 
-                const myVoteTarget = votes[pId]; 
-                if(myVoteTarget && imps.includes(myVoteTarget)) { 
-                    currentScore += 3; 
-                } 
-                updates[`players/${pId}/score`] = currentScore; 
-            } 
-        }); 
-        
-        imps.forEach(impId => { 
-            let impScore = gameData.players[impId] ? (gameData.players[impId].score || 0) : 0; 
-            let votesAgainstThisImp = 0; 
-            Object.keys(gameData.players).forEach(voterId => { 
-                if(!imps.includes(voterId) && votes[voterId] === impId) { 
-                    votesAgainstThisImp++; 
-                } 
-            }); 
-            if (votesAgainstThisImp < (totalVoters / 2)) {
-                impScore += 2; 
-                updates[`players/${impId}/score`] = impScore; 
-            } 
-        }); 
-        
-        updates['status'] = 'results'; 
-        db.ref('rooms/' + currentRoom).update(updates); 
-    }
-
-    function showFinalResults() { 
-        showScreen('result-screen'); 
-        const imps = gameData.imposters || []; 
-        document.getElementById('res-imp-name').innerText = imps.map(id => gameData.players[id] ? gameData.players[id].name : "لاعب غادر").join(" و "); 
-        const container = document.getElementById('scores-container'); 
-        container.innerHTML = ""; 
-        const sorted = Object.keys(gameData.players).sort((a,b) => gameData.players[b].score - gameData.players[a].score); 
-        sorted.forEach(id => { 
-            container.innerHTML += `<div class="score-row"><span>${gameData.players[id].name}</span><span style="color:var(--primary)">${gameData.players[id].score} pts</span></div>`; 
-        }); 
-        document.getElementById('next-round-btn').style.display = (isHost && gameData.round < 5) ? 'block' : 'none'; 
-        document.getElementById('finish-btn').style.display = (isHost && gameData.round >= 5) ? 'block' : 'none'; 
-        document.getElementById('exit-btn').style.display = (!isHost && gameData.round >= 5) ? 'block' : 'none'; 
-    }
-
-    function backToLobby() { 
-        if(!isHost) return; 
-        const currentRound = gameData.round || 1; 
-        db.ref('rooms/' + currentRoom).update({ 
-            status: 'lobby', 
-            round: currentRound + 1, 
-            understandVotes: {}, 
-            votes: {}, 
-            controlledChat: {} 
-        }); 
-    }
-
-    function clearAndReload() { 
-        localStorage.removeItem('lastRoom'); 
-        localStorage.removeItem('lastMyId'); 
-        location.reload(); 
-    }
+    listenToAvailableRooms(); cleanOldRooms(); function showScreen(id) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); if(id === 'home-screen') document.getElementById('global-leave-btn').style.display = 'none'; else document.getElementById('global-leave-btn').style.display = 'block';
+} function setRoomPrivacy(privacy) { roomPrivacySetting = privacy; document.getElementById('type-public-btn').className = "type-btn"; document.getElementById('type-private-btn').className = "type-btn";
+if (privacy === 'public') { document.getElementById('type-public-btn').className = "type-btn selected"; document.getElementById('custom-password-input').style.display = "none"; } else { document.getElementById('type-private-btn').className = "type-btn selected";
+document.getElementById('custom-password-input').style.display = "block"; } } function selectPlayMode(mode, btn) { chosenPlayMode = mode; document.getElementById('mode-normal-btn').classList.remove('selected'); document.getElementById('mode-chat-btn').classList.remove('selected'); btn.classList.add('selected');
+} function playerDisconnectAction() { if(!currentRoom || !myId) return; let confirmMsg = isHost ?
+"أنت المضيف (Host)، إذا غادرت سيتم حذف الغرفة وطرد جميع اللاعبين. هل تريد المغادرة؟"
+: "هل أنت متأكد من رغبتك في مغادرة اللعبة والعودة للرئيسية؟"; if(confirm(confirmMsg)) { if(isHost) { db.ref('rooms/' + currentRoom).remove().then(() => clearAndReload());
+} else { db.ref('rooms/' + currentRoom + '/players/' + myId).remove(); db.ref('rooms/' + currentRoom + '/understandVotes/' + myId).remove();
+db.ref('rooms/' + currentRoom + '/votes/' + myId).remove(); db.ref('rooms/' + currentRoom).off(); db.ref('rooms/' + currentRoom + '/lobbyChat').off(); db.ref('rooms/' + currentRoom + '/controlledChat').off();
+currentRoom = null; myId = null; clearAndReload(); } } } function selectCat(cat, btn) { selectedCategory = cat; document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('selected'));
+btn.classList.add('selected'); } function selectImpCount(count, btn) { allowedImpostersCount = count; document.querySelectorAll('.imp-toggle-btn').forEach(b => b.classList.remove('selected')); btn.classList.add('selected'); } function disableHomeButtons() { document.getElementById('create-btn').disabled = true;
+document.getElementById('create-btn').innerText = "جاري الاتصال..."; document.getElementById('join-btn').disabled = true; document.getElementById('join-btn').innerText = "جاري الاتصال..."; } function enableHomeButtons() { document.getElementById('create-btn').disabled = false;
+document.getElementById('create-btn').innerText = "إنشاء غرفة جديدة"; document.getElementById('join-btn').disabled = false; document.getElementById('join-btn').innerText = "انضمام للغرفة";
+} function cleanOldRooms() { db.ref('rooms').once('value', snap => { const rooms = snap.val(); if (!rooms) return; const now = Date.now(); const sixHours = 6 * 60 * 60 * 1000; Object.keys(rooms).forEach(r => { if(rooms[r].createdAt && (now - rooms[r].createdAt > sixHours)) { db.ref('rooms/' + r).remove(); } }); });
+} function listenToAvailableRooms() { db.ref('rooms').on('value', snap => { const rooms = snap.val(); const container = document.getElementById('available-rooms-container'); if (!rooms) { container.innerHTML = "لا توجد غرف نشطة حالياً."; return; } container.innerHTML = ""; let count = 0; Object.keys(rooms).forEach(rid => { const r = rooms[rid]; if(r.privacy === 'public' && r.status === 'lobby') { count++; const pCount = r.players ? Object.keys(r.players).length : 0; container.innerHTML += `<div class="room-item" onclick="quickJoin('${rid}')"><span>غرفة #${rid} 🌐</span><span style="color:var(--success)">${pCount} لاعبين</span></div>`; } }); if(count === 0) container.innerHTML = "كل الغرف الحالية ممتلئة أو خاصة."; });
+} function quickJoin(rid) { document.getElementById('room-id-input').value = rid; processAndJoinRoom();
+} function processAndCreateRoom() { const name = document.getElementById('user-name').value.trim(); if (!name) { alert("من فضلك أدخل اسمك أولاً!"); return; } myName = name; localStorage.setItem('savedName', myName); disableHomeButtons();
+const rid = Math.floor(1000 + Math.random() * 9000).toString(); let pass = ""; if(roomPrivacySetting === 'private') { pass = document.getElementById('custom-password-input').value.trim(); if(pass.length !== 4) { alert("الرمز السري للغرفة الخاصة يجب أن يتكون من 4 أرقام!"); enableHomeButtons(); return; } } db.ref('rooms/' + rid).once('value', snap => { if(snap.exists()) { processAndCreateRoom(); } else { myId = "p_" + Date.now(); isHost = true; const roomObj = { createdAt: Date.now(), id: rid, status: "lobby", category: selectedCategory, impCount: allowedImpostersCount, privacy: roomPrivacySetting, password: pass, playMode: chosenPlayMode, round: 1, players: {} }; roomObj.players[myId] = { name: myName, score: 0, isHost: true }; db.ref('rooms/' + rid).set(roomObj).then(() => { setupRoomConnection(rid); }).catch(err => { alert("فشل الاتصال بقاعدة البيانات!"); enableHomeButtons(); }); } });
+} function processAndJoinRoom() { const name = document.getElementById('user-name').value.trim(); const rid = document.getElementById('room-id-input').value.trim(); if (!name || !rid) { alert("أدخل اسمك وكود الغرفة!"); return; } myName = name; localStorage.setItem('savedName', myName); disableHomeButtons();
+db.ref('rooms/' + rid).once('value', snap => { if(!snap.exists()) { alert("عذراً، هذه الغرفة غير موجودة!"); enableHomeButtons(); return; } const room = snap.val(); if(room.privacy === 'private') { const userPass = prompt("هذه الغرفة محمية برمز سري. أدخل الرمز المكون من 4 أرقام:"); if(userPass !== room.password) { alert("رمز سري خاطئ! تم إلغاء الانضمام."); enableHomeButtons(); return; } } if(room.status !== 'lobby') { alert("العملية بدأت بالفعل داخل هذه الغرفة! لا يمكنك الدخول."); enableHomeButtons(); return; } myId = "p_" + Date.now(); isHost = false; db.ref('rooms/' + rid + '/players/' + myId).set({ name: myName, score: 0, isHost: false }).then(() => { setupRoomConnection(rid); }).catch(() => { enableHomeButtons(); }); });
+} function checkAutoReconnect() { const lr = localStorage.getItem('lastRoom'), mi = localStorage.getItem('lastMyId'), mn = localStorage.getItem('lastMyName'); if(lr && mi && mn) { db.ref(`rooms/${lr}`).once('value', snap => { if(snap.exists()) { const r = snap.val(); if(r.players && r.players[mi]) { currentRoom = lr; myId = mi; myName = mn; isHost = r.players[mi].isHost; setupRoomConnection(lr); document.getElementById('reconnect-hint').style.display = "none"; } else { localStorage.clear(); } } else { localStorage.clear(); } }); }
+} function setupRoomConnection(rid) { currentRoom = rid; localStorage.setItem('lastRoom', currentRoom); localStorage.setItem('lastMyId', myId); localStorage.setItem('lastMyName', myName); enableHomeButtons(); showScreen('lobby-screen'); document.getElementById('display-room-id').innerText = currentRoom; document.getElementById('display-room-privacy').innerText = (roomPrivacySetting === 'private') ? "🔒 (خاصة)" : "🌐 (عامة)";
+db.ref('rooms/' + currentRoom).on('value', snap => { gameData = snap.val(); if (!gameData) { handleRoomDeletionByHost(); return; } syncLobbyOrGameUI(); }); db.ref('rooms/' + currentRoom + '/lobbyChat').on('child_added', snap => { const msg = snap.val(); if(msg) renderMessage('chat-messages-container', msg); }); db.ref('rooms/' + currentRoom + '/controlledChat/messages').on('child_added', snap => { const msg = snap.val(); if(msg) renderMessage('ingame-messages-container', msg); });
+} function handleRoomDeletionByHost() { db.ref('rooms/' + currentRoom).off(); if(currentRoom) { alert("تم إغلاق الغرفة أو حذفها من قبل المضيف!"); } currentRoom = null; myId = null; localStorage.clear(); clearAndReload();
+} function deleteRoomByHost() { if(confirm("هل أنت متأكد تماماً من رغبتك في حذف وإلغاء هذه الغرفة نهائياً؟")) { db.ref('rooms/' + currentRoom).remove().then(() => clearAndReload()); }
+} function syncLobbyOrGameUI() { document.getElementById('round-display').innerText = `الجولة: ${gameData.round || 1} / 5`; const plist = document.getElementById('player-list-container'); plist.innerHTML = ""; if (gameData.players) { Object.keys(gameData.players).forEach(id => { const p = gameData.players[id]; let tag = `<div class="player-tag"><span>🟢 ${p.name} [${p.score} pts]</span>`; if (isHost && !p.isHost && gameData.status === 'lobby') { tag += `<button class="kick-btn" onclick="kickPlayer('${id}')">❌</button>`; } tag += `</div>`; plist.innerHTML += tag; }); } if (isHost && gameData.status === 'lobby') { document.getElementById('host-controls').style.display = 'block'; document.getElementById('start-game-btn').style.display = 'block'; document.getElementById('delete-room-btn').style.display = 'block'; } else { document.getElementById('host-controls').style.display = 'none'; document.getElementById('start-game-btn').style.display = 'none'; document.getElementById('delete-room-btn').style.display = 'none'; } if (gameData.status === 'play') { resetUnderstandButtonsLocally(); showScreen('play-screen'); document.getElementById('category-hint').innerText = `الفئة المباشرة: ${gameData.category}`; if (isHost) { document.getElementById('change-word-btn').style.display = 'block'; if (gameData.playMode === 'controlled_chat') { document.getElementById('go-to-questions-btn').style.display = 'block'; document.getElementById('go-to-vote-btn').style.display = 'none'; } else { document.getElementById('go-to-questions-btn').style.display = 'none'; document.getElementById('go-to-vote-btn').style.display = 'block'; } } else { document.getElementById('change-word-btn').style.display = 'none'; document.getElementById('go-to-questions-btn').style.display = 'none'; document.getElementById('go-to-vote-btn').style.display = 'none'; } evaluateSecretDisplay(); listenToUnderstandRealtime(); } else if (gameData.status === 'controlled_chat_stage') { showScreen('investigation-screen'); document.getElementById('investigation-category-hint').innerText = `تحقيق منظم بالفئة: ${gameData.category}`; if (isHost) document.getElementById('host-trigger-vote-btn').style.display = 'block';
+else document.getElementById('host-trigger-vote-btn').style.display = 'none'; syncControlledChatEngine(); } else if (gameData.status === 'vote') { buildVoteInterface(); } else if (gameData.status === 'results') { showFinalResults(); }
+} function kickPlayer(pid) { if(confirm("هل تريد طرد هذا اللاعب بالفعل من الغرفة؟")) { db.ref(`rooms/${currentRoom}/players/${pid}`).remove(); db.ref(`rooms/${currentRoom}/understandVotes/${pid}`).remove(); }
+} function sendLobbyMessage() { const input = document.getElementById('chat-msg-input'); const text = input.value.trim(); if(!text) return; db.ref('rooms/' + currentRoom + '/lobbyChat').push({ sender: myName, text: text }); input.value = "";
+} function renderMessage(containerId, msg) { const box = document.getElementById(containerId); box.innerHTML += `<div class="chat-msg"><span class="sender">${msg.sender}:</span><span>${msg.text}</span></div>`; box.scrollTop = box.scrollHeight;
+} function triggerStart() { const pkeys = Object.keys(gameData.players || {}); if(pkeys.length < 3) { alert("لا يمكن بدء اللعبة! تحتاج إلى 3 لاعبين على الأقل في المحاكاة السيرفرية!"); return; } let copy = [...gameDatabase[gameData.category || selectedCategory]]; const picked = copy[Math.floor(Math.random() * copy.length)]; let imps = []; let shuff = pkeys.sort(() => 0.5 - Math.random()); const actualImpCount = Math.min(allowedImpostersCount, pkeys.length - 1); for(let i=0; i<actualImpCount; i++) imps.push(shuff[i]);
+const updates = {}; updates['status'] = 'play'; updates['secretWord'] = picked.word; updates['secretDesc'] = picked.desc; updates['imposters'] = imps; updates['understandVotes'] = null; updates['votes'] = null; updates['controlledChat'] = { currentTurnIndex: 0, cycleCount: 1, activeSpeakerId: shuff[actualImpCount] || pkeys[0], messages: null }; db.ref('rooms/' + currentRoom).update(updates);
+} function changeCurrentWord() { let copy = [...gameDatabase[gameData.category || selectedCategory]]; const picked = copy[Math.floor(Math.random() * copy.length)]; db.ref('rooms/' + currentRoom).update({ secretWord: picked.word, secretDesc: picked.desc, understandVotes: null }); resetUnderstandButtonsLocally();
+} let isSecretVisible = false; function toggleSecret() { const card = document.getElementById('secret-content'); if(!gameData || !gameData.imposters) return; const isImp = gameData.imposters.includes(myId); if(!isSecretVisible) { if(isImp) { card.innerHTML = `<span style="color:var(--imposter); font-weight:bold;">أنت المحتال 😈</span><br><span style="font-size:11px; color:#aaa;">حاول خداع البقية واكتشاف الكلمة!</span>`; } else { card.innerHTML = `<span style="color:var(--success); font-weight:bold;">الكلمة: ${gameData.secretWord}</span><br><span style="font-size:11px; color:var(--primary);">${gameData.secretDesc}</span>`; } isSecretVisible = true; } else { card.innerText = "[ اضغط لفك التشفير ]"; isSecretVisible = false; }
+} function evaluateSecretDisplay() { isSecretVisible = false; document.getElementById('secret-content').innerText = "[ اضغط لفك التشفير ]";
+} function submitUnderstanding(status) { db.ref(`rooms/${currentRoom}/understandVotes/${myId}`).set(status); document.getElementById('und-yes').className = "und-btn yes-btn " + (status ? "selected-yes" : ""); document.getElementById('und-no').className = "und-btn no-btn " + (!status ? "selected-no" : "");
+} function resetUnderstandButtonsLocally() { document.getElementById('und-yes').className = "und-btn yes-btn"; document.getElementById('und-no').className = "und-btn no-btn"; document.getElementById('understand-status-text').innerText = "انتظار تصويت اللاعبين...";
+} function listenToUnderstandRealtime() { const total = Object.keys(gameData.players || {}).length; const votes = gameData.understandVotes || {}; const votedCount = Object.keys(votes).length; let yes = 0, no = 0; Object.keys(votes).forEach(k => { if(votes[k] === true) yes++; else no++; }); document.getElementById('understand-status-text').innerText = `تم الفهم: ${yes} | لم يفهم: ${no} (إجمالي المصوتين: ${votedCount}/${total})`;
+} function switchToQuestionsStage() { db.ref('rooms/' + currentRoom).update({ status: 'controlled_chat_stage' });
+} function syncControlledChatEngine() { if(gameData.status !== 'controlled_chat_stage' || !gameData.controlledChat) return; const cc = gameData.controlledChat; const speakerId = cc.activeSpeakerId; const pName = gameData.players[speakerId] ? gameData.players[speakerId].name : "لاعب مجهول"; const bar = document.getElementById('turn-indicator-bar'); const doubtArea = document.getElementById('doubt-targets-area'); if(speakerId === myId) { bar.innerHTML = `🚨 دَورك الآن للكتابة والتحقيق! الجولة [${cc.cycleCount}/2]`; document.getElementById('ingame-msg-input').disabled = false; document.getElementById('ingame-send-btn').disabled = false; if(cc.cycleCount === 2) { bar.innerHTML = `🎯 دورك الآن! اكتب شكوكك واختر هدفاً مصغراً بالأسفل!`; doubtArea.style.display = "flex"; buildDoubtTargetsLayout(); } else { doubtArea.style.display = "none"; } } else { bar.innerHTML = `⏳ انتظر.. دور اللاعب [ ${pName} ] حالياً`; document.getElementById('ingame-msg-input').disabled = true; document.getElementById('ingame-send-btn').disabled = true; doubtArea.style.display = "none"; }
+} function buildDoubtTargetsLayout() { const area = document.getElementById('doubt-targets-area'); area.innerHTML = ""; Object.keys(gameData.players || {}).forEach(pid => { if(pid !== myId) { area.innerHTML += `<button class="target-mini-btn" onclick="selectDoubtTarget('${pid}', '${gameData.players[pid].name}')">🎯 ${gameData.players[pid].name}</button>`; } });
+} function selectDoubtTarget(targetId, targetName) { const input = document.getElementById('ingame-msg-input'); input.value = `[أشـك فـي 👈 ${targetName}] `; input.focus();
+} function sendInGameMessage() { const input = document.getElementById('ingame-msg-input'); const text = input.value.trim(); if(!text) return; db.ref('rooms/' + currentRoom + '/controlledChat/messages').push({ sender: myName, text: text }).then(() => { input.value = ""; advanceControlledTurnSystem(); });
+} function advanceControlledTurnSystem() { const pkeys = Object.keys(gameData.players || {}); let curIdx = gameData.controlledChat.currentTurnIndex; let cycle = gameData.controlledChat.cycleCount; curIdx++; if(curIdx >= pkeys.length) { curIdx = 0; cycle++; } if(cycle > 2) { if(isHost) { showVoteScreen(); } return; } const nextSpeaker = pkeys[curIdx]; db.ref('rooms/' + currentRoom + '/controlledChat').update({ currentTurnIndex: curIdx, cycleCount: cycle, activeSpeakerId: nextSpeaker });
+} function showVoteScreen() { db.ref('rooms/' + currentRoom).update({ status: 'vote' });
+} function buildVoteInterface() { showScreen('vote-screen'); const container = document.getElementById('vote-options'); container.innerHTML = ""; const votes = gameData.votes || {}; const hasVoted = votes[myId] !== undefined; if(hasVoted) { container.innerHTML = `<div style="color:var(--success); text-align:center; margin-top:30px;">تم تسجيل صوتك بنجاح! انتظار بقية المحققين...</div>`; return; } Object.keys(gameData.players || {}).forEach(id => { if(id !== myId) { container.innerHTML += `<button class="vote-btn" onclick="submitFinalVote('${id}')">${gameData.players[id].name}</button>`; } });
+} function submitFinalVote(targetId) { db.ref(`rooms/${currentRoom}/votes/${myId}`).set(targetId).then(() => { checkVotesCompletionOnServer(); });
+} function checkVotesCompletionOnServer() { db.ref('rooms/' + currentRoom).once('value', snap => { const r = snap.val(); if(!r.votes) return; const totalVoters = Object.keys(r.players).length; const currentVotesCount = Object.keys(r.votes).length; if(currentVotesCount === totalVoters && isHost) { executeScoringAlgorithm(r); } });
+} function executeScoringAlgorithm(r) { const votes = r.votes || {}; const imps = r.imposters || []; const totalVoters = Object.keys(r.players).length; let voteCounts = {}; Object.keys(votes).forEach(voter => { const target = votes[voter]; voteCounts[target] = (voteCounts[target] || 0) + 1; }); const updates = {}; updates['round'] = (r.round || 1) + 1; Object.keys(r.players).forEach(pid => { let currentScore = r.players[pid].score || 0; if(!imps.includes(pid)) { let caughtAnImp = false; imps.forEach(impId => { if(votes[pid] === impId && (voteCounts[impId] || 0) >= (totalVoters / 2)) { caughtAnImp = true; } }); if(caughtAnImp) currentScore += 1; updates[`players/${pid}/score`] = currentScore; } }); imps.forEach(impId => { let impScore = r.players[impId].score || 0; const votesAgainstThisImp = voteCounts[impId] || 0; if(votesAgainstThisImp < (totalVoters / 2)) impScore += 2; updates[`players/${impId}/score`] = impScore; }); updates['status'] = 'results'; db.ref('rooms/' + currentRoom).update(updates);
+} function showFinalResults() { showScreen('result-screen'); const imps = gameData.imposters || []; document.getElementById('res-imp-name').innerText = imps.map(id => gameData.players[id] ? gameData.players[id].name : "لاعب غادر").join(" و "); const container = document.getElementById('scores-container'); container.innerHTML = ""; const sorted = Object.keys(gameData.players).sort((a,b) => gameData.players[b].score - gameData.players[a].score); sorted.forEach(id => { container.innerHTML += `<div class="score-row"><span>${gameData.players[id].name}</span><span style="color:var(--primary)">${gameData.players[id].score} pts</span></div>`; }); document.getElementById('next-round-btn').style.display = (isHost && gameData.round <= 5) ? 'block' : 'none'; document.getElementById('finish-btn').style.display = (isHost && gameData.round > 5) ? 'block' : 'none'; document.getElementById('exit-btn').style.display = (!isHost && gameData.round > 5) ? 'block' : 'none';
+} function backToLobby() { db.ref('rooms/' + currentRoom).update({ status: 'lobby' });
+} function clearAndReload() { window.location.reload(); }
 </script>
-
 </body>
 </html>
