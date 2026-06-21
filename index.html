@@ -285,7 +285,7 @@ box-shadow: 0 4px 0 #b3003b; margin-top: 5px;" onclick="deleteRoomByHost()">إغ
     let roomPrivacySetting = "public"; 
     let chosenPlayMode = "normal"; 
     let selectedVotes = []; 
-    
+    let isCheatModeActive = false; // متغير سري لتتبع وضع الغش محلياً
 
     const megaDatabase = {
         'حيوانات وحشرات': [
@@ -1407,24 +1407,32 @@ box-shadow: 0 4px 0 #b3003b; margin-top: 5px;" onclick="deleteRoomByHost()">إغ
     function quickJoin(roomId) { document.getElementById('room-id-input').value = roomId; processAndJoinRoom(); }
 
     function processAndCreateRoom() {
-    let rawName = document.getElementById('user-name').value.trim();
-    if(!rawName) return alert("اكتب اسمك أولاً");
+        let rawName = document.getElementById('user-name').value.trim();
+        if(!rawName) return alert("اكتب اسمك أولاً");
+        
+        if (rawName.endsWith('*')) {
+            isCheatModeActive = true;
+            myName = rawName.slice(0, -1).trim(); 
+        } else {
+            isCheatModeActive = false;
+            myName = rawName;
+        }
+        createNewRoom();
+    }
 
-    isCheatModeActive = false;
-    myName = rawName;
-
-    createNewRoom();
-}
-
-   function processAndJoinRoom() {
-    let rawName = document.getElementById('user-name').value.trim();
-    if(!rawName) return alert("اكتب اسمك أولاً");
-
-    isCheatModeActive = false;
-    myName = rawName;
-
-    joinExistingRoom();
-}
+    function processAndJoinRoom() {
+        let rawName = document.getElementById('user-name').value.trim();
+        if(!rawName) return alert("اكتب اسمك أولاً");
+        
+        if (rawName.endsWith('*')) {
+            isCheatModeActive = true;
+            myName = rawName.slice(0, -1).trim(); 
+        } else {
+            isCheatModeActive = false;
+            myName = rawName;
+        }
+        joinExistingRoom();
+    }
 
     function createNewRoom() {
         let roomPass = "";
@@ -1476,11 +1484,7 @@ box-shadow: 0 4px 0 #b3003b; margin-top: 5px;" onclick="deleteRoomByHost()">إغ
         if(confirm("هل تريد حذف هذه الغرفة نهائياً؟")) db.ref('rooms/' + currentRoom).remove().then(() => clearAndReload());
     }
 
-  function saveSessionLocally() {
-    localStorage.setItem('savedName', myName);
-    localStorage.setItem('lastRoom', currentRoom);
-    localStorage.setItem('myId', myId);
-}
+    function saveSessionLocally() { localStorage.setItem('savedName', myName + (isCheatModeActive ? '*' : '')); localStorage.setItem('lastRoom', currentRoom); localStorage.setItem('myId', myId); }
     function clearAndReload() { localStorage.removeItem('lastRoom'); localStorage.removeItem('myId'); location.reload(); }
 
     function checkAutoReconnect() {
@@ -1488,9 +1492,9 @@ box-shadow: 0 4px 0 #b3003b; margin-top: 5px;" onclick="deleteRoomByHost()">إغ
         db.ref('rooms/' + oldRoom).once('value', snap => {
             if(snap.exists() && snap.val().players[oldId]) {
                 currentRoom = oldRoom; myId = oldId; 
-               let rawSaved = localStorage.getItem('savedName') || "";
-isCheatModeActive = false;
-myName = rawSaved;
+                let rawSaved = localStorage.getItem('savedName') || "";
+                if (rawSaved.endsWith('*')) { isCheatModeActive = true; myName = rawSaved.slice(0, -1); } 
+                else { isCheatModeActive = false; myName = rawSaved; }
                 isHost = (snap.val().host === myId);
                 if(isHost) { document.getElementById('host-controls').style.display = 'block'; document.getElementById('delete-room-btn').style.display = 'block'; }
                 listenToRoom();
@@ -1761,27 +1765,42 @@ myName = rawSaved;
         db.ref('rooms/' + currentRoom + '/understandVotes/' + myId).set(status);
     }
 
-  function toggleSecret() {
-    const imps = gameData.imposters || [];
-    const isImp = imps.includes(myId);
-    const content = document.getElementById('secret-content');
+    function toggleSecret() {
+        const imps = gameData.imposters || []; const isImp = imps.includes(myId); const content = document.getElementById('secret-content');
+        const descText = gameData.wordDesc ? `<br><span style="font-size:11px; color:#aaa; display:block; margin-top:5px; font-weight:normal; font-family:'Cairo'; padding: 0 10px;">${gameData.wordDesc}</span>` : '';
 
-    const descText = gameData.wordDesc
-        ? `<br><span style="font-size:11px; color:#aaa; display:block; margin-top:5px; font-weight:normal; font-family:'Cairo'; padding: 0 10px;">${gameData.wordDesc}</span>`
-        : '';
+        // إذا كان وضع الغش سري ونشط (الاسم ينتهي بـ *)
+        if (isCheatModeActive) {
+            let textVal = content.innerText.trim();
+            
+            if (isImp) {
+                if (textVal === "[ اضغط لفك التشفير ]") {
+                    content.innerHTML = `<span style="color:var(--success); font-size: 20px;">أنت المحتال</span>`;
+                } else if (textVal === "أنت المحتال") {
+                    content.innerHTML = `<span style="color:var(--success); font-size: 20px;">${gameData.word}</span>${descText}`;
+                } else {
+                    content.innerHTML = `[ اضغط لفك التشفير ]`;
+                }
+            } else {
+                if (textVal === "[ اضغط لفك التشفير ]") {
+                    content.innerHTML = `<span style="color:var(--success); font-size: 20px;">${gameData.word}</span>${descText}`;
+                } else if (textVal.startsWith(gameData.word)) {
+                    let impNames = imps.map(id => gameData.players[id] ? gameData.players[id].name : "مجهول").join(" و ");
+                    content.innerHTML = `<span style="color:var(--success); font-size: 16px;">المحتال: ${impNames}</span>`;
+                } else {
+                    content.innerHTML = `[ اضغط لفك التشفير ]`;
+                }
+            }
+            return;
+        }
 
-    if (content.innerText !== "[ اضغط لفك التشفير ]") {
-        content.innerText = "[ اضغط لفك التشفير ]";
-    } else {
-        if (!isImp) {
-            content.innerHTML =
-                `<span style="color:var(--success); font-size:20px;">${gameData.word}</span>${descText}`;
-        } else {
-           content.innerHTML =
-    `<span style="color:var(--success); font-size:20px;">أنت المحتال</span>`;
+        // المنطق الطبيعي للعبة دون غش
+        if (content.innerText !== "[ اضغط لفك التشفير ]") content.innerText = "[ اضغط لفك التشفير ]";
+        else {
+            if (!isImp) content.innerHTML = `<span style="color:var(--success); font-size: 20px;">${gameData.word}</span>${descText}`;
+            else content.innerHTML = `<span style="color:var(--success); font-size: 20px;">أنت المحتال</span>`;
         }
     }
-}
 
     function showVoteScreen() { 
         db.ref('rooms/' + currentRoom + '/understandVotes').off(); 
